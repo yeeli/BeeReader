@@ -1,0 +1,10 @@
+
+# Ignore vim cache file
+*.swp
+*.swo
+
+# Ignore temp file
+.DS_Store
+
+/node_modules
+/yarn-error.log
