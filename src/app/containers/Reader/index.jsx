@@ -2,18 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import SplitPane from 'react-split-pane'
+import interact from 'interactjs'
 import Subscriptions from 'components/Subscriptions'
 import Feeds from 'components/Feeds'
-import interact from 'interactjs'
+import {fetchSubscriptions} from 'actions/Subscriptions'
 
 class Reader extends Component {
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
+    this.props.fetchSubscriptions()
+  /*
     self = this
-    interact('.resize1')
+
+      interact('.resize1')
       .draggable({
         onmove: window.dragMoveListener
       })
@@ -27,6 +27,7 @@ class Reader extends Component {
         width += event.dx;
         target.style.flex = '0 0 ' +  width + 'px';
       });
+
     interact('.resize2')
       .draggable({
         onmove: window.dragMoveListener
@@ -41,15 +42,16 @@ class Reader extends Component {
         width += event.dx;
         target.style.flex = '0 0 ' +  width + 'px';
       });
-
+      */
   }
 
   render () {
+    const { subscriptions } = this.props
     return (
       <div id="reader">
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions">
-            <Subscriptions />
+            <Subscriptions subscriptions={ subscriptions } />
           </div>
           <div className="resizer vertical resize1"/>
           <div className="pane pane-feeds" ref="paneFeeds">
@@ -66,4 +68,9 @@ class Reader extends Component {
 }
 
 import './index.sass'
-export default Reader
+
+const mapStateToProps = state => ({
+  subscriptions: state.Subscriptions
+})
+
+export default connect(mapStateToProps, {fetchSubscriptions})(Reader)

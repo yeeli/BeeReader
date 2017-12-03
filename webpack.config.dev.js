@@ -1,11 +1,11 @@
 'use strict'
 
 const webpack = require('webpack');
+const path = require('path');
 const paths = require('./config/paths');
 const { env } = require('process')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-console.log(['node_modules', paths.appNodeModules, paths.appSrc].concat(paths.nodePaths))
 
 const config = {
   devtool: 'inline-source-map',
@@ -17,6 +17,7 @@ const config = {
       'webpack-dev-server/client?http://localhost:5000',
       'webpack/hot/only-dev-server',
       require.resolve('./config/webpackHotDevClient'),
+      require.resolve('react-error-overlay'),
       paths.appIndexJs
     ]
   },
@@ -34,7 +35,9 @@ const config = {
       components: 'components',
       actions: 'actions',
       reducers: 'reducers',
-      'react-native': 'react-native-web'
+      'react-native': 'react-native-web',
+      config: path.resolve(__dirname, 'src/config'),
+      libs: path.resolve(__dirname, 'src/libs')
     }
   },
 
@@ -56,7 +59,7 @@ const config = {
         }, {
           loader: "css-loader" // translates CSS into CommonJS
         }, {
-          loader: "sass-loader" // compiles Sass to CSS 
+          loader: "sass-loader" // compiles Sass to CSS
         }]
       }
 
@@ -76,7 +79,7 @@ const config = {
       template: "./src/public/main.html"
     })
   ],
-  stats: { errorDetails: true},
+  stats: { errorDetails: true },
   devServer: {
     host: 'localhost',
     port: '5000',

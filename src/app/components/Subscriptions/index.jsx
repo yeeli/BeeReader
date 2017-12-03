@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import {List, ListItem} from 'material-ui/List'
 import Toggle from 'material-ui/Toggle'
-
-import { remote } from 'electron';
-
+import WindowMenu from 'components/WindowMenu'
 
 class Subscriptions extends Component {
+
   state = {
     open: false,
   };
@@ -21,63 +20,45 @@ class Subscriptions extends Component {
       open: item.state.open,
     });
   };
-  handleWindowMin = () => {
-    const currentWin = remote.getCurrentWindow()
-    currentWin.minimize(); 
-  };
 
-  handleWindowMax = () => {
-    const currentWin = remote.getCurrentWindow()
-    currentWin.maximize(); 
+  listSubscriptions = (items) => {
+    return items.map( item => (
+      <ListItem
+        key={`sub-${item._id}`}
+        primaryText={item.title}
+      />
+    ))
+  }
+
+  listCategories = (subscriptions) => {
+    return subscriptions.map(item => {
+      return (
+        <ListItem
+          primaryText={item.label}
+          initiallyOpen={false}
+          primaryTogglesNestedList={true}
+          key={`cate-${item._id}`}
+          nestedItems={this.listSubscriptions(item.subscriptions)}
+        />
+      )
+    })
   };
 
   render () {
+    const {subscriptions} = this.props
+
     return(
-      <div className="block-subscriptions"> 
-        <div className="block-hd" style={{ "-webkit-app-region": "drag"}}>
-          <button id="btn-close">x</button>
-          <button id="btn-min" onClick={ this.handleWindowMin }>-</button>
-          <button id="btn-max" onClick={ this.handleWindowMax }>+</button>
-        </div>
+      <div className="block-subscriptions">
+        <WindowMenu />
         <div className="block-bd">
           <List>
-            <ListItem primaryText="Sent mail" />
-            <ListItem primaryText="Drafts" />
-            <ListItem
-              primaryText="Inbox"
-              initiallyOpen={true}
-              primaryTogglesNestedList={true}
-              nestedItems={[
-                <ListItem
-                  key={1}
-                  primaryText="Starred"
-                />,
-                <ListItem
-                  key={2}
-                  primaryText="Sent Mail"
-                  disabled={true}
-                  nestedItems={[
-                    <ListItem key={1} primaryText="Drafts" />,
-                  ]}
-                />,
-                <ListItem
-                  key={3}
-                  primaryText="Inbox"
-                  open={this.state.open}
-                  onNestedListToggle={this.handleNestedListToggle}
-                  nestedItems={[
-                    <ListItem key={1} primaryText="Drafts" />,
-                  ]}
-                />,
-              ]}
-            />
+            {this.listCategories(subscriptions)}
           </List>
         </div>
       </div>
     )
   }
 }
-
 
 import './index.sass'
 export default Subscriptions
