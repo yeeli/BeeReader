@@ -7,6 +7,7 @@ class GetStarted extends Component {
   render () {
     return (
       <div>
+        <Link to="/reader">Reader</Link>
         123
       </div>
     )

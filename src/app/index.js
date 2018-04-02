@@ -4,7 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { AppContainer } from 'react-hot-loader'
 
 import Root from '@/containers/root';
-import configureStore from '@/store/configureStore'
+import { configureStore, history } from './store/configureStore'
 
 // Disable Electron App Drop File
 document.addEventListener('dragover', function (event) {
@@ -21,12 +21,13 @@ document.addEventListener('drop', function (event) {
 // Material-UI use react-tap-event-plugin to listen for touch / tap / clickevents.
 // http://www.material-ui.com/#/get-started/installation
 injectTapEventPlugin();
+
 const store = configureStore()
 
 const render = Component => {
   ReactDOM.render(
     <AppContainer>
-      <Component store={store} />
+      <Component store={store} history={history} />
     </AppContainer>,
     document.getElementById('root')
   )
