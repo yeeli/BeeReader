@@ -5,7 +5,7 @@
   "author": "yeeli",
   "license": "MIT",
   "scripts": {
-    "hot-server": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.dev.js",
+    "hot-server": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack/config.dev.js",
     "dev": "cross-env HOT=1 NODE_ENV=development electron  -r babel-register -r babel-polyfill ./src/main/index.js --dev --enable-logging",
     "rebuild": "electron-rebuild -f -w sqlite3"
   },
@@ -43,7 +43,8 @@
     "sass-loader": "^6.0.5",
     "style-loader": "^0.17.0",
     "webpack": "^2.5.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "^2.4.5",
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -59,7 +60,8 @@
     "react-dom": "^15.5.4",
     "react-error-overlay": "^1.0.7",
     "react-redux": "^5.0.4",
-    "react-router-dom": "^4.1.1",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "react-scrollbar-js": "^1.0.1",
     "react-split-pane": "^0.1.63",
     "react-tap-event-plugin": "^2.0.1",

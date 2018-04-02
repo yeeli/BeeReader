@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import { AppContainer } from 'react-hot-loader'
 
-import Root from './containers/Root';
-import configureStore from './store/configureStore'
+import Root from '@/containers/root';
+import configureStore from '@/store/configureStore'
 
 // Disable Electron App Drop File
 document.addEventListener('dragover', function (event) {
@@ -34,6 +34,6 @@ const render = Component => {
 
 render(Root);
 
-if (module.hot) module.hot.accept('./containers/Root', () => {
+if (module.hot) module.hot.accept('./containers/root', () => {
   render(Root)
 });

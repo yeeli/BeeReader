@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import Subscriptions from './Subscriptions'
+import Subscriptions from './subscriptions'
 
 const rootReducer = combineReducers({
   Subscriptions

@@ -3,9 +3,11 @@ import { connect } from 'react-redux'
 
 import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
-import Subscriptions from 'components/Subscriptions'
-import Feeds from 'components/Feeds'
-import {fetchSubscriptions} from 'actions/Subscriptions'
+import Subscriptions from '@/components/subscriptions'
+import Feeds from '@/components/feeds'
+import {fetchSubscriptions} from '@/actions/subscriptions'
+
+import { Link } from 'react-router-dom'
 
 class Reader extends Component {
   componentDidMount() {
@@ -59,7 +61,7 @@ class Reader extends Component {
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content">
-            <div />
+            <Link to="/">首页</Link>
           </div>
         </div>
       </div>

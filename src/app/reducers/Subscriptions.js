@@ -1,4 +1,4 @@
-import * as SubscriptionsActions from '../actions/Subscriptions'
+import * as SubscriptionsActions from '@/actions/subscriptions'
 
 const Subscriptions = (state = [], action) => {
   switch(action.type) {
