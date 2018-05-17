@@ -2,7 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const paths = require('../config/paths');
+const paths = require('./paths');
 const { env } = require('process')
 const sharedConfig = require('./shared')
 
@@ -19,7 +19,7 @@ const config = merge(sharedConfig, {
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:5000',
       'webpack/hot/only-dev-server',
-      require.resolve('../config/webpackHotDevClient'),
+      require.resolve('./webpackHotDevClient'),
       require.resolve('react-error-overlay'),
       paths.appIndexJs
     ]

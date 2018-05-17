@@ -6,6 +6,7 @@ import { AppContainer } from 'react-hot-loader'
 import Root from '@/containers/root';
 import { configureStore, history } from './store/configureStore'
 
+
 // Disable Electron App Drop File
 document.addEventListener('dragover', function (event) {
   event.preventDefault();
