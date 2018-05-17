@@ -6,5 +6,7 @@
 # Ignore temp file
 .DS_Store
 
+.env
 /node_modules
 /yarn-error.log
+*.db
