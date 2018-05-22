@@ -7,10 +7,10 @@ require('dotenv').config()
 class Feedly extends Service {
   constructor(){
     super()
-    //this.apiUri = "http://cloud.feedly.com"
-    //this.token = process.env.FEEDLY_TOKEN 
-    //axios.defaults.baseURL = this.apiUri
-    //axios.defaults.headers.common['Authorization'] = `OAuth ${this.token}`
+    this.apiUri = "http://cloud.feedly.com"
+    this.token = process.env.FEEDLY_TOKEN 
+    axios.defaults.baseURL = this.apiUri
+    axios.defaults.headers.common['Authorization'] = `OAuth ${this.token}`
   }
   async getProfile() {
     const res = await axios.get('/v3/profile')

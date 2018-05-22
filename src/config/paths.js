@@ -10,13 +10,13 @@ function resolveApp(relativePath) {
   return path.resolve(appDirectory, relativePath);
 }
 
-/*
 const nodePaths = (process.env.NODE_PATH || '')
   .split(process.platform === 'win32' ? ';' : ':')
   .filter(Boolean)
   .filter(folder => !path.isAbsolute(folder))
   .map(resolveApp);
 
+/*
 const envPublicUrl = process.env.PUBLIC_URL;
 
 function getPublicUrl(appPackageJson) {
@@ -33,7 +33,7 @@ function ensureSlash(path, needsSlash) {
     return path;
   }
 }
-
+*/
 
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);
@@ -41,16 +41,15 @@ function getServedPath(appPackageJson) {
     (publicUrl ? url.parse(publicUrl).pathname : '/');
   return ensureSlash(servedUrl, true);
 }
-*/
 
 // config after eject: we're in ./config/
 module.exports = {
+  nodePaths: nodePaths,
+  nodeModules: resolveApp('node_modules'),
   appSrc: resolveApp('src/app'),
   appIndexJs: resolveApp('src/app/index.js'),
   appBuild: resolveApp('build'),
   appPackageJson: resolveApp('package.json'),
   yarnLockFile: resolveApp('yarn.lock'),
-  nodeModules: resolveApp('node_modules'),
   dbMigrations: resolveApp('src/db/migrations')
-  //nodePaths: nodePaths,
 };

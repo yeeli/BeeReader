@@ -4,7 +4,7 @@ const paths = require('../src/config/paths');
 module.exports = {
   target: 'electron-renderer',
   resolve: {
-    modules: ['node_modules', paths.appNodeModules, paths.appSrc].concat(paths.nodePaths),
+    modules: ['node_modules', paths.nodeModules, paths.appSrc].concat(paths.nodePaths),
     extensions: ['.js', '.json', '.jsx'],
     alias: {
       containers: 'containers',

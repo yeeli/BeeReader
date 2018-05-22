@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 class GetStarted extends Component {
   render () {
-    console.log("123")
     return (
       <div>
         <Link to="/reader">Reader</Link>
