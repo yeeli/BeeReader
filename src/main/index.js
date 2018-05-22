@@ -2,8 +2,7 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 const paths = require('../config/paths')
-//require('./ipcMain/account')
-const schema = require('../db/schema')
+const sync = require('./sync')
 
 let mainWindow
 
@@ -25,7 +24,6 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 */
-schema()
 
 const createWindow = async () =>{
   //await installExtensions();

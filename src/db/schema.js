@@ -1,12 +1,7 @@
-const config = require('../config/database')
 const path = require('path')
-
-const database = config[process.env.NODE_ENV]
 const migrationsPath = path.join(__dirname, "migrations")
 
-const knex = require('knex')(database)
-
-module.exports = function() {
+module.exports = function(knex) {
   knex.migrate.latest({directory: migrationsPath})
     .catch(function(e){
       console.error(e);

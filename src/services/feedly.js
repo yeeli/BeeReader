@@ -27,13 +27,3 @@ class Feedly extends Service {
   getFeeds() {
   }
 }
-
-/*
-feedly = new Feedly()
-feedly.getSubscriptions()
-knex('accounts').where('id', 1)
-  .then(function(res) {
-    console.log(res)
-    process.exit(0);
-  })
-*/
