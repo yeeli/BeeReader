@@ -2,7 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const paths = require('./paths');
+const paths = require('../src/config/paths');
 const { env } = require('process')
 const sharedConfig = require('./shared')
 
