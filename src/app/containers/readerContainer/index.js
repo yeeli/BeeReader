@@ -9,7 +9,7 @@ import {fetchSubscriptions} from '@/actions/subscriptions'
 
 import { Link } from 'react-router-dom'
 
-class Reader extends Component {
+class ReaderContainer extends Component {
   componentDidMount() {
     this.props.fetchSubscriptions()
   /*
@@ -75,4 +75,4 @@ const mapStateToProps = state => ({
   subscriptions: state.Subscriptions
 })
 
-export default connect(mapStateToProps, {fetchSubscriptions})(Reader)
+export default connect(mapStateToProps, {fetchSubscriptions})(ReaderContainer)

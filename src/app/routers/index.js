@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import {Route, Switch, HashRouter as Router} from 'react-router-dom'
 
-import GetStarted from '@/containers/getStarted'
-import Reader from '@/containers/reader'
+import AppContainer from '@/containers/appContainer'
+import ReaderContainer from '@/containers/readerContainer'
 
 
 const Routers = () =>(
   <Router>
     <Switch>
-      <Route exact path="/" component={GetStarted}/>
-      <Route path="/reader" component={Reader}/>
+      <Route exact path="/" component={AppContainer}/>
+      <Route path="/reader" component={ReaderContainer}/>
     </Switch>
   </Router>
 )

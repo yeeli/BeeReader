@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-class GetStarted extends Component {
+class AppContainer extends Component {
   render () {
     return (
       <div>
@@ -13,4 +13,4 @@ class GetStarted extends Component {
   }
 }
 
-export default connect()(GetStarted)
+export default connect()(AppContainer)
