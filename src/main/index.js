@@ -24,23 +24,24 @@ const installExtensions = async () => {
 
 
 const createWindow = async () =>{
-  // Create the browser window.
-
+  // Install Extensions
   installExtensions()
+  
+  // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600, frame: false, minWidth: 800, minHeight: 600})
 
   // and load the index.html of the app.
-/*
+  /*
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'public/main.html'),
     protocol: 'file:',
     slashes: true
   }))
-*/
+  */
   mainWindow.loadURL("http://localhost:5000/dist/main.html")
 
 
- //mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null

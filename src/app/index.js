@@ -36,6 +36,6 @@ const render = Component => {
 
 render(Root);
 
-if (module.hot) module.hot.accept('./containers/root', () => {
+/*if (module.hot) module.hot.accept('./containers/root', () => {
   render(Root)
-});
+}); */
