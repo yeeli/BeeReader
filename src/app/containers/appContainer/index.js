@@ -3,14 +3,20 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 class AppContainer extends Component {
+  componentWillMount() {
+  }
   render () {
     return (
       <div>
-        <Link to="/reader">Reader</Link>
-        123
+        12333
       </div>
     )
   }
 }
 
-export default connect()(AppContainer)
+const mapStateToProps = state => ({
+  subscriptions: state.Subscriptions
+})
+
+
+export default connect(mapStateToProps)(AppContainer)

@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
   componentDidMount() {
-    this.props.fetchSubscriptions()
+    //this.props.fetchSubscriptions()
   /*
     self = this
 

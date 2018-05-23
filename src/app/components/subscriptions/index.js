@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import {List, ListItem} from 'material-ui/List'
-import Toggle from 'material-ui/Toggle'
+import {List, ListItem} from '@material-ui/core/List'
 import WindowMenu from 'components/WindowMenu'
 
 class Subscriptions extends Component {
@@ -8,7 +7,7 @@ class Subscriptions extends Component {
   state = {
     open: false,
   };
-
+  /*
   handleToggle = () => {
     this.setState({
       open: !this.state.open,
@@ -43,7 +42,7 @@ class Subscriptions extends Component {
       )
     })
   };
-
+  */
   render () {
     const {subscriptions} = this.props
 
@@ -51,13 +50,15 @@ class Subscriptions extends Component {
       <div className="block-subscriptions">
         <WindowMenu />
         <div className="block-bd">
-          <List>
+          { /*<List>
             {this.listCategories(subscriptions)}
           </List>
+          */
+          }
         </div>
       </div>
     )
-  }
+    }
 }
 
 import './index.sass'

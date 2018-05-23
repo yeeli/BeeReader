@@ -2,7 +2,8 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 const paths = require('../config/paths')
-const sync = require('./sync')
+//const sync = require('./sync')
+require('./ipcMain/account')
 
 let mainWindow
 
@@ -10,24 +11,22 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')({ showDevTools: true });
 }
 
-/*
 const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = [
-    'REACT_DEVELOPER_TOOLS',
-    'REDUX_DEVTOOLS'
-  ];
+  if (process.env.NODE_ENV === 'development') {
+    if(!BrowserWindow.getDevToolsExtensions()["Redux DevTools"]) {
+      BrowserWindow.addDevToolsExtension(path.join(paths.extensions, "redux_devtools"))
+    }
+    if(!BrowserWindow.getDevToolsExtensions()["React Developer Tools"]) {
+      BrowserWindow.addDevToolsExtension(path.join(paths.extensions, "react_developer_tools"))
+    }
+  }
+}
 
-  return Promise
-    .all(extensions.map(name => installer.default(installer[name], forceDownload)))
-    .catch(console.log);
-};
-*/
 
 const createWindow = async () =>{
-  //await installExtensions();
   // Create the browser window.
+
+  installExtensions()
   mainWindow = new BrowserWindow({width: 800, height: 600, frame: false, minWidth: 800, minHeight: 600})
 
   // and load the index.html of the app.
@@ -39,6 +38,7 @@ const createWindow = async () =>{
   }))
 */
   mainWindow.loadURL("http://localhost:5000/dist/main.html")
+
 
  //mainWindow.webContents.openDevTools();
 

@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import { routerMiddleware, routerActions } from 'react-router-redux'
 import { createLogger } from 'redux-logger'
 import rootReducer from '@/reducers'
+import syncMiddleware from '@/middleware/sync'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createHashHistory } from 'history'
 
@@ -10,7 +11,7 @@ const logger = createLogger()
 export const history = createHashHistory()
 
 const router = routerMiddleware(history);
-const middlewares = [thunk, logger, router]
+const middlewares = [thunk, logger, router, syncMiddleware]
 
 export const configureStore = preloadedState => {
   const store = createStore(

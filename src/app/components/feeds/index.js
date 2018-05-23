@@ -17,4 +17,5 @@ class Feeds extends Component {
 
 
 import './index.sass'
+
 export default Feeds
