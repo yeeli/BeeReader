@@ -1,11 +1,8 @@
-//const config = require('../config/database')
-//const database = config[process.env.NODE_ENV]
-//const knex = require('knex')(database)
-
-class Service {
+module.exports = class Service {
   constructor(){
+    //axios.defaults.baseURL = this.getApiUri()
     //this.apiUrl = ''
   }
+    
 }
 
-module.experts = Service

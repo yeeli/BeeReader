@@ -6,13 +6,14 @@ exports.up = function(knex, Promise) {
     t.string('title');
     t.string('html');
     t.string('url');
-    t.integer('unread_count');
-    t.integer('starred_count');
-    t.integer('entries_count');
-    t.integer('streams_count');
+    t.integer('unread_count').defaultTo(0);
+    t.integer('starred_count').defaultTo(0);
+    t.integer('entries_count').defaultTo(0);
+    t.integer('streams_count').defaultTo(0);
     t.integer('sort');
     t.string('state');
-    t.timestamps(['created_at', 'updated_at'], knex.fn.now());
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+    t.timestamp('updated_at').defaultTo(knex.fn.now());
 
 
     t.foreign('account_id').references('id').inTable('accounts');

@@ -1,6 +1,7 @@
 const Service = require('./service')
 const axios = require('axios')
 const path = require('path')
+const { Account } = require('../main/model')
 require('dotenv').config()
 
 
@@ -14,7 +15,16 @@ class Feedly extends Service {
   }
   async getProfile() {
     const res = await axios.get('/v3/profile')
-    console.log(res.data)
+    const data = res.data
+    Account.count({oid: data.id}).then(count =>{ 
+      if( count < 1 ) {
+        Account.create({
+          oid: data.id,
+          username: data.login,
+          service: 'Feedly'
+        })
+      }
+    })
   }
   async getCategories() {
     var res = await axios.get('/v3/categories')
@@ -27,3 +37,6 @@ class Feedly extends Service {
   getFeeds() {
   }
 }
+
+
+module.exports = Feedly

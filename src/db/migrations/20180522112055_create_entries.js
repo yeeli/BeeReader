@@ -8,12 +8,13 @@ exports.up = function(knex, Promise) {
     t.text('summary');
     t.enum('keywords', []);
     t.jsonb('cover');
-    t.boolean('unread', false);
-    t.boolean('starred', false);
-    t.boolean('cached', false);
+    t.boolean('unread').defaultTo(false);
+    t.boolean('starred').defaultTo(false);
+    t.boolean('cached').defaultTo(false);
     t.datetime('published');
     t.datetime('starred_at');
-    t.timestamps(['created_at', 'updated_at'], knex.fn.now());
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+    t.timestamp('updated_at').defaultTo(knex.fn.now());
   
     t.foreign('stream_id').references('id').inTable('streams');
    }) 

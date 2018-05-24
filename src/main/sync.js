@@ -1,17 +1,13 @@
-'use strict'
-  /*
-const config = require('../config/database')
-const database = config[process.env.NODE_ENV]
-const knex = require('knex')(database)
-const schema = require('../db/schema')
+const Feedly = require('../services/feedly')
 
-// Start migrations
-schema(knex)
+feedly = new Feedly()
+feedly.getProfile()
+
+/*
+Account.all().map(function(row){
+  console.log(row)
+})
+.catch(function(e) {
+  console.error(e);
+});
 */
-
-const model = require('./model')
-
-console.log(model.account.all())
-
-module.experts = {
-}
