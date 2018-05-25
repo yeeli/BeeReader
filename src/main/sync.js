@@ -1,7 +1,17 @@
 const Feedly = require('../services/feedly')
 
 feedly = new Feedly()
-feedly.getProfile()
+
+const test = async () => {
+  const account = await feedly.getProfile()
+  await feedly.fetchCategories()
+  await feedly.fetchSubscriptions()
+}
+
+test().then(() => {
+  //process.exit(0)
+})
+//feedly.getCategories()
 
 /*
 Account.all().map(function(row){

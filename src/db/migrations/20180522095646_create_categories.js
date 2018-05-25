@@ -4,8 +4,6 @@ exports.up = function(knex, Promise) {
     t.string('oid');
     t.integer('account_id').unsigned().notNullable();
     t.string('title');
-    t.string('html');
-    t.string('url');
     t.integer('unread_count').defaultTo(0);
     t.integer('starred_count').defaultTo(0);
     t.integer('entries_count').defaultTo(0);

@@ -2,11 +2,10 @@ exports.up = function(knex, Promise) {
    return knex.schema.createTable('streams', function(t) {
     t.increments();
     t.string('oid');
-    t.integer('categorie_id').unsigned().notNullable();
     t.integer('account_id').unsigned().notNullable();
     t.string('title');
     t.string('website');
-     t.json('keywords');
+    t.json('keywords');
     t.integer('unread_count').defaultTo(0);
     t.integer('starred_count').defaultTo(0);
     t.integer('entries_count').defaultTo(0);
@@ -15,8 +14,6 @@ exports.up = function(knex, Promise) {
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
 
-  
-    t.foreign('categorie_id').references('id').inTable('categories');
     t.foreign('account_id').references('id').inTable('accounts');
   })
 };

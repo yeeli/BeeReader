@@ -59,7 +59,7 @@
     "knex": "^0.14.6",
     "lodash": "^4.17.4",
     "node-pre-gyp": "^0.10.0",
-    "pluralize": "^5.0.0",
+    "pluralize": "^7.0.0",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dev-utils": "^3.0.0",
