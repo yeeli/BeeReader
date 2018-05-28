@@ -73,7 +73,7 @@ class Feedly extends Service {
              item.categories.forEach( async (cate) => {
                const category = await Category.where({oid: cate.id, account_id: this.account.id, state: 'active'})
                console.log(`CategoryStreams: ${res[0].title} ${category[0].title} synced.`)
-               Stream.createCategoryStreams(category[0].id, res[0].id)
+               await Stream.createCategoryStreams(category[0].id, res[0].id)
              })
         
           }).catch(e => {console.log(e)})
@@ -91,7 +91,13 @@ class Feedly extends Service {
           let resData = res.data
           resData.items.forEach( entry => {
             console.log(`entry: ${entry.title} synced...`)
-            let summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
+            if (entry.content == undefined) {
+              let content = entry.summary.content
+              let summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
+            } else {
+              let content = entry.content.content
+              let summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
+            }
             Entry.create({
             oid: entry.id,
             stream_id: streamId,
@@ -104,7 +110,7 @@ class Feedly extends Service {
               Data.create({
                 entry_id: resEntry[0].id,
                 title: entry.title,
-                content: entry.content,
+                content: content,
                 author: entry.author,
                 url: entry.originId
               })

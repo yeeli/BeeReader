@@ -59,8 +59,8 @@ class Stream extends Model {
     super()
   }
 
-  static createCategoryStreams(category_id, stream_id) {
-    return this.prototype.connection(knex.table("categories_streams").insert({ category_id: category_id,  stream_id: stream_id}))
+  static async createCategoryStreams(category_id, stream_id) {
+    return await this.prototype.connection(knex.table("categories_streams").insert({ category_id: category_id,  stream_id: stream_id}))
   }
 }
 
