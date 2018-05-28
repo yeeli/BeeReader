@@ -6,8 +6,8 @@ exports.up = function(knex, Promise) {
     t.integer('account_id').unsigned().notNullable();
     t.string('title');
     t.text('summary');
-    t.enum('keywords', []);
-    t.jsonb('cover');
+    t.jsonb('keywords', '[]');
+    t.jsonb('cover', '{}');
     t.boolean('unread').defaultTo(false);
     t.boolean('starred').defaultTo(false);
     t.boolean('cached').defaultTo(false);

@@ -17,7 +17,12 @@ class Model {
     return this.connection(knex.table(this.tableName).insert(this.attributes)) 
   }
   static tableName() {
-    return pluralize(this.name.toLowerCase())
+    let pulName = pluralize(this.name.toLowerCase())
+    if(pulName == this.name.toLowerCase()) {
+      return `${pulName}s`
+    } else {
+      return pulName
+    }
   }
   static all() {
     return this.prototype.connection(knex.select().from(this.tableName()))
@@ -59,8 +64,22 @@ class Stream extends Model {
   }
 }
 
+class Entry extends Model {
+  constructor() {
+    super()
+  }
+}
+
+class Data extends Model {
+  constructor() {
+    super()
+  }
+}
+
 module.exports = {
   Account, 
   Category,
-  Stream
+  Stream,
+  Entry,
+  Data
 }

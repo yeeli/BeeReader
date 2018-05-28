@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
     t.integer('account_id').unsigned().notNullable();
     t.string('title');
     t.string('website');
-    t.json('keywords');
+    t.jsonb('keywords');
     t.integer('unread_count').defaultTo(0);
     t.integer('starred_count').defaultTo(0);
     t.integer('entries_count').defaultTo(0);
