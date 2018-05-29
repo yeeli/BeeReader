@@ -1,3 +1,7 @@
-const events = {}
+const urls = {}
 
-export default events
+urls.accountsPath = '/accounts'
+urls.categoriesPath = '/categories'
+urls.subscriptionsPath = '/subscriptions'
+
+export default urls

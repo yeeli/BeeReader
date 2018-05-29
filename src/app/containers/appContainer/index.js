@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 const { ipcRenderer } = require('electron')
 
-import * as AccountActions from '@/actions/account'
+import * as AccountsActions from '@/actions/accounts'
 
 
 class AppContainer extends Component {
@@ -16,7 +16,7 @@ class AppContainer extends Component {
     this.props.dispatch(AccountActions.fetchAccount())
   }
   render () {
-    if(this.props.account.length > 0 ) {
+    if(this.props.accounts.length > 0 ) {
       return <Redirect to='/reader' />
     }
     return (
@@ -32,7 +32,7 @@ class AppContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  return { account: state.Account.items }
+  return { accounts: state.Accounts.items }
 }
 
 

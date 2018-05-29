@@ -9,7 +9,7 @@ export const load = (result) => ({
 export const fetchAccount = () => (dispatch, state) => {
   return dispatch({
     type: REQUEST, 
-    sync: {method: "SYNC", event: "/account"}
+    sync: {url: "accountPath"}
   }).then(res => {
     dispatch(load(res))
   })
