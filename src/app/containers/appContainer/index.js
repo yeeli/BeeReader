@@ -5,13 +5,20 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
 
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+const { ipcRenderer } = require('electron')
+
+import * as AccountActions from '@/actions/account'
 
 
 class AppContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
+    this.props.dispatch(AccountActions.fetchAccount())
   }
   render () {
+    if(this.props.account.length > 0 ) {
+      return <Redirect to='/reader' />
+    }
     return (
       <div id="app">
         <div className="account-loading">
@@ -22,11 +29,10 @@ class AppContainer extends Component {
   }
 }
 
-
 import './index.sass'
 
 const mapStateToProps = state => {
-  return { account: state.account }
+  return { account: state.Account.items }
 }
 
 

@@ -3,14 +3,14 @@ export const LOAD = "ACCOUNT_LOAD"
 
 export const load = (result) => ({
   type: LOAD,
-  items: result.data
+  items: result.data.account
 })
 
 export const fetchAccount = () => (dispatch, state) => {
   return dispatch({
     type: REQUEST, 
-    sync: {method: "SYNC", event: "getAccount"}
+    sync: {method: "SYNC", event: "/account"}
   }).then(res => {
-    load(res)
+    dispatch(load(res))
   })
 }

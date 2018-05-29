@@ -5,13 +5,13 @@ import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
 import Subscriptions from '@/components/subscriptions'
 import Feeds from '@/components/feeds'
-import {fetchSubscriptions} from '@/actions/subscriptions'
+import  * as SubscriptionsActions from '@/actions/subscriptions'
 
 import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
   componentDidMount() {
-    //this.props.fetchSubscriptions()
+    this.props.dispatch(SubscriptionsActions.fetchSubscriptions())
   /*
     self = this
 
@@ -72,7 +72,7 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => ({
-  subscriptions: state.Subscriptions
+  subscriptions: state.Subscriptions.items
 })
 
-export default connect(mapStateToProps, {fetchSubscriptions})(ReaderContainer)
+export default connect(mapStateToProps)(ReaderContainer)

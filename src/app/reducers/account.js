@@ -9,13 +9,13 @@ const defaultState = {
 const Account = (state = defaultState, action) => {
   switch(action.type) {
     case AccountActions.REQUEST:
-      return return {
+      return{
         ...state,
         isFetching: true,
         isLoaded: false
       }
     case AccountActions.LOAD:
-      return return {
+      return {
         ...state,
         isFetching: false,
         isLoaded: true,
