@@ -1,9 +1,9 @@
 const {ipcMain} = require('electron')
 
-const { Stream, Category } = require('../model')
+const { Stream } = require('../model')
 
 ipcMain.on('/subscriptions', (event, arg) => {
-  Stream.all().then(res => {
+  Stream.all(arg).then(res => {
     event.sender.send('/subscriptionsResponse', {
         meta: { status: 'success' }, 
         data: { subscriptions: res }

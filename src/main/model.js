@@ -52,6 +52,9 @@ class Category extends Model {
   constructor() {
     super()
   }
+  static all() {
+   return knex.raw("select *, (select group_concat(stream_id) from categories_streams where category_id = categories.id ) as stream_ids from categories")
+  }
 }
 
 class Stream extends Model {

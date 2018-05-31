@@ -13,7 +13,7 @@ import * as AccountsActions from '@/actions/accounts'
 
 class AppContainer extends Component {
   componentDidMount() {
-    this.props.dispatch(AccountActions.fetchAccount())
+    this.props.dispatch(AccountsActions.fetchAccount())
   }
   render () {
     if(this.props.accounts.length > 0 ) {

@@ -13,9 +13,11 @@ const sync = opts => store => next => action => {
   //  return Promise.resolve(ipcRenderer.sendSync(event, params))
   //}
   event = api[url]
+  console.log("send event: ", event, " params: ",params)
   ipcRenderer.send(event, params)
   return new Promise( (resolve, reject) => {
     return ipcRenderer.once(`${event}Response`, (event, arg) => {
+      console.log(`response event: ${event}Response, data: ${arg}`)
       resolve(arg)
     }) 
   })

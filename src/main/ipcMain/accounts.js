@@ -2,9 +2,9 @@ const {ipcMain} = require('electron')
 
 const { Account } = require('../model')
 
-ipcMain.on('/account', (event, arg) => {
+ipcMain.on('/accounts', (event, arg) => {
   Account.all().then(res => {
-    event.sender.send('/accountResponse', {
+    event.sender.send('/accountsResponse', {
         meta: { status: 'success' }, 
         data: { account: res }
       })

@@ -1,17 +1,20 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import { routerMiddleware, routerActions } from 'react-router-redux'
+import { routerMiddleware } from 'react-router-redux'
 import { createLogger } from 'redux-logger'
 import rootReducer from '@/reducers'
 import syncMiddleware from '@/middleware/sync'
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createHashHistory } from 'history'
+
+import createHistory from 'history/createHashHistory'
+
 
 const logger = createLogger()
-export const history = createHashHistory()
+export const history = createHistory()
 
-const router = routerMiddleware(history);
-const middlewares = [thunk, logger, router, syncMiddleware]
+const historyMiddleware = routerMiddleware(history)
+
+const middlewares = [thunk, logger, syncMiddleware, historyMiddleware]
 
 
 const composeEnhancers =
@@ -21,7 +24,7 @@ const composeEnhancers =
       // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
     }) : composeWithDevTools({ realtime: true, port: 5678 });
 
-export const configureStore = preloadedState => {
+export const configureStore = (history, preloadedState) => {
   const store = createStore(
     rootReducer,
     preloadedState,

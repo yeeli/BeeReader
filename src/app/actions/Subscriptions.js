@@ -9,8 +9,9 @@ export const load = (items) => ({
 export const fetchSubscriptions = () => (dispatch,state)=> {
   return dispatch({
     type: REQUEST, 
-    sync: {url: 'subscriptionsPath' }
+    sync: { url: 'subscriptionsPath' }
   }).then(res => {
-    dispatch(load(res.data))
+    console.log(res)
+    dispatch(load(res.data.subscriptions))
   })
 }

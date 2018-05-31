@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import {List, ListItem} from '@material-ui/core/List'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse'
 import WindowMenu from 'components/WindowMenu'
 
 class Subscriptions extends Component {
@@ -7,58 +12,53 @@ class Subscriptions extends Component {
   state = {
     open: false,
   };
-  /*
-  handleToggle = () => {
+
+  handleClick = () => {
     this.setState({
       open: !this.state.open,
-    });
-  };
-
-  handleNestedListToggle = (item) => {
-    this.setState({
-      open: item.state.open,
-    });
-  };
-
-  listSubscriptions = (items) => {
-    return items.map( item => (
-      <ListItem
-        key={`sub-${item._id}`}
-        primaryText={item.title}
-      />
-    ))
+    })
   }
 
-  listCategories = (subscriptions) => {
-    return subscriptions.map(item => {
+  listSubscriptions = (subscription) => {
+    return (
+      <ListItem button>
+        <ListItemText inset primary={subscription.title} />
+      </ListItem>
+    )
+  }
+
+  listCategories = (categories) => {
+    return categories.map(category => {
       return (
-        <ListItem
-          primaryText={item.label}
-          initiallyOpen={false}
-          primaryTogglesNestedList={true}
-          key={`cate-${item._id}`}
-          nestedItems={this.listSubscriptions(item.subscriptions)}
-        />
+        <div>
+          <ListItem button onClick={this.handleClick}>
+            {this.state.open ? <ExpandMore /> : <ChevronRight />  }
+            <ListItemText inset primary={category.title} style={{color: "#fff"}} />
+          </ListItem>
+          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              { category.subscriptions.map(this.listSubscriptions)}
+            </List>
+          </Collapse>
+        </div>
       )
     })
-  };
-  */
+  }
+
   render () {
-    const {subscriptions} = this.props
+    const { categories } = this.props
 
     return(
       <div className="block-subscriptions">
         <WindowMenu />
         <div className="block-bd">
-          { /*<List>
-            {this.listCategories(subscriptions)}
+          <List>
+            { this.listCategories(categories) }
           </List>
-          */
-          }
         </div>
       </div>
     )
-    }
+  }
 }
 
 import './index.sass'
