@@ -6,10 +6,12 @@ import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
 import Subscriptions from '@/components/subscriptions'
 import Feeds from '@/components/feeds'
+import Entry from '@/components/entry'
 
 import  * as CategoriesActions from '@/actions/categories'
-import  * as SubscriptionsActions from '@/actions/subscriptions'
+import  * as StreamsActions from '@/actions/streams'
 import  * as EntriesActions from '@/actions/entries'
+import  * as DatasActions from '@/actions/datas'
 
 import { Link } from 'react-router-dom'
 
@@ -20,8 +22,9 @@ class ReaderContainer extends Component {
   }
   componentDidMount() {
     this.props.dispatch(CategoriesActions.fetchCategories())
-    this.props.dispatch(SubscriptionsActions.fetchSubscriptions())
+    this.props.dispatch(StreamsActions.fetchStreams())
     this.props.dispatch(EntriesActions.fetchEntries())
+    this.props.dispatch(DatasActions.fetchDatas())
   /*
     self = this
 
@@ -58,9 +61,9 @@ class ReaderContainer extends Component {
   }
 
   componentDidUpdate(){
-    const { Categories, Subscriptions,  Entries } = this.props
-    const subscriptions = Subscriptions.items
-    if(Categories.isLoaded && Subscriptions.isLoaded && !this.state.synced) {
+    const { Categories, Streams,  Entries } = this.props
+    const subscriptions = Streams.items
+    if(Categories.isLoaded && Streams.isLoaded && !this.state.synced) {
       let subscriptionsList = Categories.items.map(category => {
         let subs = category.stream_ids.split(",").map( stream => {
           let index = _.findIndex(subscriptions, (s) => { return stream == s.id.toString() })
@@ -79,11 +82,16 @@ class ReaderContainer extends Component {
 
   render () {
     const { synced, subscriptionsList } = this.state
-    const { Entries } = this.props
+    const { Entries, Datas } = this.props
     let entries = []
+    let data = {}
     if(Entries.isLoaded) {
       entries = Entries.items
     }
+    if(Datas.isLoaded) {
+      data = Datas.items[1]
+    }
+
     return (
       <div id="reader">
         <div className="reader-container split-pane">
@@ -96,7 +104,7 @@ class ReaderContainer extends Component {
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content">
-            <Link to="/">首页</Link>
+            <Entry data={data} />
           </div>
         </div>
       </div>
@@ -107,8 +115,8 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const { Categories, Subscriptions, Entries } = state
-  return { Categories, Subscriptions, Entries }
+  const { Categories, Streams, Entries, Datas } = state
+  return { Categories, Streams, Entries, Datas }
 }
 
 export default connect(mapStateToProps)(ReaderContainer)

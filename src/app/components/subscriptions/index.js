@@ -21,8 +21,8 @@ class Subscriptions extends Component {
 
   listSubscriptions = (subscription) => {
     return (
-      <ListItem button>
-        <ListItemText inset primary={subscription.title} />
+      <ListItem button className="subscription-item" key={subscription.id}>
+        <ListItemText inset primary={subscription.title} className="subscription-title" />
       </ListItem>
     )
   }
@@ -31,9 +31,9 @@ class Subscriptions extends Component {
     return categories.map(category => {
       return (
         <div>
-          <ListItem button onClick={this.handleClick}>
-            {this.state.open ? <ExpandMore /> : <ChevronRight />  }
-            <ListItemText inset primary={category.title} style={{color: "#fff"}} />
+          <ListItem button onClick={this.handleClick} className="category-item" key={category.id}>
+            {this.state.open ? <ExpandMore style={{color: "#fff"}} /> : <ChevronRight style={{color: "#fff"}}/>  }
+            <ListItemText inset primary={category.title} className="category-title"/>
           </ListItem>
           <Collapse in={this.state.open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>

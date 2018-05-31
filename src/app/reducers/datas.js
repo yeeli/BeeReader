@@ -1,4 +1,4 @@
-import * as SubscriptionsActions from '@/actions/subscriptions'
+import * as DatasActions from '@/actions/datas'
 
 const defaultState = {
   isFetching: false,
@@ -6,15 +6,15 @@ const defaultState = {
   items: []
 }
 
-const Subscriptions = (state = [], action) => {
+const Datas = (state = [], action) => {
   switch(action.type) {
-    case SubscriptionsActions.REQUEST:
+    case DatasActions.REQUEST:
       return {
         ...state,
         isFetching: true,
         isLoaded: false
       }
-    case SubscriptionsActions.LOAD:
+    case DatasActions.LOAD:
       return {
         ...state,
         isFetching: false,
@@ -26,4 +26,4 @@ const Subscriptions = (state = [], action) => {
   }
 }
 
-export default Subscriptions
+export default Datas

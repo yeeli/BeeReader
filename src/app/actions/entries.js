@@ -11,7 +11,6 @@ export const fetchEntries = () => (dispatch, state) => {
     type: REQUEST, 
     sync: { url: 'entriesPath'}
   }).then(res => {
-    console.log(res)
     dispatch(load(res.data.entries))
   })
 

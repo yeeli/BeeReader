@@ -3,15 +3,17 @@ import { routerReducer } from 'react-router-redux'
 
 import Accounts from './accounts'
 import Categories from './categories'
-import Subscriptions from './subscriptions'
-import Entries from './Entries'
+import Streams from './streams'
+import Entries from './entries'
+import Datas from './datas'
 
 
 const rootReducer = combineReducers({
   Accounts,
   Categories,
-  Subscriptions,
+  Streams,
   Entries,
+  Datas,
   Router: routerReducer
 })
 

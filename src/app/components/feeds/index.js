@@ -16,8 +16,8 @@ class Feeds extends Component {
           <List>
             { entries.map( (entry) => {
               return (
-                <ListItem button>
-                  <ListItemText inset primary={entry.title}/>
+                <ListItem className="feed-item">
+                  <ListItemText primary={entry.title} secondary={entry.summary.substr(0, 20)} className="feed-title"/>
                 </ListItem> 
               )
             })}

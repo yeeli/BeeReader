@@ -6,8 +6,9 @@ const paths = require('../config/paths')
 //const sync = require('./sync')
 require('./ipcMain/accounts')
 require('./ipcMain/categories')
-require('./ipcMain/subscriptions')
+require('./ipcMain/streams')
 require('./ipcMain/entries')
+require('./ipcMain/datas')
 
 let mainWindow
 
