@@ -7,24 +7,24 @@ import _ from 'lodash'
 class Feeds extends Component {
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { entries } = this.props
+    const { entries, clickFeed, height } = this.props
+    const nheight = height - 100
     return(
       <div className="block-feeds">
-        <div className="block-hd" style={winStyle}>
-        </div>
-        <div className="block-bd">
-          <List>
+        <div className="block-hd" style={winStyle}></div>
+        <div className="block-bd" style={{height: `${nheight}px`}}>
+          <List className="listing-feeds">
             { entries.map( (entry) => {
               return (
-                <ListItem className="feed-item">
+                <ListItem button className="feed-item" onClick={(e) => { clickFeed(e, entry.id) }}>
                   <ListItemText primary={entry.title} secondary={entry.summary.substr(0, 20)} className="feed-title"/>
                 </ListItem> 
               )
             })}
           </List>
-          {_.isEmpty(entries) && <div className="listing-feeds-blank"></div>}
-
+          {_.isEmpty(entries) && <div className="listing-feeds-blank" style={{height: `${nheight - 40}`}}></div>}
         </div>
+        <div className="block-ft">footer</div>
       </div>
     )
   }

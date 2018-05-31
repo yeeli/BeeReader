@@ -3,7 +3,7 @@ import * as DatasActions from '@/actions/datas'
 const defaultState = {
   isFetching: false,
   isLoaded: false,
-  items: []
+  items: {}
 }
 
 const Datas = (state = [], action) => {
@@ -15,11 +15,15 @@ const Datas = (state = [], action) => {
         isLoaded: false
       }
     case DatasActions.LOAD:
+      let listDatas = {}
+      for(let data of action.items) {
+        listDatas[data["entry_id"]] = data 
+      }
       return {
         ...state,
         isFetching: false,
         isLoaded: true,
-        items: action.items
+        items: listDatas
       }
     default:
       return state

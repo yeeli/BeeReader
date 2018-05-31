@@ -1,12 +1,13 @@
 .block-subscriptions
   width: 100%
-  background: #595959
   height: 100%
+  background: #595959
+  position: relative
+  clear: both
   .block-hd
     height: 50px
     border-bottom: 1px solid rgba(72, 72, 72, 0.52)
   .block-bd
-    height: 100%
     overflow-y: auto
     .category-title, .subscription-title
       h3
@@ -17,3 +18,16 @@
       padding: 5px
     .subscription-item
       padding: 5px
+    .subscription-count
+      font-size: 0.8rem
+      font-weight: 100
+      margin-right: 10px
+      color: #c1c1c1
+  .block-ft
+    position: absolute
+    bottom: 0
+    left: 0
+    height: 50px
+    width: 100%
+    background: #595959
+    border-top: 1px solid rgba(72, 72, 72, 0.52)

@@ -18,15 +18,29 @@ import { Link } from 'react-router-dom'
 class ReaderContainer extends Component {
    constructor(props) {
     super(props);
-    this.state = {subscriptionsList : [], synced: false}
+     this.state = {
+       subscriptionsList : [], 
+       synced: false, 
+       showEntry: null, 
+       showSubscriptions: [],
+       browserHeight: document.body.scrollHeight,
+       browserWidth: document.body.scrollWidth,
+       subscriptionsWidth: 250,
+       feedsWidth: 250,
+
+     }
+    this.handleClickFeed = this.handleClickFeed.bind(this)
+    this.handleClickSubscription = this.handleClickSubscription.bind(this)
+    this.handleClickCategory = this.handleClickCategory.bind(this)
   }
   componentDidMount() {
+    let self = this
     this.props.dispatch(CategoriesActions.fetchCategories())
     this.props.dispatch(StreamsActions.fetchStreams())
     this.props.dispatch(EntriesActions.fetchEntries())
     this.props.dispatch(DatasActions.fetchDatas())
-  /*
-    self = this
+
+    window.addEventListener("resize", this.handleWindowResize.bind(this))
 
       interact('.resize1')
       .draggable({
@@ -40,7 +54,9 @@ class ReaderContainer extends Component {
         // update the element's style
         var width = parseFloat(target.offsetWidth)
         width += event.dx;
-        target.style.flex = '0 0 ' +  width + 'px';
+        if( self.state.browserWidth - width - self.state.feedsWidth > 250) {
+          self.setState({subscriptionsWidth: width})
+        }
       });
 
     interact('.resize2')
@@ -55,9 +71,10 @@ class ReaderContainer extends Component {
         // update the element's style
         var width = parseFloat(target.offsetWidth)
         width += event.dx;
-        target.style.flex = '0 0 ' +  width + 'px';
+        if( self.state.browserWidth - width - self.state.subscriptionsWidth > 250) {
+          self.setState({feedsWidth: width})
+        }
       });
-      */
   }
 
   componentDidUpdate(){
@@ -71,7 +88,7 @@ class ReaderContainer extends Component {
             return subscriptions[index]
           }
         })
-        return {...category, subscriptions: subs}
+        return {...category, subscriptions: subs, open: false}
       })
       this.setState({
         subscriptionsList: subscriptionsList,
@@ -80,27 +97,60 @@ class ReaderContainer extends Component {
     }
   }
 
+  handleClickCategory(event, id) {
+    let changeSubscriptions = this.state.subscriptionsList.map((s) => {
+      if(s.id == id) {
+        if (s.open) {
+          return {...s, open: false}
+        } else {
+          return {...s, open: true}
+        }
+      } else {
+        return s
+      }
+    })
+    this.setState({subscriptionsList: changeSubscriptions })
+  }
+  handleWindowResize() {
+    //if( self.state.browserWidth - 250 - self.state.subscriptionsWidth > 250) {
+    //}
+
+    this.setState({browserHeight: document.body.scrollHeight, browserWidth: document.body.scrollWidth })
+  }
+
+  handleClickSubscription(event, id){
+    this.setState({showSubscriptions: [id]})
+  }
+
+  handleClickFeed(event, id) {
+    this.setState({showEntry: id})
+  }
+
   render () {
-    const { synced, subscriptionsList } = this.state
+    const { synced, subscriptionsList, showEntry, showSubscriptions, browserHeight, subscriptionsWidth, feedsWidth } = this.state
     const { Entries, Datas } = this.props
     let entries = []
     let data = {}
     if(Entries.isLoaded) {
       entries = Entries.items
     }
-    if(Datas.isLoaded) {
-      data = Datas.items[1]
+    if(!_.isNil(showEntry)) {
+      data = Datas.items[showEntry]
+    }
+
+    if(!_.isEmpty(showSubscriptions)) {
+      entries = _.takeWhile(entries, (o) => { return _.includes(showSubscriptions, o.stream_id)})
     }
 
     return (
       <div id="reader">
         <div className="reader-container split-pane">
-          <div className="pane pane-subscriptions" ref="paneSubscriptions">
-            <Subscriptions categories={ synced ? this.state.subscriptionsList : [] } />
+          <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
+            <Subscriptions  height={browserHeight} categories={ synced ? this.state.subscriptionsList : [] } onClickSubscription={this.handleClickSubscription} onClickCategory={ this.handleClickCategory } />
           </div>
           <div className="resizer vertical resize1"/>
-          <div className="pane pane-feeds" ref="paneFeeds">
-            <Feeds entries={entries} />
+          <div className="pane pane-feeds" ref="paneFeeds" style={{flex: `0 0 ${feedsWidth}px`}}>
+            <Feeds entries={entries} clickFeed={this.handleClickFeed} height={browserHeight} />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content">

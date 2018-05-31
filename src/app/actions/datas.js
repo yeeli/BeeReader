@@ -8,7 +8,6 @@ export const load = (items) => ({
 
 export const fetchDatas = () => (dispatch, state) => {
   return dispatch({ type: REQUEST, sync: {url: 'datasPath'}}).then(res => {
-    console.log("datas", res)
     dispatch(load(res.data.datas))
   })
 }
