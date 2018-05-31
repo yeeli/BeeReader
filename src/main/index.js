@@ -2,10 +2,12 @@ const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
 const paths = require('../config/paths')
+
 //const sync = require('./sync')
 require('./ipcMain/accounts')
 require('./ipcMain/categories')
 require('./ipcMain/subscriptions')
+require('./ipcMain/entries')
 
 let mainWindow
 

@@ -58,7 +58,7 @@ class Feedly extends Service {
     console.log("fetched /v3/subscriptions")
     var res = await axios.get('/v3/subscriptions')
     const data = res.data
-    data.forEach(async (item, index) => {
+    for (let item of data) {
       console.log(`Subscription: ${item.title} synced.`)
       const resData = await Stream.where({oid: item.id, account_id: this.account.id, state: 'active'})
       if(resData.length < 1 ){
@@ -70,15 +70,14 @@ class Feedly extends Service {
           keywords: JSON.stringify(item.topics),
           state: 'active'
           }).then(async (res) => {
-             item.categories.forEach( async (cate) => {
+             for(let cate of item.categories) {
                const category = await Category.where({oid: cate.id, account_id: this.account.id, state: 'active'})
                console.log(`CategoryStreams: ${res[0].title} ${category[0].title} synced.`)
                await Stream.createCategoryStreams(category[0].id, res[0].id)
-             })
-        
+             }
           }).catch(e => {console.log(e)})
       }
-    })
+    }
 
   }
   async fetchFeeds() {
@@ -91,21 +90,24 @@ class Feedly extends Service {
           let resData = res.data
           resData.items.forEach( entry => {
             console.log(`entry: ${entry.title} synced...`)
+            let summary = ""
+            let content = ""
             if (entry.content == undefined) {
-              let content = entry.summary.content
-              let summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
+              content = entry.summary.content
+              summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
             } else {
-              let content = entry.content.content
-              let summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
+              content = entry.content.content
+              summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
             }
             Entry.create({
             oid: entry.id,
             stream_id: streamId,
             account_id: this.account.id, 
-            title: resData.title,
+            title: entry.title,
             summary: summary,
             keywords: JSON.stringify(entry.keywords),
-            cover:  JSON.stringify(entry.visual)
+            cover:  JSON.stringify(entry.visual),
+            published_at: new Date(parseInt(entry.published))
             }).then(resEntry => {
               Data.create({
                 entry_id: resEntry[0].id,

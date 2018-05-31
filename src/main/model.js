@@ -79,6 +79,7 @@ class Data extends Model {
   }
 }
 
+
 module.exports = {
   Account, 
   Category,

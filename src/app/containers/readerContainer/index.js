@@ -58,9 +58,10 @@ class ReaderContainer extends Component {
   }
 
   componentDidUpdate(){
-    const { isCategoriesLoaded, categories, isSubscriptionsLoaded, subscriptions } = this.props
-    if(isCategoriesLoaded && isSubscriptionsLoaded && !this.state.synced) {
-      let subscriptionsList = categories.map(category => {
+    const { Categories, Subscriptions,  Entries } = this.props
+    const subscriptions = Subscriptions.items
+    if(Categories.isLoaded && Subscriptions.isLoaded && !this.state.synced) {
+      let subscriptionsList = Categories.items.map(category => {
         let subs = category.stream_ids.split(",").map( stream => {
           let index = _.findIndex(subscriptions, (s) => { return stream == s.id.toString() })
           if(index != -1) {
@@ -78,6 +79,11 @@ class ReaderContainer extends Component {
 
   render () {
     const { synced, subscriptionsList } = this.state
+    const { Entries } = this.props
+    let entries = []
+    if(Entries.isLoaded) {
+      entries = Entries.items
+    }
     return (
       <div id="reader">
         <div className="reader-container split-pane">
@@ -86,7 +92,7 @@ class ReaderContainer extends Component {
           </div>
           <div className="resizer vertical resize1"/>
           <div className="pane pane-feeds" ref="paneFeeds">
-            <Feeds />
+            <Feeds entries={entries} />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content">
@@ -101,14 +107,8 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const isCategoriesFetching = state.Categories.isFetching
-  const isCategoriesLoaded = state.Categories.isLoaded
-  const categories = state.Categories.items
-
-  const isSubscriptionsFetching = state.Subscriptions.isFetching
-  const isSubscriptionsLoaded = state.Subscriptions.isLoaded
-  const subscriptions = state.Subscriptions.items
-  return { isCategoriesFetching, isCategoriesLoaded, categories, isSubscriptionsFetching, isSubscriptionsLoaded, subscriptions }
+  const { Categories, Subscriptions, Entries } = state
+  return { Categories, Subscriptions, Entries }
 }
 
 export default connect(mapStateToProps)(ReaderContainer)

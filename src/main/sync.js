@@ -4,8 +4,8 @@ feedly = new Feedly()
 
 const test = async () => {
   const account = await feedly.getProfile()
-  //await feedly.fetchCategories()
-  //await feedly.fetchSubscriptions()
+  await feedly.fetchCategories()
+  await feedly.fetchSubscriptions()
   await feedly.fetchFeeds()
 }
 

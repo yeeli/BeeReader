@@ -1,14 +1,29 @@
 import React, { Component } from 'react'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import _ from 'lodash'
 
 class Feeds extends Component {
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
+    const { entries } = this.props
     return(
       <div className="block-feeds">
         <div className="block-hd" style={winStyle}>
         </div>
         <div className="block-bd">
-          <div className="listing-feeds-blank"></div>
+          <List>
+            { entries.map( (entry) => {
+              return (
+                <ListItem button>
+                  <ListItemText inset primary={entry.title}/>
+                </ListItem> 
+              )
+            })}
+          </List>
+          {_.isEmpty(entries) && <div className="listing-feeds-blank"></div>}
+
         </div>
       </div>
     )

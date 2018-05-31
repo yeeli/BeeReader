@@ -9,7 +9,7 @@ export const load = (items) => ({
 export const fetchEntries = () => (dispatch, state) => {
   return dispatch({
     type: REQUEST, 
-    sync: { url: 'entriesPath' }
+    sync: { url: 'entriesPath'}
   }).then(res => {
     console.log(res)
     dispatch(load(res.data.entries))

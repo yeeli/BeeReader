@@ -11,8 +11,9 @@ exports.up = function(knex, Promise) {
     t.boolean('unread').defaultTo(false);
     t.boolean('starred').defaultTo(false);
     t.boolean('cached').defaultTo(false);
-    t.datetime('published');
+    t.datetime('published_at');
     t.datetime('starred_at');
+    t.datetime('read_at');
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
   

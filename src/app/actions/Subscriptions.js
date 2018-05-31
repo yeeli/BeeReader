@@ -11,7 +11,6 @@ export const fetchSubscriptions = () => (dispatch,state)=> {
     type: REQUEST, 
     sync: { url: 'subscriptionsPath' }
   }).then(res => {
-    console.log(res)
     dispatch(load(res.data.subscriptions))
   })
 }
