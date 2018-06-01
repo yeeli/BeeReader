@@ -8,37 +8,38 @@ class Model {
     this.attributes = attributes
     this.tableName = this.constructor.name
   }
-  connection(fun) {
-    return knex.schema.then(function(){
-      return fun
-    })
-  }
-  save() {
-    return this.connection(knex.table(this.tableName).insert(this.attributes)) 
+  static connection(fun) {
+    return knex(this.tableName())
   }
   static tableName() {
-    let pulName = pluralize(this.name.toLowerCase())
-    if(pulName == this.name.toLowerCase()) {
-      return `${pulName}s`
-    } else {
-      return pulName
-    }
+    let pluralizeName = pluralize(this.name.toLowerCase())
+    return pluralizeName == this.name.toLowerCase() ? `${pluralizeName}s` : pluralizeName
   }
-  static all() {
-    return this.prototype.connection(knex.select().from(this.tableName()))
+
+  static all(){
+    return this.connection().select()
   }
   static where(attributes) {
-    return this.prototype.connection(knex(this.tableName()).where(attributes))
+    return this.connection().where(attributes)
   }
   static create(attributes) {
-    return this.prototype.connection(knex.table(this.tableName()).insert(attributes)).then(id => { return knex(this.tableName()).where({id: id[0]})})
-  }
-  static async count(attributes) {
-    let count = 0
-    await this.prototype.connection(knex.table(this.tableName()).where(attributes).count()).then( function(row){
-      count = row[0]["count(*)"]
+    let self = this
+    return new Promise((resolve, reject) => {
+      self.connection().insert(attributes).then(id => { 
+        self.connection().where({id: id[0]}).then( row => {
+          resolve(row[0])
+        })
+      }) 
     })
-    return  Promise.resolve(count)
+  }
+  static count() {
+    let count = 0
+    return new Promise( (resolve, reject) => {
+      this.connection().count().then((row) => {
+        count = row[0]["count(*)"]
+        resolve(count)
+      })
+    })
   }
 }
 
@@ -52,8 +53,8 @@ class Category extends Model {
   constructor() {
     super()
   }
-  static all() {
-   return knex.raw("select *, (select group_concat(stream_id) from categories_streams where category_id = categories.id ) as stream_ids from categories")
+  static withStreams() {
+    return knex.schema.raw("select *, (select group_concat(stream_id) from categories_streams where category_id = categories.id ) as stream_ids from categories")
   }
 }
 
@@ -63,7 +64,7 @@ class Stream extends Model {
   }
 
   static async createCategoryStreams(category_id, stream_id) {
-    return await this.prototype.connection(knex.table("categories_streams").insert({ category_id: category_id,  stream_id: stream_id}))
+    return await this.connection().insert({ category_id: category_id,  stream_id: stream_id})
   }
 }
 
