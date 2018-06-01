@@ -16,22 +16,23 @@ import  * as DatasActions from '@/actions/datas'
 import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
-   constructor(props) {
+  constructor(props) {
     super(props);
-     this.state = {
-       subscriptionsList : [], 
-       synced: false, 
-       showEntry: null, 
-       showSubscriptions: [],
-       browserHeight: document.body.scrollHeight,
-       browserWidth: document.body.scrollWidth,
-       subscriptionsWidth: 250,
-       feedsWidth: 250,
+    this.state = {
+      subscriptionsList : [], 
+      synced: false, 
+      showEntry: null, 
+      showSubscriptions: [],
+      browserHeight: document.body.scrollHeight,
+      browserWidth: document.body.scrollWidth,
+      subscriptionsWidth: 250,
+      feedsWidth: 250,
 
-     }
+    }
     this.handleClickFeed = this.handleClickFeed.bind(this)
     this.handleClickSubscription = this.handleClickSubscription.bind(this)
     this.handleClickCategory = this.handleClickCategory.bind(this)
+    this.handleResizeFeeds = this.handleResizeFeeds.bind(this)
   }
   componentDidMount() {
     let self = this
@@ -42,39 +43,11 @@ class ReaderContainer extends Component {
 
     window.addEventListener("resize", this.handleWindowResize.bind(this))
 
-      interact('.resize1')
-      .draggable({
-        onmove: window.dragMoveListener
-      })
-      .on('dragmove', function (event) {
-        var target = self.refs.paneSubscriptions;
-        var split = event.target
-        var x = (parseFloat(split.getAttribute('data-x')) || 0);
+    interact('.resize1').draggable({ onmove: window.dragMoveListener })
+      .on('dragmove', self.handleResizeFeeds);
 
-        // update the element's style
-        var width = parseFloat(target.offsetWidth)
-        width += event.dx;
-        if( self.state.browserWidth - width - self.state.feedsWidth > 250) {
-          self.setState({subscriptionsWidth: width})
-        }
-      });
-
-    interact('.resize2')
-      .draggable({
-        onmove: window.dragMoveListener
-      })
-      .on('dragmove', function (event) {
-        var target = self.refs.paneFeeds;
-        var split = event.target
-        var x = (parseFloat(split.getAttribute('data-x')) || 0);
-
-        // update the element's style
-        var width = parseFloat(target.offsetWidth)
-        width += event.dx;
-        if( self.state.browserWidth - width - self.state.subscriptionsWidth > 250) {
-          self.setState({feedsWidth: width})
-        }
-      });
+    interact('.resize2').draggable({ onmove: window.dragMoveListener})
+      .on('dragmove', self.handleResizeFeeds);
   }
 
   componentDidUpdate(){
@@ -97,6 +70,32 @@ class ReaderContainer extends Component {
     }
   }
 
+  handleResizeSubscriptions(event) {
+    var target = self.refs.paneSubscriptions;
+    var split = event.target
+    var x = (parseFloat(split.getAttribute('data-x')) || 0);
+
+    // update the element's style
+    var width = parseFloat(target.offsetWidth)
+    width += event.dx;
+    if( this.state.browserWidth - width - this.state.feedsWidth > 250) {
+      this.setState({subscriptionsWidth: width})
+    }
+
+  }
+
+  handleResizeFeeds(event) {
+    var target = self.refs.paneFeeds
+    var split = event.target 
+    var x = (parseFloat(split.getAttribute('data-x')) || 0)
+    // update the element's style 
+    var width = parseFloat(target.offsetWidth) 
+    width += event.dx; 
+    if( this.state.browserWidth - width - this.state.subscriptionsWidth > 250) {
+      this.setState({feedsWidth: width})
+    }
+  }
+
   handleClickCategory(event, id) {
     let changeSubscriptions = this.state.subscriptionsList.map((s) => {
       if(s.id == id) {
@@ -112,9 +111,9 @@ class ReaderContainer extends Component {
     this.setState({subscriptionsList: changeSubscriptions })
   }
   handleWindowResize() {
-    //if( self.state.browserWidth - 250 - self.state.subscriptionsWidth > 250) {
+    //if(this.feedsWith > 250) {
+    //  this.setState({browserHeight: document.body.scrollHeight, browserWidth: document.body.scrollWidth })
     //}
-
     this.setState({browserHeight: document.body.scrollHeight, browserWidth: document.body.scrollWidth })
   }
 

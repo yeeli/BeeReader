@@ -1,4 +1,5 @@
-const {app, BrowserWindow} = require('electron');
+const electron = require('electron')
+const {app, BrowserWindow} = require('electron')
 const path = require('path');
 const url = require('url');
 const paths = require('../config/paths')
@@ -11,6 +12,10 @@ require('./ipcMain/entries')
 require('./ipcMain/datas')
 
 let mainWindow
+
+//let externalDisplay = displays.find((display) => {
+//  return display.bounds.x !== 0 || display.bounds.y !== 0
+//})
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')({ showDevTools: true });
@@ -29,11 +34,26 @@ const installExtensions = async () => {
 
 
 const createWindow = async () =>{
+
+
   // Install Extensions
   installExtensions()
-  
-  // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, frame: false, minWidth: 800, minHeight: 600})
+
+  // windows infomation
+  let win = {
+    width: 800, 
+    height: 600, 
+    frame: false, 
+    minWidth: 800, 
+    minHeight: 600
+  }
+
+  mainWindow = new BrowserWindow(win)
+
+
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.loadURL("http://localhost:5000/dist/main.html")
+  }
 
   // and load the index.html of the app.
   /*
@@ -43,15 +63,18 @@ const createWindow = async () =>{
     slashes: true
   }))
   */
-  mainWindow.loadURL("http://localhost:5000/dist/main.html")
-
 
   //mainWindow.webContents.openDevTools();
+ const ses = mainWindow.webContents.session
+  console.log(ses.getUserAgent())
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 };
+
+
+app.setName("BeeReader")
 
 app.on('ready', createWindow);
 
@@ -67,4 +90,3 @@ app.on('activate',  () => {
   }
 })
 
-app.setName("BeeReader")

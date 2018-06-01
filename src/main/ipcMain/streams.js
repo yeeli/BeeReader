@@ -1,5 +1,4 @@
 const {ipcMain} = require('electron')
-
 const { Stream } = require('../model')
 
 ipcMain.on('/streams', (event, arg) => {

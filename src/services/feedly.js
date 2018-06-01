@@ -62,64 +62,64 @@ class Feedly extends Service {
       console.log(`Subscription: ${item.title} synced.`)
       const resData = await Stream.where({oid: item.id, account_id: this.account.id, state: 'active'})
       if(resData.length < 1 ){
-          Stream.create({ 
+        Stream.create({ 
           oid: item.id, 
           account_id: this.account.id, 
           title: item.title,
           website: item.website,
           keywords: JSON.stringify(item.topics),
           state: 'active'
-          }).then(async (res) => {
-             for(let cate of item.categories) {
-               const category = await Category.where({oid: cate.id, account_id: this.account.id, state: 'active'})
-               console.log(`CategoryStreams: ${res[0].title} ${category[0].title} synced.`)
-               await Stream.createCategoryStreams(category[0].id, res[0].id)
-             }
-          }).catch(e => {console.log(e)})
+        }).then(async (res) => {
+          for(let cate of item.categories) {
+            const category = await Category.where({oid: cate.id, account_id: this.account.id, state: 'active'})
+            console.log(`CategoryStreams: ${res[0].title} ${category[0].title} synced.`)
+            await Stream.createCategoryStreams(category[0].id, res[0].id)
+          }
+        }).catch(e => {console.log(e)})
       }
     }
 
   }
   async fetchFeeds() {
     console.log("fetched /v3/streams/contents")
-    Stream.where({oid: 'feed/http://www.36kr.com/feed', state: 'active'}).then( (stream) => {
-      let streamId = stream[0].id
-      let streamOid = stream[0].oid
-      let params = {streamId: streamOid, count: 20, ranked: 'newest', ck: Date.now()}
-      axios.get('/v3/streams/contents', {params: params}).then(res => {
-          let resData = res.data
-          resData.items.forEach( entry => {
-            console.log(`entry: ${entry.title} synced...`)
-            let summary = ""
-            let content = ""
-            if (entry.content == undefined) {
-              content = entry.summary.content
-              summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
-            } else {
-              content = entry.content.content
-              summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
-            }
-            Entry.create({
-            oid: entry.id,
-            stream_id: streamId,
-            account_id: this.account.id, 
-            title: entry.title,
-            summary: summary,
-            keywords: JSON.stringify(entry.keywords),
-            cover:  JSON.stringify(entry.visual),
-            published_at: new Date(parseInt(entry.published))
-            }).then(resEntry => {
-              Data.create({
-                entry_id: resEntry[0].id,
-                title: entry.title,
-                content: content,
-                author: entry.author,
-                url: entry.originId
-              })
-            })
+    let stream = await Stream.where({oid: 'feed/http://www.ifanr.com/feed', state: 'active'})
+
+    let streamId = stream[0].id
+    let streamOid = stream[0].oid
+    let params = {streamId: streamOid, count: 20, ranked: 'newest', ck: Date.now()}
+    let res = await axios.get('/v3/streams/contents', {params: params})
+    let resData = res.data
+    for(let entry of resData.items){
+      console.log(`entry: ${entry.title} synced...`)
+      let summary = ""
+      let content = ""
+      if (entry.content == undefined) {
+        content = entry.summary.content
+        summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
+      } else {
+        content = entry.content.content
+        summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
+      }
+      let resEntry = await Entry.create({
+        oid: entry.id,
+        stream_id: streamId,
+        account_id: this.account.id, 
+        title: entry.title,
+        summary: summary,
+        keywords: JSON.stringify(entry.keywords),
+        cover:  JSON.stringify(entry.visual),
+        published_at: new Date(parseInt(entry.published))
+      })
+      if(resEntry) {
+        await Data.create({
+          entry_id: resEntry[0].id,
+          title: entry.title,
+          content: content,
+          author: entry.author,
+          url: entry.originId
         })
-      }).catch(error => { console.log(error)})
-    })
+      }
+    }
   }
 }
 
