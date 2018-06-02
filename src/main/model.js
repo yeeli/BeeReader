@@ -64,7 +64,7 @@ class Stream extends Model {
   }
 
   static async createCategoryStreams(category_id, stream_id) {
-    return await this.connection().insert({ category_id: category_id,  stream_id: stream_id})
+    return await knex("categories_streams").insert({ category_id: category_id,  stream_id: stream_id})
   }
 }
 

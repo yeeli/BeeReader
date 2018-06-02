@@ -6,11 +6,12 @@
   "license": "MIT",
   "scripts": {
     "hs": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack/development.js",
-    "dev": "cross-env HOT=1 NODE_ENV=development electron  -r babel-register -r babel-polyfill --inspect=5858 ./src/main/index.js --dev --enable-logging",
+    "dev": "cross-env HOT=1 NODE_ENV=development electron  -r babel-register -r babel-polyfill ./src/main/index.js --dev --enable-logging",
     "rebuild": "electron-rebuild -f -w sqlite3",
     "migration": "knex --knexfile src/config/database.js --cwd src/db/ migrate:make",
     "rollback": "knex --knexfile src/config/database.js --cwd src/db/ migrate:rollback",
-    "db:dev:migrate": "cross-env NODE_ENV=development node -r babel-register ./src/db/schema.js"
+    "db:dev:migrate": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/db/schema.js",
+    "sync": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/main/sync.js"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

@@ -10,7 +10,7 @@ class Feedly extends Service {
   constructor(){
     super()
     this.apiUri = "http://cloud.feedly.com"
-    this.token = process.env.FEEDLY_TOKEN 
+    this.token = process.env.FEEDLY_TOKEN
     let account
     axios.defaults.baseURL = this.apiUri
     axios.defaults.headers.common['Authorization'] = `OAuth ${this.token}`
@@ -19,20 +19,17 @@ class Feedly extends Service {
     console.log("fetched /v3/profile")
     const res = await axios.get('/v3/profile')
     const data = res.data
-    const resData = await Account.where({oid: data.id})
+    let resData = await Account.where({oid: data.id})
+    if( resData.length < 1 ) {
+      resData = await Account.create({
+        oid: data.id,
+        username: data.login,
+        service: 'Feedly'
+      })
+    }
+    this.account = resData[0]
     return new Promise((resolve, reject) => {
-      if( resData.length < 1 ) {
-        Account.create({
-          oid: data.id,
-          username: data.login,
-          service: 'Feedly'
-        }).then( row => {
-          resolve(row)
-        }).catch( e => { console.log(e)})
-      } else {
-        this.account = resData[0]
-        resolve(resData[0])
-      }
+      resolve(resData[0])
     })
   }
   async fetchCategories() {
@@ -41,14 +38,15 @@ class Feedly extends Service {
     const data = res.data
     for(let [index, item] of data.entries()) {
       const resData = await Category.where({
-        oid: item.id, 
-        account_id: this.account.id, 
+        oid: item.id,
+        account_id: this.account.id,
         state: 'active'
       })
       if(resData.length < 1 ){
-        await Category.create({ 
-          oid: item.id, 
-          account_id: this.account.id, 
+        console.log(`Category: ${item.label} synced.`)
+        await Category.create({
+          oid: item.id,
+          account_id: this.account.id,
           title: item.label,
           sort: index,
           state: 'active'
@@ -64,18 +62,19 @@ class Feedly extends Service {
       const resData = await Stream.where({oid: item.id, account_id: this.account.id, state: 'active'})
       if(resData.length < 1 ){
         console.log(`Subscription: ${item.title} synced.`)
-        let stream = Stream.create({ 
-          oid: item.id, 
-          account_id: this.account.id, 
+        let stream = await Stream.create({
+          oid: item.id,
+          account_id: this.account.id,
           title: item.title,
           website: item.website,
           keywords: JSON.stringify(item.topics),
           state: 'active'
         })
+        console.log(stream)
         for(let cate of item.categories) {
           const category = await Category.where({oid: cate.id, account_id: this.account.id, state: 'active'})
-          console.log(`CategoryStreams: ${res.title} ${category[0].title} synced.`)
-          await Stream.createCategoryStreams(category[0].id, res.id)
+          console.log(`CategoryStreams: ${stream.title} ${category[0].title} synced.`)
+          await Stream.createCategoryStreams(category[0].id, stream.id)
         }
       }
     }
@@ -125,7 +124,11 @@ class Feedly extends Service {
           })
         }
       }
+     await this.sleep(1000)
     }
+  }
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 }
 

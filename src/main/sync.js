@@ -8,9 +8,8 @@ const exitProcess = async() => {
 
 const test = async () => {
   const account = await feedly.getProfile()
-  console.log(account)
-  await feedly.fetchCategories()
-  await feedly.fetchStreams()
+  //await feedly.fetchCategories()
+  //await feedly.fetchStreams()
   await feedly.fetchEntries()
   await exitProcess()
 }
