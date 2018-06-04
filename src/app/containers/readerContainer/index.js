@@ -20,6 +20,7 @@ class ReaderContainer extends Component {
     super(props);
     this.state = {
       subscriptionsList : [], 
+      entriesList: [],
       synced: false, 
       showEntry: null, 
       showSubscriptions: [],
@@ -29,10 +30,12 @@ class ReaderContainer extends Component {
       feedsWidth: 250,
 
     }
+    this.handleSync = this.handleSync.bind(this)
     this.handleClickFeed = this.handleClickFeed.bind(this)
     this.handleClickSubscription = this.handleClickSubscription.bind(this)
     this.handleClickCategory = this.handleClickCategory.bind(this)
     this.handleResizeFeeds = this.handleResizeFeeds.bind(this)
+
   }
   componentDidMount() {
     let self = this
@@ -53,17 +56,21 @@ class ReaderContainer extends Component {
   componentDidUpdate(){
     const { Categories, Streams,  Entries } = this.props
     const subscriptions = Streams.items
-    if(Categories.isLoaded && Streams.isLoaded && !this.state.synced) {
-      let subscriptionsList = Categories.items.map(category => {
-        let subs = category.stream_ids.split(",").map( stream => {
+    if(Categories.isLoaded && Streams.isLoaded && Entries.isLoaded && !this.state.synced ) {
+       let subscriptionsList = Categories.items.map(category => {
+        let subs = []
+        if(!_.isNil(category.stream_ids)) {
+          subs = category.stream_ids.split(",").map( stream => {
           let index = _.findIndex(subscriptions, (s) => { return stream == s.id.toString() })
-          if(index != -1) {
-            return subscriptions[index]
-          }
-        })
+            if(index != -1) {
+              return subscriptions[index]
+            }
+          })
+        }
         return {...category, subscriptions: subs, open: false}
       })
       this.setState({
+        entriesList: Entries.items,
         subscriptionsList: subscriptionsList,
         synced: true
       })
@@ -96,6 +103,10 @@ class ReaderContainer extends Component {
     }
   }
 
+  handleSync(event) {
+    console.log("1")
+  }
+
   handleClickCategory(event, id) {
     let changeSubscriptions = this.state.subscriptionsList.map((s) => {
       if(s.id == id) {
@@ -126,7 +137,7 @@ class ReaderContainer extends Component {
   }
 
   render () {
-    const { synced, subscriptionsList, showEntry, showSubscriptions, browserHeight, subscriptionsWidth, feedsWidth } = this.state
+    const { synced, subscriptionsList, entriesList, showEntry, showSubscriptions, browserHeight, subscriptionsWidth, feedsWidth } = this.state
     const { Entries, Datas } = this.props
     let entries = []
     let data = {}
@@ -145,11 +156,11 @@ class ReaderContainer extends Component {
       <div id="reader">
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
-            <Subscriptions  height={browserHeight} categories={ synced ? this.state.subscriptionsList : [] } onClickSubscription={this.handleClickSubscription} onClickCategory={ this.handleClickCategory } />
+            <Subscriptions  height={browserHeight} categories={ subscriptionsList } onClickSubscription={this.handleClickSubscription} onClickCategory={ this.handleClickCategory }  onClickSync={ this.handleSync } />
           </div>
           <div className="resizer vertical resize1"/>
           <div className="pane pane-feeds" ref="paneFeeds" style={{flex: `0 0 ${feedsWidth}px`}}>
-            <Feeds entries={entries} clickFeed={this.handleClickFeed} height={browserHeight} />
+            <Feeds height={ browserHeight } entries={ entriesList } clickFeed={ this.handleClickFeed }/>
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content">

@@ -7,6 +7,9 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse'
 import Badge from '@material-ui/core/Badge'
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import SyncIcon from '@material-ui/icons/Sync'
 import WindowMenu from 'components/WindowMenu'
 
 class Subscriptions extends Component {
@@ -62,7 +65,11 @@ class Subscriptions extends Component {
             { this.listCategories(categories) }
           </List>
         </div>
-        <div className="block-ft">footer</div>
+        <div className="block-ft">
+          <IconButton variant="fab" aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync}>
+            <SyncIcon className="icon-spin" />
+          </IconButton>
+        </div>
       </div>
     )
   }
