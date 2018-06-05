@@ -7,10 +7,8 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse'
 import Badge from '@material-ui/core/Badge'
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from '@material-ui/icons/Sync'
-import WindowMenu from 'components/WindowMenu'
 
 class Subscriptions extends Component {
 
@@ -32,7 +30,7 @@ class Subscriptions extends Component {
   listCategories = (categories) => {
     return categories.map(category => {
       return (
-        <div>
+        <div key={category.id}>
           <ListItem button onClick={(e) =>{ this.props.onClickCategory(e, category.id)}} className="category-item" key={category.id}>
             {category.open ? <ExpandMore style={{color: "#fff"}} /> : <ChevronRight style={{color: "#fff"}}/>  }
             <ListItemText inset primary={category.title} className="category-title"/>
@@ -55,18 +53,22 @@ class Subscriptions extends Component {
   }
 
   render () {
+    const winStyle = { "WebkitAppRegion": "drag" }
     const { categories, height } = this.props
     const nheight = height - 100
     return(
       <div className="block-subscriptions">
-        <WindowMenu />
+        <div className="block-hd" style={winStyle}></div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
+          <div className="account">
+            <span>Feedly</span>
+          </div>
           <List className="listing-subscriptions">
             { this.listCategories(categories) }
           </List>
         </div>
         <div className="block-ft">
-          <IconButton variant="fab" aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync}>
+          <IconButton aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync}>
             <SyncIcon className="icon-spin" />
           </IconButton>
         </div>

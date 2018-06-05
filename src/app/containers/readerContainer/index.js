@@ -7,11 +7,14 @@ import interact from 'interactjs'
 import Subscriptions from '@/components/subscriptions'
 import Feeds from '@/components/feeds'
 import Entry from '@/components/entry'
+import WindowMenu from '@/components/WindowMenu'
 
+import  * as AppActions from '@/actions/app'
 import  * as CategoriesActions from '@/actions/categories'
 import  * as StreamsActions from '@/actions/streams'
 import  * as EntriesActions from '@/actions/entries'
 import  * as DatasActions from '@/actions/datas'
+
 
 import { Link } from 'react-router-dom'
 
@@ -23,19 +26,19 @@ class ReaderContainer extends Component {
       entriesList: [],
       synced: false, 
       showEntry: null, 
-      showSubscriptions: [],
       browserHeight: document.body.scrollHeight,
       browserWidth: document.body.scrollWidth,
-      subscriptionsWidth: 250,
+      subscriptionsWidth: 150,
       feedsWidth: 250,
+      contentWidth: 500
 
     }
+    this.handleResizeFeeds = this.handleResizeFeeds.bind(this)
+    this.handleResizeSubscriptions = this.handleResizeSubscriptions.bind(this)
     this.handleSync = this.handleSync.bind(this)
     this.handleClickFeed = this.handleClickFeed.bind(this)
     this.handleClickSubscription = this.handleClickSubscription.bind(this)
     this.handleClickCategory = this.handleClickCategory.bind(this)
-    this.handleResizeFeeds = this.handleResizeFeeds.bind(this)
-
   }
   componentDidMount() {
     let self = this
@@ -47,7 +50,7 @@ class ReaderContainer extends Component {
     window.addEventListener("resize", this.handleWindowResize.bind(this))
 
     interact('.resize1').draggable({ onmove: window.dragMoveListener })
-      .on('dragmove', self.handleResizeFeeds);
+      .on('dragmove', self.handleResizeSubscriptions);
 
     interact('.resize2').draggable({ onmove: window.dragMoveListener})
       .on('dragmove', self.handleResizeFeeds);
@@ -78,58 +81,77 @@ class ReaderContainer extends Component {
   }
 
   handleResizeSubscriptions(event) {
-    var target = self.refs.paneSubscriptions;
+    var target = this.refs.paneSubscriptions;
     var split = event.target
     var x = (parseFloat(split.getAttribute('data-x')) || 0);
 
     // update the element's style
     var width = parseFloat(target.offsetWidth)
     width += event.dx;
-    if( this.state.browserWidth - width - this.state.feedsWidth > 250) {
-      this.setState({subscriptionsWidth: width})
+    if( this.state.browserWidth - width - this.state.feedsWidth > 500) {
+      this.setState({ subscriptionsWidth: width })
     }
-
   }
 
   handleResizeFeeds(event) {
-    var target = self.refs.paneFeeds
+    var target = this.refs.paneFeeds
     var split = event.target 
     var x = (parseFloat(split.getAttribute('data-x')) || 0)
     // update the element's style 
     var width = parseFloat(target.offsetWidth) 
-    width += event.dx; 
-    if( this.state.browserWidth - width - this.state.subscriptionsWidth > 250) {
-      this.setState({feedsWidth: width})
+    width += event.dx 
+    if( this.state.browserWidth - width - this.state.subscriptionsWidth > 500) {
+      this.setState({ feedsWidth: width })
     }
+  }
+  handleWindowResize(event) {
+    let browserWidth = document.body.scrollWidth
+    let browserHeight = document.body.scrollHeight
+    let { subscriptionsWidth, feedsWidth, contentWidth } = this.state
+    if( browserWidth < (subscriptionsWidth + feedsWidth + 500)) {
+      contentWidth = 500
+      if(browserWidth - subscriptionsWidth - 500 > 250) {
+        feedsWidth = browserWidth - subscriptionsWidth - 500
+      } else {
+        subscriptionsWidth = browserWidth - 750
+      }
+    } else {
+      contentWidth = browserWidth - subscriptionsWidth - feedsWidth
+    }
+    this.setState({
+      browserHeight: browserHeight, 
+      browserWidth: browserWidth,  
+      contentWidth: contentWidth, 
+      feedsWidth: feedsWidth, 
+      subscriptionsWidth: subscriptionsWidth  
+    })
   }
 
   handleSync(event) {
-    console.log("1")
+    this.props.dispatch(AppActions.syncEntries())
   }
 
   handleClickCategory(event, id) {
-    let changeSubscriptions = this.state.subscriptionsList.map((s) => {
-      if(s.id == id) {
-        if (s.open) {
-          return {...s, open: false}
+    let entries = []
+    let changeSubscriptions = this.state.subscriptionsList.map((category) => {
+      if(category.id == id) {
+        if (category.open) {
+          entries = _.takeWhile(this.props.Entries.items, (o) => { return _.includes(category.stream_ids.split(","), o.stream_id)})
+          return {...category, open: false}
         } else {
-          return {...s, open: true}
+          return {...category, open: true}
         }
       } else {
-        return s
+        return category
       }
     })
-    this.setState({subscriptionsList: changeSubscriptions })
-  }
-  handleWindowResize() {
-    //if(this.feedsWith > 250) {
-    //  this.setState({browserHeight: document.body.scrollHeight, browserWidth: document.body.scrollWidth })
-    //}
-    this.setState({browserHeight: document.body.scrollHeight, browserWidth: document.body.scrollWidth })
+    this.setState({subscriptionsList: changeSubscriptions, entriesList: entries })
   }
 
+
   handleClickSubscription(event, id){
-    this.setState({showSubscriptions: [id]})
+    let entries = _.takeWhile(this.props.Entries.items, (o) => { return _.includes([id], o.stream_id)})
+    this.setState({entriesList: entries})
   }
 
   handleClickFeed(event, id) {
@@ -137,33 +159,27 @@ class ReaderContainer extends Component {
   }
 
   render () {
-    const { synced, subscriptionsList, entriesList, showEntry, showSubscriptions, browserHeight, subscriptionsWidth, feedsWidth } = this.state
-    const { Entries, Datas } = this.props
+    const { synced, subscriptionsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
+    const { Account, Entries, Datas } = this.props
     let entries = []
     let data = {}
-    if(Entries.isLoaded) {
-      entries = Entries.items
-    }
     if(!_.isNil(showEntry)) {
       data = Datas.items[showEntry]
     }
 
-    if(!_.isEmpty(showSubscriptions)) {
-      entries = _.takeWhile(entries, (o) => { return _.includes(showSubscriptions, o.stream_id)})
-    }
-
     return (
       <div id="reader">
+        <WindowMenu />
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
-            <Subscriptions  height={browserHeight} categories={ subscriptionsList } onClickSubscription={this.handleClickSubscription} onClickCategory={ this.handleClickCategory }  onClickSync={ this.handleSync } />
+            <Subscriptions  height={browserHeight} categories={ subscriptionsList } onClickSubscription={this.handleClickSubscription} onClickCategory={ this.handleClickCategory }  onClickSync={ this.handleSync }  />
           </div>
           <div className="resizer vertical resize1"/>
           <div className="pane pane-feeds" ref="paneFeeds" style={{flex: `0 0 ${feedsWidth}px`}}>
             <Feeds height={ browserHeight } entries={ entriesList } clickFeed={ this.handleClickFeed }/>
           </div>
           <div className="resizer vertical resize2" />
-          <div className="pane pane-content">
+          <div className="pane pane-content" ref="paneContent">
             <Entry data={data} />
           </div>
         </div>

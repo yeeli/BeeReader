@@ -11,4 +11,3 @@ export const fetchCategories = () => (dispatch, state) => {
     dispatch(load(res.data.categories))
   })
 }
-

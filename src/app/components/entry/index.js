@@ -15,7 +15,9 @@ class Entry extends Component {
               <div className="entry-info">
               </div>
             </div>
-            {<div dangerouslySetInnerHTML={{__html: data.content}} className="entry-content"></div> }
+            <div className="entry-bd">
+              {<div dangerouslySetInnerHTML={{__html: data.content}} className="entry-content"></div> }
+            </div>
           </div>
         </div>
       </div>

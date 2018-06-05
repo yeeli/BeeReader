@@ -8,7 +8,6 @@ ipcMain.on('/streams', (event, arg) => {
   } else {
     params = arg
   }
-  console.log(params)
   Stream.where(params).then(res => {
     event.sender.send('/streamsResponse', {
         meta: { status: 'success' }, 

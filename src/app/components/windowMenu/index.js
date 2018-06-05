@@ -16,9 +16,8 @@ class WindowMenu extends Component {
   };
 
   render () {
-    const winStyle = { "WebkitAppRegion": "drag" }
     return (
-      <div className="block-hd" style={winStyle}>
+      <div className="block-win-menu">
         <button id="btn-close" onClick={ this.handleWindowClose }>x</button>
         <button id="btn-min" onClick={ this.handleWindowMin }>-</button>
         <button id="btn-max" onClick={ this.handleWindowMax }>+</button>
@@ -26,5 +25,8 @@ class WindowMenu extends Component {
     )
   }
 }
+
+
+import './index.sass'
 
 export default WindowMenu
