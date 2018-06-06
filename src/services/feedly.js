@@ -23,6 +23,7 @@ class Feedly extends Service {
     if( resData.length < 1 ) {
       resData = await Account.create({
         oid: data.id,
+        title: data.login,
         username: data.login,
         service: 'Feedly'
       })

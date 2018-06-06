@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
     t.increments();
     t.string('oid');
     t.string('service')
+    t.string('title')
     t.string('username');
     t.integer('unread_count').defaultTo(0);
     t.integer('starred_count').defaultTo(0);
@@ -17,4 +18,4 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema.dropTable('accounts')
-  };
+};
