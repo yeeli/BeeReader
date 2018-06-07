@@ -1,4 +1,5 @@
 const Feedly = require('../services/feedly')
+const Rss = require('../services/rss')
 
 feedly = new Feedly()
 
@@ -14,4 +15,9 @@ const test = async () => {
   await exitProcess()
 }
 
-test()
+(async () => {
+  let rss = new Rss()
+  let entries = await rss.getEntries("http://www.ifanr.com/feed")
+  //let entries = await rss.getEntries("http://36kr.com/feed")
+  console.log(entries)
+})()

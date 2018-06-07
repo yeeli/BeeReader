@@ -81,55 +81,48 @@ class Feedly extends Service {
     }
 
   }
-  async fetchEntries() {
+  async fetchEntries(oid) {
     console.log("fetched /v3/streams/contents")
-    let streams = await Stream.where({account_id: this.account.id, state: 'active'})
-    for (let stream of streams) {
-      let streamId = stream.id
-      let streamOid = stream.oid
-      let params = {streamId: streamOid, count: 20, ranked: 'newest', ck: Date.now()}
-      let res = await axios.get('/v3/streams/contents', {params: params})
-      let resData = res.data
-      for(let entry of resData.items){
-        const entryData = await Entry.where({oid: entry.id, account_id: this.account.id})
-        if (entryData.length > 0) {
-          continue 
-        }
-        console.log(`entry: ${entry.title} synced...`)
-        let summary = ""
-        let content = ""
-        if (entry.content == undefined) {
-          content = entry.summary.content
-          summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
-        } else {
-          content = entry.content.content
-          summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
-        }
-        let resEntry = await Entry.create({
-          oid: entry.id,
-          stream_id: streamId,
-          account_id: this.account.id, 
-          title: entry.title,
-          summary: summary,
-          keywords: JSON.stringify(entry.keywords),
-          cover:  JSON.stringify(entry.visual),
-          published_at: new Date(parseInt(entry.published))
-        })
-        if(resEntry) {
-          await Data.create({
-            entry_id: resEntry.id,
-            title: entry.title,
-            content: content,
-            author: entry.author,
-            url: entry.originId
-          })
-        }
+    let stream = await Stream.connection.where({account_id: this.account.id, state: 'active'}).first()
+
+    let params = {streamId: oid, count: 20, ranked: 'newest', ck: Date.now()}
+    let res = await axios.get('/v3/streams/contents', {params: params})
+    let resData = res.data
+    for(let entry of resData.items){
+      const entryData = await Entry.where({oid: entry.id, account_id: this.account.id})
+      if (entryData.length > 0) {
+        continue 
       }
-     await this.sleep(1000)
+      console.log(`entry: ${entry.title} synced...`)
+      let summary = ""
+      let content = ""
+      if (entry.content == undefined) {
+        content = entry.summary.content
+        summary = htmlToText.fromString(content, {ignoreImage: true, ignoreHref: true})
+      } else {
+        content = entry.content.content
+        summary = htmlToText.fromString(entry.summary.content, {ignoreImage: true, ignoreHref: true})
+      }
+      let resEntry = await Entry.create({
+        oid: entry.id,
+        stream_id: streamId,
+        account_id: this.account.id, 
+        title: entry.title,
+        summary: summary,
+        keywords: JSON.stringify(entry.keywords),
+        cover:  JSON.stringify(entry.visual),
+        published_at: new Date(parseInt(entry.published))
+      })
+      if(resEntry) {
+        await Data.create({
+          entry_id: resEntry.id,
+          title: entry.title,
+          content: content,
+          author: entry.author,
+          url: entry.originId
+        })
+      }
     }
-  }
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
   }
 }
 
