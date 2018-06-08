@@ -5,14 +5,26 @@ const parse5 = require('parse5')
 const { JSDOM } = require('jsdom')
 
 class Rss extends Service {
-  constructor(){
+  constructor(uri){
     super()
     this.parser = new Parser()
+    this.uri = uri
   }
 
-  async getEntries(uri) {
-    let feed = await this.parser.parseURL(uri)
-    return feed.items.map(res => {
+  async getFeed() {
+    this.feed = await this.parser.parseURL(this.uri)
+    let icon = await this.getIcon()
+    return {
+      title: this.feed.title,
+      link: this.feed.link,
+      description: this.feed.description,
+      feed_url: this.feed.feedUrl,
+      icon: icon
+    }
+  }
+
+  async getEntries() {
+    return this.feed.items.map(res => {
       let content = ""
       let summary = null
       if(res['content:encoded']){
@@ -32,14 +44,17 @@ class Rss extends Service {
     })
   }
 
-  async getIcon(uri){
-    let res = await axios.get(uri)
+  async getIcon(){
+    let res = await axios.get(this.feed.link)
     const window = (new JSDOM(res.data)).window
-    iconLink = ""
+    let iconLink = null
     for (let i of window.document.querySelectorAll("link")) {
       if(i.outerHTML.match('shortcut icon')){
         iconLink = i.href
       }
+    }
+    if(!iconLink.match(/^http/)){
+      iconLink = 'http:' + iconLink
     }
     return iconLink
   }

@@ -1,23 +1,10 @@
 const Feedly = require('../services/feedly')
 const Rss = require('../services/rss')
+const Model = require('./model')
 
-feedly = new Feedly()
-
-const exitProcess = async() => {
-  process.exit(0)
+const syncAccount = async () => {
+  let account = await Model.Account.connection().where({service: 'Rss'}).first()
+  console.log(account)
 }
 
-const test = async () => {
-  const account = await feedly.getProfile()
-  await feedly.fetchCategories()
-  await feedly.fetchStreams()
-  await feedly.fetchEntries()
-  await exitProcess()
-}
-
-(async () => {
-  let rss = new Rss()
-  let entries = await rss.getEntries("http://www.ifanr.com/feed")
-  //let entries = await rss.getEntries("http://36kr.com/feed")
-  console.log(entries)
-})()
+syncAccount()

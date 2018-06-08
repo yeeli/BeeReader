@@ -5,11 +5,7 @@ const url = require('url');
 const paths = require('../config/paths')
 
 //const sync = require('./sync')
-require('./ipcMain/accounts')
-require('./ipcMain/categories')
-require('./ipcMain/streams')
-require('./ipcMain/entries')
-require('./ipcMain/datas')
+require('./routers')
 
 let mainWindow
 
@@ -34,7 +30,6 @@ const installExtensions = async () => {
 
 
 const createWindow = async () =>{
-
 
   // Install Extensions
   installExtensions()
