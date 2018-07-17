@@ -19,9 +19,5 @@ ipcMain.on('/categories', (event, arg) => {
    })
 })
 
-ipcMain.on('/categories/sync', (event, arg) => {
-
-})
-
 ipcMain.on('/categories/create', (event, arg) => {
 })

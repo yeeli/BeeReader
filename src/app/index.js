@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import { AppContainer } from 'react-hot-loader'
 
 import Root from '~/containers/root';
@@ -18,10 +18,6 @@ document.addEventListener('drop', function (event) {
   return false;
 }, false);
 
-
-// Material-UI use react-tap-event-plugin to listen for touch / tap / clickevents.
-// http://www.material-ui.com/#/get-started/installation
-injectTapEventPlugin();
 
 const store = configureStore()
 

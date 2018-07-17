@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
@@ -10,6 +11,7 @@ import Subscriptions from '~/components/subscriptions'
 import Feeds from '~/components/feeds'
 import Entry from '~/components/entry'
 import WindowMenu from '~/components/WindowMenu'
+import AddSubscription from '~/components/addSubscription'
 
 // Actions
 import  * as AppActions from '~/actions/app'
@@ -172,6 +174,7 @@ class ReaderContainer extends Component {
 
     return (
       <div id="reader">
+        <CssBaseline />
         <WindowMenu />
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
@@ -196,7 +199,7 @@ class ReaderContainer extends Component {
             <Entry data={data} />
           </div>
         </div>
-
+        <AddSubscription />
       </div>
     )
   }

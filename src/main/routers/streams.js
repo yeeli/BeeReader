@@ -35,6 +35,7 @@ ipcMain.on('/streams', (event, arg) => {
  */
 
 ipcMain.on('/streams/create', (event, arg) => {
+
 })
 
 ipcMain.on('/streams/destroy', (event, arg) => {
