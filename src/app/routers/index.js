@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Route, Switch, HashRouter as Router} from 'react-router-dom'
 import { ConnectedRouter } from 'react-router-redux'
 
-import AppContainer from '@/containers/appContainer'
-import ReaderContainer from '@/containers/readerContainer'
+import AppContainer from '~/containers/appContainer'
+import ReaderContainer from '~/containers/readerContainer'
 
 
 const Routers = ({history}) =>(

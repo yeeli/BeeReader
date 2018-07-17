@@ -12,7 +12,7 @@ module.exports = {
       actions: 'actions',
       reducers: 'reducers',
       'react-native': 'react-native-web',
-      '@': paths.appSrc
+      '~': paths.appSrc
     }
   },
   module: {

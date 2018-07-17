@@ -11,3 +11,6 @@ export const fetchCategories = () => (dispatch, state) => {
     dispatch(load(res.data.categories))
   })
 }
+
+export const addCategory = (name) => (dispatch, state) =>  {
+}

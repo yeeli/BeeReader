@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class Entry extends Component {
   render() {
@@ -23,6 +24,10 @@ class Entry extends Component {
       </div>
     )
   }
+}
+
+Entry.propTypes = {
+  data: PropTypes.object
 }
 
 

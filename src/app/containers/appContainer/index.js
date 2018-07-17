@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 const { ipcRenderer } = require('electron')
 
-import * as AccountsActions from '@/actions/accounts'
+import * as AccountsActions from '~/actions/accounts'
 
 
 class AppContainer extends Component {

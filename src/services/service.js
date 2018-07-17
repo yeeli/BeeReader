@@ -3,6 +3,5 @@ module.exports = class Service {
     //axios.defaults.baseURL = this.getApiUri()
     //this.apiUrl = ''
   }
-    
 }
 

@@ -1,4 +1,4 @@
-import * as DatasActions from '@/actions/datas'
+import * as DatasActions from '~/actions/datas'
 
 const defaultState = {
   isFetching: false,

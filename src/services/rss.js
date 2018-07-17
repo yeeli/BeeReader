@@ -14,16 +14,18 @@ class Rss extends Service {
   async getFeed() {
     this.feed = await this.parser.parseURL(this.uri)
     let icon = await this.getIcon()
+    let link = this.feed.link.trim()
     return {
       title: this.feed.title,
-      link: this.feed.link,
+      link: link,
       description: this.feed.description,
-      feed_url: this.feed.feedUrl,
-      icon: icon
+      feed_url: this.feed.feedUrl || this.uri,
+      icon: icon,
+      items: this.getEntries()
     }
   }
 
-  async getEntries() {
+  getEntries() {
     return this.feed.items.map(res => {
       let content = ""
       let summary = null
@@ -32,11 +34,12 @@ class Rss extends Service {
       } else {
         content = res.content
       }
+      let publishedAt = new Date(res.pubDate.trim())
       return { 
         title: res.title, 
         author: res.creator, 
         link:  res.link,
-        published_at: res.pubDate,
+        published_at: publishedAt,
         content: content,
         summary: res.contentSnippet,
         keywords: res.categories,

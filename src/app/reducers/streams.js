@@ -1,4 +1,4 @@
-import * as StreamsActions from '@/actions/streams'
+import * as StreamsActions from '~/actions/streams'
 
 const defaultState = {
   isFetching: false,

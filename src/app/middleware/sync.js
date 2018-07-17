@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import api from '@/config/api'
+import api from '~/config/api'
 
 
 const sync = opts => store => next => action => {

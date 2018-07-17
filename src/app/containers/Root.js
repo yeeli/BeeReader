@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 
-import Routers from '@/routers'
+import Routers from '~/routers'
 
-import '@/shared/layout.sass'
+import '~/shared/layout.sass'
 
 //import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 //import getMuiTheme from 'material-ui/styles/getMuiTheme'

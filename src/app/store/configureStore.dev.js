@@ -2,12 +2,11 @@ import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { routerMiddleware } from 'react-router-redux'
 import { createLogger } from 'redux-logger'
-import rootReducer from '@/reducers'
-import syncMiddleware from '@/middleware/sync'
 import { composeWithDevTools } from 'redux-devtools-extension';
-
 import createHistory from 'history/createHashHistory'
 
+import rootReducer from '~/reducers'
+import syncMiddleware from '~/middleware/sync'
 
 const logger = createLogger()
 export const history = createHistory()

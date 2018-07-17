@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -9,22 +10,33 @@ import Collapse from '@material-ui/core/Collapse'
 import Badge from '@material-ui/core/Badge'
 import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from '@material-ui/icons/Sync'
+import AddIcon from '@material-ui/icons/Add'
 
 class Subscriptions extends Component {
 
-  listSubscriptions = (subscription) => {
+  setStream = (stream) => {
     return (
-      <ListItem button className="subscription-item" key={subscription.id} onClick={(e) => { this.props.onClickSubscription(e, subscription.id)}}>
-        <ListItemText inset primary={subscription.title} className="subscription-title" />
-        { subscription.entries_count > 0 && 
+      <ListItem button className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickSubscription(e, stream.id)}}>
+        <ListItemText inset primary={stream.title} className="subscription-title" />
+        { stream.entries_count > 0 && 
             (
               <ListItemSecondaryAction>
-                <span className="subscription-count">{subscription.entries_count}</span>
+                <span className="subscription-count">{ stream.entries_count }</span>
               </ListItemSecondaryAction>
             )
         }
       </ListItem>
     )
+  }
+
+  listSubscriptions = (subscriptions) => {
+    return subscriptions.map( subscription  => {
+      return (
+        <div key={ subscription.id }>
+          { this.setStream(subscription) }
+        </div>
+      )
+    }) 
   }
 
   listCategories = (categories) => {
@@ -54,27 +66,40 @@ class Subscriptions extends Component {
 
   render () {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { categories, height } = this.props
+    const { subscriptions, height } = this.props
     const nheight = height - 100
     return(
       <div className="block-subscriptions">
         <div className="block-hd" style={winStyle}></div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
           <div className="account">
-            <span>Feedly</span>
+            <span>Rss</span>
           </div>
           <List className="listing-subscriptions">
-            { this.listCategories(categories) }
+            {
+               this.listSubscriptions(subscriptions) 
+            }
           </List>
         </div>
         <div className="block-ft">
-          <IconButton aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync}>
-            <SyncIcon className="icon-spin" />
+          <IconButton aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync }>
+            <SyncIcon />
+          </IconButton>
+          <IconButton aria-label="add" className="btn-add">
+            <AddIcon />
           </IconButton>
         </div>
       </div>
     )
   }
+}
+
+Subscriptions.propTypes = {
+  height: PropTypes.number,
+  subscriptions: PropTypes.array,
+  onClickSubscription: PropTypes.func,
+  onClickCategory: PropTypes.func,
+  onClickSync: PropTypes.func,
 }
 
 import './index.sass'

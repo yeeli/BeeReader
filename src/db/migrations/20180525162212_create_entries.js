@@ -16,6 +16,7 @@ exports.up = function(knex, Promise) {
     t.datetime('read_at');
     t.timestamp('created_at').defaultTo(knex.fn.now());
     t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.string('state');
   
     t.foreign('stream_id').references('id').inTable('streams');
    }) 

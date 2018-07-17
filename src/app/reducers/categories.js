@@ -1,4 +1,4 @@
-import * as CategoriesActions from '@/actions/categories'
+import * as CategoriesActions from '~/actions/categories'
 
 const defaultState = {
   isFetching: false,

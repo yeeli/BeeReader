@@ -1,4 +1,4 @@
-import * as AccountsActions from '@/actions/accounts'
+import * as AccountsActions from '~/actions/accounts'
 
 const defaultState = {
   isFetching: false,

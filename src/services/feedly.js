@@ -15,6 +15,7 @@ class Feedly extends Service {
     axios.defaults.baseURL = this.apiUri
     axios.defaults.headers.common['Authorization'] = `OAuth ${this.token}`
   }
+
   async getProfile() {
     console.log("fetched /v3/profile")
     const res = await axios.get('/v3/profile')
@@ -33,6 +34,7 @@ class Feedly extends Service {
       resolve(resData[0])
     })
   }
+
   async fetchCategories() {
     console.log("fetched /v3/categories")
     var res = await axios.get('/v3/categories')
@@ -55,6 +57,7 @@ class Feedly extends Service {
       }
     }
   }
+
   async fetchStreams() {
     console.log("fetched /v3/subscriptions")
     var res = await axios.get('/v3/subscriptions')
@@ -79,8 +82,8 @@ class Feedly extends Service {
         }
       }
     }
-
   }
+
   async fetchEntries(oid) {
     console.log("fetched /v3/streams/contents")
     let stream = await Stream.connection.where({account_id: this.account.id, state: 'active'}).first()

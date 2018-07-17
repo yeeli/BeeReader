@@ -15,3 +15,7 @@ export const fetchEntries = () => (dispatch, state) => {
   })
 
 }
+
+export const addEntry = (uri) => (dispatch, state) => {
+
+}

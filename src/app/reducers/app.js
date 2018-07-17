@@ -1,4 +1,4 @@
-import * as AppActions from '@/actions/app'
+import * as AppActions from '~/actions/app'
 
 const defaultState = {
 }
