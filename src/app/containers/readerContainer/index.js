@@ -7,11 +7,11 @@ import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
 
 // Components
-import Subscriptions from '~/components/subscriptions'
+import Streams from '~/components/streams'
 import Feeds from '~/components/feeds'
 import Entry from '~/components/entry'
 import WindowMenu from '~/components/WindowMenu'
-import AddSubscription from '~/components/addSubscription'
+import AddStream from '~/components/addStream'
 
 // Actions
 import  * as AppActions from '~/actions/app'
@@ -24,21 +24,25 @@ import  * as DatasActions from '~/actions/datas'
 import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      subscriptionsList : [], 
-      entriesList: [],
-      synced: false, 
-      showEntry: null, 
-      browserHeight: document.body.scrollHeight,
-      browserWidth: document.body.scrollWidth,
-      subscriptionsWidth: 250,
-      feedsWidth: 250,
-      contentWidth: 500
 
-    }
+  state = {
+    streamsList : [], 
+    entriesList: [],
+    showEntry: null, 
+    browserHeight: document.body.scrollHeight,
+    browserWidth: document.body.scrollWidth,
+    subscriptionsWidth: 250,
+    feedsWidth: 320,
+    contentWidth: 500,
+    openNewStream: false,
+    synced: false 
   }
+
+  constructor(props) {
+    super(props)
+    this.rssUrlRef = React.createRef()
+  }
+
   componentDidMount() {
     let self = this
     this.props.dispatch(CategoriesActions.fetchCategories())
@@ -57,24 +61,24 @@ class ReaderContainer extends Component {
 
   componentDidUpdate(){
     const { Categories, Streams,  Entries } = this.props
-    const subscriptions = Streams.items
+    const streams = Streams.items
 
     if(Categories.isLoaded && Streams.isLoaded && Entries.isLoaded && !this.state.synced ) {
-      let subscriptionsList = Categories.items.map(category => {
+      let streamsList = Categories.items.map(category => {
         let subs = []
         if(!_.isNil(category.stream_ids)) {
           subs = category.stream_ids.split(",").map( stream => {
-          let index = _.findIndex(subscriptions, (s) => { return stream == s.id.toString() })
+            let index = _.findIndex(subscriptions, (s) => { return stream == s.id.toString() })
             if(index != -1) {
               return subscriptions[index]
             }
           })
         }
-        return {...category, subscriptions: subscriptions, open: false}
+        return {...category, streams: streams, open: false}
       })
       this.setState({
         entriesList: Entries.items,
-        subscriptionsList: subscriptions,
+        streamsList: streams,
         synced: true
       })
     }
@@ -130,13 +134,25 @@ class ReaderContainer extends Component {
 
   // Subscription Events
 
-  handleSync = (event) =>  {
+  handleClickSync = (event) =>  {
     this.props.dispatch(AppActions.syncEntries())
+  }
+
+  handleClickNewStream = (event) => {
+    this.setState({ openNewStream: true })
+  }
+
+  handleCloseNewStream = () => {
+    this.setState({ openNewStream: false })
+  }
+
+  handleSearchStream = (event, value) => {
+    this.props.dispatch(StreamsActions.fetchRss(value))
   }
 
   handleClickCategory = (event, id) => {
     let entries = []
-    let changeSubscriptions = this.state.subscriptionsList.map((category) => {
+    let changeStreams = this.state.streamsList.map((category) => {
       if(category.id == id) {
         if (category.open) {
           entries = _.takeWhile(this.props.Entries.items, (o) => { return _.includes(category.stream_ids.split(","), o.stream_id) })
@@ -148,11 +164,11 @@ class ReaderContainer extends Component {
         return category
       }
     })
-    this.setState({subscriptionsList: changeSubscriptions, entriesList: entries })
+    this.setState({streamsList: changeStreams, entriesList: entries })
   }
 
 
-  handleClickSubscription = (event, id) => {
+  handleClickStream = (event, id) => {
     let entries = _.takeWhile(this.props.Entries.items, (o) => { return _.includes([id], o.stream_id)})
     this.setState({entriesList: entries})
   }
@@ -163,8 +179,10 @@ class ReaderContainer extends Component {
     this.setState({showEntry: id})
   }
 
+
+
   render () {
-    const { synced, subscriptionsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
+    const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
     const { Account, Entries, Datas } = this.props
     let entries = []
     let data = {}
@@ -178,12 +196,13 @@ class ReaderContainer extends Component {
         <WindowMenu />
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
-            <Subscriptions  
+            <Streams  
               height={browserHeight} 
-              subscriptions={ subscriptionsList }
-              onClickSubscription={this.handleClickSubscription} 
+              streams={ streamsList }
+              onClickStream={ this.handleClickStream } 
               onClickCategory={ this.handleClickCategory }  
-              onClickSync={ this.handleSync }  
+              onClickSync={ this.handleClickSync }  
+              onClickNewStream={ this.handleClickNewStream } 
             />
           </div>
           <div className="resizer vertical resize1"/>
@@ -199,7 +218,7 @@ class ReaderContainer extends Component {
             <Entry data={data} />
           </div>
         </div>
-        <AddSubscription />
+        <AddStream open={ this.state.openNewStream } onClose={ this.handleCloseNewStream } onSearch={ this.handleSearchStream } />
       </div>
     )
   }

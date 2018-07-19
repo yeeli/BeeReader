@@ -18,6 +18,7 @@ class Feeds extends Component {
             { entries.map( (entry) => {
               return (
                 <ListItem key={entry.id} button className="feed-item" onClick={(e) => { clickFeed(e, entry.id) }}>
+                  <div></div>
                   <ListItemText primary={entry.title} secondary={entry.summary.substr(0, 20)} className="feed-title"/>
                 </ListItem> 
               )

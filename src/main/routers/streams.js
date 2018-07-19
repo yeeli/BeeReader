@@ -1,6 +1,7 @@
 const {ipcMain} = require('electron')
 const _ = require('lodash')
 const { Stream } = require('../model')
+const Rss = require('../../services/rss')
 
 /*
  * /streams
@@ -39,4 +40,14 @@ ipcMain.on('/streams/create', (event, arg) => {
 })
 
 ipcMain.on('/streams/destroy', (event, arg) => {
+})
+
+ipcMain.on('/streams/rss', (event, arg) => {
+  let rss = new Rss(arg.url)
+  rss.getFeed().then(res => {
+    event.sender.send('/streams/rssResponse', {
+      meta: { status: 'success'},
+      data: { rss: res }
+    })
+  })
 })

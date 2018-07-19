@@ -12,11 +12,11 @@ import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from '@material-ui/icons/Sync'
 import AddIcon from '@material-ui/icons/Add'
 
-class Subscriptions extends Component {
+class Streams extends Component {
 
   setStream = (stream) => {
     return (
-      <ListItem button className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickSubscription(e, stream.id)}}>
+      <ListItem button className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickStream(e, stream.id)}}>
         <ListItemText inset primary={stream.title} className="subscription-title" />
         { stream.entries_count > 0 && 
             (
@@ -29,11 +29,11 @@ class Subscriptions extends Component {
     )
   }
 
-  listSubscriptions = (subscriptions) => {
-    return subscriptions.map( subscription  => {
+  listStreams = (streams) => {
+    return streams.map( stream  => {
       return (
-        <div key={ subscription.id }>
-          { this.setStream(subscription) }
+        <div key={ stream.id }>
+          { this.setStream(stream) }
         </div>
       )
     }) 
@@ -56,7 +56,7 @@ class Subscriptions extends Component {
           </ListItem>
           <Collapse in={category.open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              { category.subscriptions.map(this.listSubscriptions)}
+              { category.streams.map(this.listStreams)}
             </List>
           </Collapse>
         </div>
@@ -66,7 +66,7 @@ class Subscriptions extends Component {
 
   render () {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { subscriptions, height } = this.props
+    const { streams, height } = this.props
     const nheight = height - 100
     return(
       <div className="block-subscriptions">
@@ -77,7 +77,7 @@ class Subscriptions extends Component {
           </div>
           <List className="listing-subscriptions">
             {
-               this.listSubscriptions(subscriptions) 
+              this.listStreams(streams) 
             }
           </List>
         </div>
@@ -85,7 +85,7 @@ class Subscriptions extends Component {
           <IconButton aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync }>
             <SyncIcon />
           </IconButton>
-          <IconButton aria-label="add" className="btn-add">
+          <IconButton aria-label="add" className="btn-add" onClick={ this.props.onClickNewStream }>
             <AddIcon />
           </IconButton>
         </div>
@@ -94,7 +94,7 @@ class Subscriptions extends Component {
   }
 }
 
-Subscriptions.propTypes = {
+Streams.propTypes = {
   height: PropTypes.number,
   subscriptions: PropTypes.array,
   onClickSubscription: PropTypes.func,
@@ -103,4 +103,4 @@ Subscriptions.propTypes = {
 }
 
 import './index.sass'
-export default Subscriptions
+export default Streams

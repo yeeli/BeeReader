@@ -6,11 +6,23 @@ export const load = (items) => ({
   items: items
 })
 
-export const fetchStreams = () => (dispatch,state)=> {
+export const fetchStreams = () => (dispatch,state) => {
   return dispatch({
     type: REQUEST, 
     sync: { url: 'streamsPath' }
   }).then(res => {
     dispatch(load(res.data.streams))
+  })
+}
+
+export const fetchRss = (url) => (dispatch, state) => {
+  return dispatch({
+    type: REQUEST,
+    sync: { 
+      url: 'rssStreamsPath',
+      params: { url: url }
+    }
+  }).then( res => {
+    console.log(res)
   })
 }

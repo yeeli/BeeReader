@@ -1,7 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser'
 
 class Entry extends Component {
+  transform = (node) => {
+    if (node.type === 'tag' && node.name === 'img' ) {
+      console.log(node)
+      return <img src={ node.attribs.src } />
+    }
+  }
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { data } = this.props
@@ -17,7 +24,7 @@ class Entry extends Component {
               </div>
             </div>
             <div className="entry-bd">
-              {<div dangerouslySetInnerHTML={{__html: data.content}} className="entry-content"></div> }
+              { data.content && ReactHtmlParser(data.content, { transform: this.transform }) }
             </div>
           </div>
         </div>
