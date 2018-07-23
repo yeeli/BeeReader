@@ -16,10 +16,14 @@ class Feeds extends Component {
         <div className="block-bd" style={{height: `${nheight}px`}}>
           <List className="listing-feeds">
             { entries.map( (entry) => {
+              let date = new Date(entry.published_at)
               return (
                 <ListItem key={entry.id} button className="feed-item" onClick={(e) => { clickFeed(e, entry.id) }}>
-                  <div></div>
-                  <ListItemText primary={entry.title} secondary={entry.summary.substr(0, 20)} className="feed-title"/>
+                  <div className="feed-info"><span>{date.toDateString()}</span></div>
+                  <div className="feed-detail">
+                    <h3 className="feed-title">{entry.title}</h3> 
+                    <p className="feed-summary">{entry.summary.substr(0, 20)}</p>
+                  </div>
                 </ListItem> 
               )
             })}

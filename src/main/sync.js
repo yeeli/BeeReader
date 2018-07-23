@@ -2,30 +2,26 @@ const Rss = require('../services/rss')
 const Model = require('./model')
 const _ = require('lodash')
 
-//Create Stream
+const syncStream = async (id) => {
+  let streams = await Model.Stream.where({id: id})
+  let stream = streams[0]
+  let accounts = await Model.Account.where({ id: stream.account_id })
+  let account = accounts[0]
+  if(account.service == "Rss") {
+    syncWithRss(stream)
+  }
+}
 
-
-async function sync() {
-  let stream = await Model.Stream.where({account_id: 1, oid: 'http://36kr.com/feed'})
-  let rss = new Rss('http://36kr.com/feed')
+const syncWithRss = async (stream) => {
+  let rss = new Rss(stream.oid)
   let feed = await rss.getFeed()
-  if(_.isEmpty(stream)){
-    stream = await Model.Stream.create({
-      oid: 'http://36kr.com/feed',
-      account_id: 1,
-      title: feed.title,
-      website: feed.link,
-      state: 'active'
-    })
-  } 
-  for(let item of feed.items){
-    let entryData = await Model.Entry.where({ account_id: 1, oid: item.link, state: 'active'})
+  for(let item of feed.items) {
+    let entryData = await Model.Entry.where({ account_id: stream.account_id, oid: item.link, state: 'active'})
     if(_.isEmpty(entryData)){
-      console.log(`create item ${item.title} `)
       let entryInfo = {
         oid: item.link, 
-        stream_id: stream[0].id,
-        account_id: 1,
+        stream_id: stream.id,
+        account_id: stream.account_id,
         title: item.title,
         summary: item.summary,
         keywords: JSON.stringify(item.keywords),
@@ -45,6 +41,7 @@ async function sync() {
       }
     }
   }
-
 }
-sync()
+
+
+module.exports = {withStream: syncStream}

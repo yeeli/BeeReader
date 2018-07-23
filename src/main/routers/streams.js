@@ -2,6 +2,7 @@ const {ipcMain} = require('electron')
 const _ = require('lodash')
 const { Stream } = require('../model')
 const Rss = require('../../services/rss')
+const Sync = require('../sync')
 
 /*
  * /streams
@@ -50,4 +51,8 @@ ipcMain.on('/streams/rss', (event, arg) => {
       data: { rss: res }
     })
   })
+})
+
+ipcMain.on('/streams/sync', (event, arg) => {
+   Sync.withStream(arg.id) 
 })

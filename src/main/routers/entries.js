@@ -17,7 +17,7 @@ ipcMain.on('/entries', (event, arg) => {
   } else {
     params = arg
   }
-  Entry.where(params).then(res => {
+  Entry.where(params).orderBy('created_at', 'desc').then(res => {
     event.sender.send('/entriesResponse', {
         meta: { status: 'success' }, 
         data: { entries: res }

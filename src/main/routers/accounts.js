@@ -9,8 +9,3 @@ ipcMain.on('/accounts', (event, arg) => {
       })
    })
 })
-
-
-ipcMain.on('/accounts/sync', (event, arg) => {
-
-})

@@ -11,7 +11,7 @@ import Streams from '~/components/streams'
 import Feeds from '~/components/feeds'
 import Entry from '~/components/entry'
 import WindowMenu from '~/components/WindowMenu'
-import AddStream from '~/components/addStream'
+import AddStream from '~/components/dialogs/addStream'
 
 // Actions
 import  * as AppActions from '~/actions/app'
@@ -29,7 +29,7 @@ class ReaderContainer extends Component {
     streamsList : [], 
     entriesList: [],
     showEntry: null, 
-    browserHeight: document.body.scrollHeight,
+    browserHeight: window.outerHeight,
     browserWidth: document.body.scrollWidth,
     subscriptionsWidth: 250,
     feedsWidth: 320,
@@ -111,7 +111,7 @@ class ReaderContainer extends Component {
 
   handleWindowResize = (event) => {
     let browserWidth = document.body.scrollWidth
-    let browserHeight = document.body.scrollHeight
+    let browserHeight = window.outerHeight
     let { subscriptionsWidth, feedsWidth, contentWidth } = this.state
     if( browserWidth < (subscriptionsWidth + feedsWidth + 500)) {
       contentWidth = 500
@@ -178,7 +178,6 @@ class ReaderContainer extends Component {
   handleClickFeed = (event, id) => {
     this.setState({showEntry: id})
   }
-
 
 
   render () {

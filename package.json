@@ -12,7 +12,7 @@
     "rollback": "knex --knexfile src/config/database.js --cwd src/db/ migrate:rollback",
     "db:dev:migrate": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/db/migrate.js",
     "db:dev:seeds": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/db/seeds.js",
-    "sync": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/main/sync.js"
+    "sync": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/main/test_sync.js"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
