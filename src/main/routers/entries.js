@@ -34,6 +34,6 @@ ipcMain.on('/entries', (event, arg) => {
  * 
  */
 
-ipcMain.on('/entries/create', (event, arg) => {
+ipcMain.on('/entries/make_read', (event, arg) => {
 
 })

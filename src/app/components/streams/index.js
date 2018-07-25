@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -11,13 +12,17 @@ import Badge from '@material-ui/core/Badge'
 import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from '@material-ui/icons/Sync'
 import AddIcon from '@material-ui/icons/Add'
+import RssIcon from '@material-ui/icons/RssFeed'
 
 class Streams extends Component {
 
   setStream = (stream) => {
     return (
       <ListItem button className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickStream(e, stream.id)}}>
-        <ListItemText inset primary={stream.title} className="subscription-title" />
+        <ListItemIcon>
+          <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/>
+        </ListItemIcon>
+        <ListItemText primary={stream.title} className="subscription-title" />
         { stream.entries_count > 0 && 
             (
               <ListItemSecondaryAction>
@@ -45,6 +50,7 @@ class Streams extends Component {
         <div key={category.id}>
           <ListItem button onClick={(e) =>{ this.props.onClickCategory(e, category.id)}} className="category-item" key={category.id}>
             {category.open ? <ExpandMore style={{color: "#fff"}} /> : <ChevronRight style={{color: "#fff"}}/>  }
+
             <ListItemText inset primary={category.title} className="category-title"/>
             { category.entries_count > 0 && 
                 (
@@ -75,6 +81,17 @@ class Streams extends Component {
           <div className="account">
             <span>Rss</span>
           </div>
+          <List>
+            <ListItem button>
+              <ListItemText primary="All" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Unread" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Today" />
+            </ListItem>
+          </List> 
           <List className="listing-subscriptions">
             {
               this.listStreams(streams) 

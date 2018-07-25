@@ -37,7 +37,7 @@ ipcMain.on('/streams', (event, arg) => {
  */
 
 ipcMain.on('/streams/create', (event, arg) => {
-
+   Sync.createStream(arg.id, arg.url) 
 })
 
 ipcMain.on('/streams/destroy', (event, arg) => {
@@ -54,5 +54,5 @@ ipcMain.on('/streams/rss', (event, arg) => {
 })
 
 ipcMain.on('/streams/sync', (event, arg) => {
-   Sync.withStream(arg.id) 
+   Sync.syncStream(arg.id) 
 })

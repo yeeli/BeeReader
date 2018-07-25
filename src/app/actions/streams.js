@@ -9,20 +9,35 @@ export const load = (items) => ({
 export const fetchStreams = () => (dispatch,state) => {
   return dispatch({
     type: REQUEST, 
-    sync: { url: 'streamsPath' }
+    sync: { 
+      url: 'streamsPath' 
+    }
   }).then(res => {
     dispatch(load(res.data.streams))
   })
 }
 
-export const fetchRss = (url) => (dispatch, state) => {
+export const addStream = (url) => (dispatch, state) => {
   return dispatch({
     type: REQUEST,
-    sync: { 
-      url: 'rssStreamsPath',
-      params: { url: url }
+    sync: {
+      url: 'createStreamsPath',
+      params: {
+        id: 1,
+        url: url
+      }
     }
-  }).then( res => {
+  }).then(res => {
     console.log(res)
+  })
+}
+
+export const syncStreams = (id) => (dispatch, state) => {
+  return dispatch({
+    type: REQUEST,
+    sync: {
+      url: 'syncStreamsPath',
+      params: {id: id}
+    }
   })
 }

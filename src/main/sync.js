@@ -12,6 +12,22 @@ const syncStream = async (id) => {
   }
 }
 
+const createStream = async (account, uri) => {
+  let stream = await Model.Stream.where({account_id: account, oid: uri})
+  let rss = new Rss(uri)
+  let feed = await rss.getFeed()
+  if(_.isEmpty(stream)){
+    stream = await Model.Stream.create({
+      oid: uri,
+      account_id: account,
+      title: feed.title,
+      website: feed.link,
+      state: 'active'
+    })
+    syncWithRss(stream)
+  } 
+}
+
 const syncWithRss = async (stream) => {
   let rss = new Rss(stream.oid)
   let feed = await rss.getFeed()
@@ -44,4 +60,4 @@ const syncWithRss = async (stream) => {
 }
 
 
-module.exports = {withStream: syncStream}
+module.exports = {syncStream: syncStream, createStream: createStream}

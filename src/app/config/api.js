@@ -6,6 +6,7 @@ urls.streamsPath = '/streams'
 urls.rssStreamsPath = '/streams/rss'
 urls.entriesPath = '/entries'
 urls.datasPath = '/datas'
-urls.syncPath = '/sync'
+urls.syncStreamsPath = '/streams/sync'
+urls.createStreamsPath = '/streams/create'
 
 export default urls

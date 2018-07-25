@@ -11,7 +11,8 @@ import Streams from '~/components/streams'
 import Feeds from '~/components/feeds'
 import Entry from '~/components/entry'
 import WindowMenu from '~/components/WindowMenu'
-import AddStream from '~/components/dialogs/addStream'
+import AddStreamDialog from '~/components/dialogs/addStream'
+import SubscribeStreamDialog from '~/components/dialogs/subscribeStream'
 
 // Actions
 import  * as AppActions from '~/actions/app'
@@ -35,6 +36,7 @@ class ReaderContainer extends Component {
     feedsWidth: 320,
     contentWidth: 500,
     openNewStream: false,
+    openSubscribeStream: false,
     synced: false 
   }
 
@@ -135,7 +137,10 @@ class ReaderContainer extends Component {
   // Subscription Events
 
   handleClickSync = (event) =>  {
-    this.props.dispatch(AppActions.syncEntries())
+    const {items} = this.props.Streams
+    for(let stream of items) {
+      this.props.dispatch(StreamsActions.syncStreams(stream.id))
+    }
   }
 
   handleClickNewStream = (event) => {
@@ -147,7 +152,18 @@ class ReaderContainer extends Component {
   }
 
   handleSearchStream = (event, value) => {
-    this.props.dispatch(StreamsActions.fetchRss(value))
+    this.props.dispatch(AppActions.fetchRss(value))
+    this.setState({ openNewStream: false, openSubscribeStream: true })
+  }
+
+  handleCloseSubscribeStream = () => {
+    this.setState({ openSubscribeStream: false })
+  }
+
+  handleSubscribeStream = (event, categories = []) => {
+    const { feed_url } = this.props.App.subscribeRss
+    this.props.dispatch(StreamsActions.addStream(feed_url))
+    this.setState({ openSubscribeStream: false })
   }
 
   handleClickCategory = (event, id) => {
@@ -169,7 +185,13 @@ class ReaderContainer extends Component {
 
 
   handleClickStream = (event, id) => {
-    let entries = _.takeWhile(this.props.Entries.items, (o) => { return _.includes([id], o.stream_id)})
+    let entries = []
+    for(let entry of this.props.Entries.items){ 
+      if(id === entry.stream_id) {
+        entries.push(entry)
+      }
+    }
+    
     this.setState({entriesList: entries})
   }
 
@@ -182,7 +204,7 @@ class ReaderContainer extends Component {
 
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
-    const { Account, Entries, Datas } = this.props
+    const { App, Account, Entries, Datas, Categories } = this.props
     let entries = []
     let data = {}
     if(!_.isNil(showEntry)) {
@@ -217,7 +239,18 @@ class ReaderContainer extends Component {
             <Entry data={data} />
           </div>
         </div>
-        <AddStream open={ this.state.openNewStream } onClose={ this.handleCloseNewStream } onSearch={ this.handleSearchStream } />
+        <AddStreamDialog 
+          open={ this.state.openNewStream } 
+          onClose={ this.handleCloseNewStream } 
+          onSearch={ this.handleSearchStream } 
+        />
+        <SubscribeStreamDialog 
+          open={ this.state.openSubscribeStream } 
+          onClose={ this.handleCloseSubscribeStream } 
+          onSubscribe = { this.handleSubscribeStream }
+          categories = {Categories.items} 
+          rss={App.subscribeRss}
+        />
       </div>
     )
   }
@@ -226,8 +259,8 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const { Categories, Streams, Entries, Datas } = state
-  return { Categories, Streams, Entries, Datas }
+  const { App, Categories, Streams, Entries, Datas } = state
+  return { App, Categories, Streams, Entries, Datas }
 }
 
 export default connect(mapStateToProps)(ReaderContainer)

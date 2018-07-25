@@ -4,6 +4,8 @@ import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from
 import _ from 'lodash'
 
 class Entry extends Component {
+  entryRef = React.createRef()
+
   state = {
     showData: null
   }
@@ -26,6 +28,10 @@ class Entry extends Component {
     }
   }
 
+  componentWillUpdate() {
+    this.entryRef.current.scrollTop = 0
+  }
+
   handleClickEvent = (event, url) => {
     this.setState({showData: url})
   }
@@ -46,11 +52,12 @@ class Entry extends Component {
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { data } = this.props
+    
     return(
       <div className="block-entry">
         <div className="block-hd" style={winStyle}>
         </div>
-        <div className="block-bd">
+        <div className="block-bd" ref={this.entryRef}>
           { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }}></webview> }
           { data && ( !this.state.showData && this.renderEntry(data))}
         </div>
