@@ -21,6 +21,18 @@ const Streams = (state = [], action) => {
         isLoaded: true,
         items: action.items
       }
+    case StreamsActions.SYNCING:
+      console.log(action)
+      let items = state.items.map( (item) =>{
+        if(action.id == item.id) {
+          item['sync'] = true
+        }
+        return item
+      })
+      return {
+        ...state,
+        items: items
+      }
     default:
       return state
   }

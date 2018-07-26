@@ -6,7 +6,7 @@ import Accounts from './accounts'
 import Categories from './categories'
 import Streams from './streams'
 import Entries from './entries'
-import Datas from './datas'
+import Data from './data'
 
 
 const rootReducer = combineReducers({
@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   Categories,
   Streams,
   Entries,
-  Datas,
+  Data,
   Router: routerReducer
 })
 

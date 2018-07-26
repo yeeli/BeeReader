@@ -19,7 +19,7 @@ import  * as AppActions from '~/actions/app'
 import  * as CategoriesActions from '~/actions/categories'
 import  * as StreamsActions from '~/actions/streams'
 import  * as EntriesActions from '~/actions/entries'
-import  * as DatasActions from '~/actions/datas'
+import  * as DataActions from '~/actions/data'
 
 
 import { Link } from 'react-router-dom'
@@ -27,17 +27,17 @@ import { Link } from 'react-router-dom'
 class ReaderContainer extends Component {
 
   state = {
-    streamsList : [], 
-    entriesList: [],
-    showEntry: null, 
     browserHeight: window.outerHeight,
     browserWidth: document.body.scrollWidth,
     subscriptionsWidth: 250,
     feedsWidth: 320,
     contentWidth: 500,
+    streamsList : [], 
+    entriesList: [],
     openNewStream: false,
     openSubscribeStream: false,
-    synced: false 
+    selectedStream: 'all',
+    selectedEntry: null
   }
 
   constructor(props) {
@@ -50,7 +50,6 @@ class ReaderContainer extends Component {
     this.props.dispatch(CategoriesActions.fetchCategories())
     this.props.dispatch(StreamsActions.fetchStreams())
     this.props.dispatch(EntriesActions.fetchEntries())
-    this.props.dispatch(DatasActions.fetchDatas())
 
     window.addEventListener("resize", this.handleWindowResize.bind(this))
 
@@ -192,24 +191,22 @@ class ReaderContainer extends Component {
       }
     }
     
-    this.setState({entriesList: entries})
+    this.props.dispatch(DataActions.clearData())
+    this.setState({entriesList: entries, selectedStream: id})
   }
 
   // Feed Events
 
   handleClickFeed = (event, id) => {
-    this.setState({showEntry: id})
+    this.props.dispatch(DataActions.fetchData(id))
+    this.setState({ selectedEntry: id })
   }
 
 
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
-    const { App, Account, Entries, Datas, Categories } = this.props
+    const { App, Account, Entries, Data, Categories } = this.props
     let entries = []
-    let data = {}
-    if(!_.isNil(showEntry)) {
-      data = Datas.items[showEntry]
-    }
 
     return (
       <div id="reader">
@@ -220,6 +217,7 @@ class ReaderContainer extends Component {
             <Streams  
               height={browserHeight} 
               streams={ streamsList }
+              selectedItem={ this.state.selectedStream }
               onClickStream={ this.handleClickStream } 
               onClickCategory={ this.handleClickCategory }  
               onClickSync={ this.handleClickSync }  
@@ -231,12 +229,13 @@ class ReaderContainer extends Component {
             <Feeds 
               height={ browserHeight } 
               entries={ entriesList } 
+              selectedItem={ this.state.selectedEntry }
               clickFeed={ this.handleClickFeed }
             />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            <Entry data={data} />
+            <Entry data={Data.item} />
           </div>
         </div>
         <AddStreamDialog 
@@ -259,8 +258,8 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const { App, Categories, Streams, Entries, Datas } = state
-  return { App, Categories, Streams, Entries, Datas }
+  const { App, Categories, Streams, Entries, Data } = state
+  return { App, Categories, Streams, Entries, Data }
 }
 
 export default connect(mapStateToProps)(ReaderContainer)

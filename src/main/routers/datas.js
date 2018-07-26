@@ -3,16 +3,12 @@ const _ = require('lodash')
 
 const { Data } = require('../model')
 
-ipcMain.on('/datas', (event, arg) => {
-  if(_.isNil(arg)){
-    params = {}
-  } else {
-    params = arg
-  }
+ipcMain.on('/data', (event, arg) => {
+  params = _.isNil(arg) ? {} : arg
   Data.where(params).then(res => {
-    event.sender.send('/datasResponse', {
+    event.sender.send('/dataResponse', {
         meta: { status: 'success' }, 
-        data: { datas: res }
+        data: { data: res[0] }
       })
    })
 })

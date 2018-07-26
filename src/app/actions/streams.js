@@ -1,5 +1,6 @@
 export const REQUEST = "STREAMS_REQUEST"
 export const LOAD = "STREAMS_LOAD"
+export const SYNCING = "SYNCING"
 
 export const load = (items) => ({
   type: LOAD,
@@ -33,6 +34,7 @@ export const addStream = (url) => (dispatch, state) => {
 }
 
 export const syncStreams = (id) => (dispatch, state) => {
+  dispatch({type: SYNCING, id: id})
   return dispatch({
     type: REQUEST,
     sync: {

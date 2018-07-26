@@ -8,7 +8,7 @@ import _ from 'lodash'
 class Feeds extends Component {
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { entries, clickFeed, height } = this.props
+    const { entries, selectedItem,  clickFeed, height } = this.props
     const nheight = height - 100
     return(
       <div className="block-feeds">
@@ -18,7 +18,7 @@ class Feeds extends Component {
             { entries.map( (entry) => {
               let date = new Date(entry.published_at)
               return (
-                <ListItem key={entry.id} button className="feed-item" onClick={(e) => { clickFeed(e, entry.id) }}>
+                <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'}`} onClick={(e) => { clickFeed(e, entry.id) }}>
                   <div className="feed-info"><span>{date.toDateString()}</span></div>
                   <div className="feed-detail">
                     <h3 className="feed-title">{entry.title}</h3> 

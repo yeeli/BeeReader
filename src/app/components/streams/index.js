@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
+import MenuList from '@material-ui/core/MenuList'
+import MenuItem from '@material-ui/core/MenuItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -13,14 +13,15 @@ import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from '@material-ui/icons/Sync'
 import AddIcon from '@material-ui/icons/Add'
 import RssIcon from '@material-ui/icons/RssFeed'
+import ToysIcon from '@material-ui/icons/Toys'
 
 class Streams extends Component {
 
-  setStream = (stream) => {
+  setStream = (stream, selected) => {
     return (
-      <ListItem button className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickStream(e, stream.id)}}>
+      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickStream(e, stream.id)}}>
         <ListItemIcon>
-          <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/>
+          { stream.sync ? <ToysIcon style={{ color: '#fff', fontSize: '15px', marginRight: 0}}  className="icon-spin"/> : <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/> }
         </ListItemIcon>
         <ListItemText primary={stream.title} className="subscription-title" />
         { stream.entries_count > 0 && 
@@ -30,15 +31,16 @@ class Streams extends Component {
               </ListItemSecondaryAction>
             )
         }
-      </ListItem>
+      </MenuItem>
     )
   }
 
-  listStreams = (streams) => {
+  listStreams = (streams, selectedItem) => {
     return streams.map( stream  => {
+      let selected = stream.id == selectedItem
       return (
         <div key={ stream.id }>
-          { this.setStream(stream) }
+          { this.setStream(stream, selected) }
         </div>
       )
     }) 
@@ -72,7 +74,7 @@ class Streams extends Component {
 
   render () {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { streams, height } = this.props
+    const { streams, height, selectedItem } = this.props
     const nheight = height - 100
     return(
       <div className="block-subscriptions">
@@ -81,22 +83,22 @@ class Streams extends Component {
           <div className="account">
             <span>Rss</span>
           </div>
-          <List>
-            <ListItem button>
+          <MenuList>
+            <MenuItem selected={ selectedItem == "all"}>
               <ListItemText primary="All" />
-            </ListItem>
-            <ListItem button>
+            </MenuItem>
+            <MenuItem selected={ selectedItem == "unread"}>
               <ListItemText primary="Unread" />
-            </ListItem>
-            <ListItem button>
+            </MenuItem>
+            <MenuItem selected={ selectedItem == "today"}>
               <ListItemText primary="Today" />
-            </ListItem>
-          </List> 
-          <List className="listing-subscriptions">
+            </MenuItem>
+            </MenuList> 
+          <MenuList className="listing-subscriptions">
             {
-              this.listStreams(streams) 
+              this.listStreams(streams, selectedItem) 
             }
-          </List>
+          </MenuList>
         </div>
         <div className="block-ft">
           <IconButton aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync }>
