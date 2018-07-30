@@ -1,5 +1,6 @@
 export const REQUEST = "CATEGORIES_REQUEST"
 export const LOAD = "CATEGORIES_LOAD"
+export const ADD = "CATEGORIES_ADD"
 
 export const load = (items) => ({
   type: LOAD,
@@ -12,5 +13,22 @@ export const fetchCategories = () => (dispatch, state) => {
   })
 }
 
-export const addCategory = (name) => (dispatch, state) =>  {
+export const add = (item) => ({
+  type: ADD,
+  item: item
+})
+
+export const addCategory = (title) => (dispatch, state) =>  {
+  return dispatch({
+    type: REQUEST,
+    sync: { 
+      url: 'createCategoriesPath',
+      params: {
+        account_id: 1,
+        title: title
+      }
+    }
+  }).then(res => {
+    dispatch(add(res.data.category))
+  })
 }

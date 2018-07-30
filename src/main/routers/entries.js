@@ -1,6 +1,7 @@
 const {ipcMain} = require('electron')
 const _ = require('lodash')
 const { Entry } = require('../model')
+const Sync = require('../sync')
 
 /*
  * /entries
@@ -11,19 +12,38 @@ const { Entry } = require('../model')
  *
  */
 
-ipcMain.on('/entries', (event, arg) => {
-  if(_.isNil(arg)){
-    params = {}
-  } else {
-    params = arg
-  }
+ipcMain.on('/entries', (event, arg, ktm) => {
+  let params = _.isNil(arg) ? {} : arg
   Entry.where(params).orderBy('created_at', 'desc').then(res => {
-    event.sender.send('/entriesResponse', {
+    event.sender.send(`/entriesResponse?ktm=${ktm}`, {
         meta: { status: 'success' }, 
         data: { entries: res }
       })
    })
 })
+
+/*
+ *
+ * /entries/sync
+ *
+ * @desc Sync all entries
+ *
+ * @params stream_id [Integer] stream Id
+ *
+ */
+ 
+ipcMain.on('/entries/sync', (event, arg, ktm) => {
+  let params = _.isNil(arg) ? {} : arg
+  Sync.syncStream(arg.stream_id).then(res => {
+     event.sender.send(`/entries/syncResponse?ktm=${ktm}`, {
+       meta: {status: 'success'},
+       data: { entries: res }
+     })
+  }).catch(e => {
+    console.log(e)
+  })
+})
+
 
 /*
  * /entries/create
@@ -34,6 +54,6 @@ ipcMain.on('/entries', (event, arg) => {
  * 
  */
 
-ipcMain.on('/entries/make_read', (event, arg) => {
+ipcMain.on('/entries/make_read', (event, arg, ktm) => {
 
 })

@@ -1,6 +1,7 @@
 export const REQUEST = "STREAMS_REQUEST"
 export const LOAD = "STREAMS_LOAD"
-export const SYNCING = "SYNCING"
+export const ADD = "STREAMS_ADD"
+export const SYNCING = "STREAMS_SYNCING"
 
 export const load = (items) => ({
   type: LOAD,
@@ -18,28 +19,22 @@ export const fetchStreams = () => (dispatch,state) => {
   })
 }
 
+export const add = (item) => ({
+  type: ADD,
+  item: item
+})
+
 export const addStream = (url) => (dispatch, state) => {
   return dispatch({
     type: REQUEST,
     sync: {
       url: 'createStreamsPath',
       params: {
-        id: 1,
+        account: 1,
         url: url
       }
     }
   }).then(res => {
     console.log(res)
-  })
-}
-
-export const syncStreams = (id) => (dispatch, state) => {
-  dispatch({type: SYNCING, id: id})
-  return dispatch({
-    type: REQUEST,
-    sync: {
-      url: 'syncStreamsPath',
-      params: {id: id}
-    }
   })
 }

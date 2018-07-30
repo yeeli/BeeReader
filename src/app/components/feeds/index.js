@@ -22,7 +22,7 @@ class Feeds extends Component {
                   <div className="feed-info"><span>{date.toDateString()}</span></div>
                   <div className="feed-detail">
                     <h3 className="feed-title">{entry.title}</h3> 
-                    <p className="feed-summary">{entry.summary.substr(0, 20)}</p>
+                    <p className="feed-summary">{entry.summary.substr(0, 80)}</p>
                   </div>
                 </ListItem> 
               )

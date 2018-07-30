@@ -1,4 +1,5 @@
 import * as EntriesActions from '~/actions/entries'
+import _ from 'lodash'
 
 const defaultState = {
   isFetching: false,
@@ -6,7 +7,7 @@ const defaultState = {
   items: []
 }
 
-const Entries = (state = [], action) => {
+const Entries = (state = defaultState, action) => {
   switch(action.type) {
     case EntriesActions.REQUEST:
       return {
@@ -20,6 +21,14 @@ const Entries = (state = [], action) => {
         isFetching: false,
         isLoaded: true,
         items: action.items
+      }
+    case EntriesActions.ADD:
+      let newEntries = _.union(state.items, action.items)
+      return {
+        ...state,
+        isFetching: false,
+        isLoaded: true,
+        items: newEntries
       }
     default:
       return state

@@ -17,15 +17,20 @@ class Entry extends Component {
     else if (node.type == "tag" && node.name == "a") {
       _.unset(node.attribs, 'class')
       _.unset(node.attribs, 'classname')
+      _.unset(node.attribs, 'style')
       let children = null
       children = processNodes(node.children, this.transform);
-      return React.createElement('a', {onClick: () => { this.handleClickEvent(event, node.attribs.href)}, href: 'javascript:;', key: Math.random()}, children)
+      return React.createElement('a', {onClick: (event) => { this.handleClickEvent(event, node.attribs.href)}, href: 'javascript:;', key: Math.random()}, children)
      }
     else if(node.type === 'tag' && _.hasIn(node.attribs, 'class')) {
       _.unset(node.attribs, 'class')
       _.unset(node.attribs, 'classname')
+      _.unset(node.attribs, 'style')
       return convertNodeToElement(node, index, this.transform)
     }
+  }
+  componentWillReceiveProps() {
+    this.setState({ showData: null })
   }
 
   componentWillUpdate() {
@@ -39,7 +44,7 @@ class Entry extends Component {
     return (
       <div className="entry">
         <div className="entry-hd">
-          <div className="entry-title"><h3>{ data.title }</h3></div>
+          <div className="entry-title"><a href='javascript:;' onClick={ (event) => { this.handleClickEvent(event, data.url) } }>{ data.title }</a></div>
           <div className="entry-info">
           </div>
         </div>

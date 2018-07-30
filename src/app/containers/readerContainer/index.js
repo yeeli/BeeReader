@@ -21,7 +21,6 @@ import  * as StreamsActions from '~/actions/streams'
 import  * as EntriesActions from '~/actions/entries'
 import  * as DataActions from '~/actions/data'
 
-
 import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
@@ -64,8 +63,8 @@ class ReaderContainer extends Component {
     const { Categories, Streams,  Entries } = this.props
     const streams = Streams.items
 
-    if(Categories.isLoaded && Streams.isLoaded && Entries.isLoaded && !this.state.synced ) {
-      let streamsList = Categories.items.map(category => {
+    if(Entries.isLoaded && !this.state.synced ) {
+      /*let streamsList = Categories.items.map(category => {
         let subs = []
         if(!_.isNil(category.stream_ids)) {
           subs = category.stream_ids.split(",").map( stream => {
@@ -77,6 +76,7 @@ class ReaderContainer extends Component {
         }
         return {...category, streams: streams, open: false}
       })
+        */
       this.setState({
         entriesList: Entries.items,
         streamsList: streams,
@@ -138,7 +138,7 @@ class ReaderContainer extends Component {
   handleClickSync = (event) =>  {
     const {items} = this.props.Streams
     for(let stream of items) {
-      this.props.dispatch(StreamsActions.syncStreams(stream.id))
+      this.props.dispatch(EntriesActions.syncEntries(stream.id))
     }
   }
 
@@ -163,6 +163,10 @@ class ReaderContainer extends Component {
     const { feed_url } = this.props.App.subscribeRss
     this.props.dispatch(StreamsActions.addStream(feed_url))
     this.setState({ openSubscribeStream: false })
+  }
+
+  handleNewFolder = (event, name) => {
+    this.props.dispatch(CategoriesActions.addCategory(name))
   }
 
   handleClickCategory = (event, id) => {
@@ -228,14 +232,14 @@ class ReaderContainer extends Component {
           <div className="pane pane-feeds" ref="paneFeeds" style={{flex: `0 0 ${feedsWidth}px`}}>
             <Feeds 
               height={ browserHeight } 
-              entries={ entriesList } 
+              entries={ Entries.items } 
               selectedItem={ this.state.selectedEntry }
               clickFeed={ this.handleClickFeed }
             />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            <Entry data={Data.item} />
+            { Data.isLoaded && <Entry data={Data.item} /> }
           </div>
         </div>
         <AddStreamDialog 
@@ -247,6 +251,7 @@ class ReaderContainer extends Component {
           open={ this.state.openSubscribeStream } 
           onClose={ this.handleCloseSubscribeStream } 
           onSubscribe = { this.handleSubscribeStream }
+          onNewFolder = { this.handleNewFolder }
           categories = {Categories.items} 
           rss={App.subscribeRss}
         />

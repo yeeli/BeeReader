@@ -7,12 +7,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button'
 import Slide from '@material-ui/core/Slide'
+import Input from '@material-ui/core/Input'
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
+import Switch from '@material-ui/core/Switch';
+import Grid from '@material-ui/core/Grid'
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -20,8 +22,10 @@ function Transition(props) {
 
 class SubscribeStream extends Component {
   state = {
-    checked: [1]
+    checked: [1],
+    folderName: ''
   }
+
   handleToggle = value => () => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
@@ -36,7 +40,14 @@ class SubscribeStream extends Component {
     this.setState({
       checked: newChecked,
     });
-  };
+  }
+
+  handleChangeFolderName = (event) => {
+    this.setState({
+      folderName: event.target.value
+    })
+  }
+
   render() {
     const { categories, rss } = this.props
     return (
@@ -49,26 +60,54 @@ class SubscribeStream extends Component {
         fullWidth={true}
         className="dialog-subscribe-stream"
       >
-        <DialogTitle id="alert-dialog-title">{"Add Subscription"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Add Subscription</DialogTitle>
         <DialogContent>
-          <div className="stream-title">
-            <h3>{rss.title}</h3>            
-            <p>{rss.feed_url}</p>
-            <p>{rss.description}</p>
+          <div className="block">
+            <div className="block-hd"><h4>Rss description</h4></div>
+            <div className="block-bd">
+              <div className="stream-info">
+                <h3>{rss.title} - {rss.description}</h3>            
+                <p>{rss.feed_url}</p>
+              </div>
+            </div>
           </div>
-          <List>
-            {this.props.categories.map(category => (
-              <ListItem key={category.id} dense button>
-                <ListItemText primary={category.name} />
-                <ListItemSecondaryAction>
-                  <Checkbox
-                    onChange={this.handleToggle(category.id)}
-                    checked={this.state.checked.indexOf(value) !== -1}
+          <div className="block">
+            <div className="block-hd"><h4>Folders / Tags</h4></div>
+            <div className="block-bd">
+              <List className="listing-categories">
+                {this.props.categories.map(category => (
+                  <ListItem key={category.id}>
+                    <ListItemText primary={category.title} />
+                    <ListItemSecondaryAction>
+                      <Switch
+                        onChange={this.handleToggle(category.id)}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          </div>
+          <div className="block block-new-category">
+            <div className="block-bd">
+              <Grid container spacing={24}>
+                <Grid item xs={10}>
+                  <Input
+                    placeholder="New folder..."
+                    inputProps={{
+                      'aria-label': 'Description',
+                    }}
+                    value={ this.state.folderName }
+                    style={{width: '100%'}}
+                    onChange={ this.handleChangeFolderName }
                   />
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-          </List>
+                </Grid>
+                <Grid item xs={2} style={{textAlign: "right"}}>
+                  <Button variant="contained" color="primary" onClick={(e) => { this.props.onNewFolder(e, this.state.folderName)}} >Save</Button>
+                </Grid>
+              </Grid>
+            </div>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.props.onClose} color="primary">

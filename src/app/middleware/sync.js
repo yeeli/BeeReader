@@ -9,12 +9,13 @@ const sync = opts => store => next => action => {
   }
   const { method, url, params } = sync
   next(others)
-  event = api[url]
-  console.log("send event: ", event, " params: ",JSON.stringify(params))
-  ipcRenderer.send(event, params)
+  let eventName = api[url]
+  let ktm = Date.now()
+  console.log("send event: ", eventName, " params: ",JSON.stringify(params))
+  ipcRenderer.send(eventName, params, ktm)
   return new Promise( (resolve, reject) => {
-    return ipcRenderer.once(`${event}Response`, (event, arg) => {
-      console.log(`response event: ${event}Response, data: ${arg}`)
+    return ipcRenderer.once(`${eventName}Response?ktm=${ktm}`, (event, arg) => {
+      //console.log(`response event: ${eventName}Response?ktm=${ktm}, data: ${JSON.stringify(arg)}`)
       resolve(arg)
     }) 
   })

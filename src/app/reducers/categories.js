@@ -21,6 +21,14 @@ const Categories = (state = defaultState, action) => {
         isLoaded: true,
         items: action.items
       }
+    case CategoriesActions.ADD:
+      state.items.push(action.item)
+      return {
+        ...state,
+        isFetching: false,
+        isLoaded: true,
+        items: state.items
+      }
     default:
       return state
   }
