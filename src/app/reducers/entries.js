@@ -4,7 +4,8 @@ import _ from 'lodash'
 const defaultState = {
   isFetching: false,
   isLoaded: false,
-  items: []
+  items: [],
+  filterItems: []
 }
 
 const Entries = (state = defaultState, action) => {
@@ -23,7 +24,7 @@ const Entries = (state = defaultState, action) => {
         items: action.items
       }
     case EntriesActions.ADD:
-      let newEntries = _.union(state.items, action.items)
+      let newEntries = _.union(action.items, state.items)
       return {
         ...state,
         isFetching: false,

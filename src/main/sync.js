@@ -78,6 +78,10 @@ const syncWithRss = async (stream) => {
       entries.push(entry)
     }
   }
+  if(entries.length > 0) {
+    stream.increment('entries_count', entries.length)
+    stream.increment('unread_count', entries.length)
+  }
   return Promise.resolve(entries)
 }
 

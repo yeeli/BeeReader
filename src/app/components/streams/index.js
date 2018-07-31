@@ -14,12 +14,33 @@ import SyncIcon from '@material-ui/icons/Sync'
 import AddIcon from '@material-ui/icons/Add'
 import RssIcon from '@material-ui/icons/RssFeed'
 import ToysIcon from '@material-ui/icons/Toys'
+import InboxIcon from '@material-ui/icons/Inbox'
+import AssessmentIcon from '@material-ui/icons/Assessment'
+import TodayIcon from '@material-ui/icons/Today'
+
+import { remote } from 'electron'
+const RemoteMenu = remote.Menu
+const RemoteMenuItem = remote.MenuItem
 
 class Streams extends Component {
 
+  constructor(props) {
+    super(props)
+  }
+
+  rightMenu = (e, stream) => {
+    e.preventDefault()
+    const menu = new RemoteMenu()
+
+    menu.append(new RemoteMenuItem({label: 'Edit', click: () => {}}))
+    menu.append(new RemoteMenuItem({type: 'separator'}))
+    menu.append(new RemoteMenuItem({label: `Unsubscribe from "${ stream.title }"`, click: () => {}}))
+    menu.popup(remote.getCurrentWindow())
+  }
+
   setStream = (stream, selected) => {
     return (
-      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickStream(e, stream.id)}}>
+      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={(e) => { this.props.onClickStream(e, stream.id)}} onContextMenu={ (e) => this.rightMenu(e, stream) }>
         <ListItemIcon>
           { stream.sync ? <ToysIcon style={{ color: '#fff', fontSize: '15px', marginRight: 0}}  className="icon-spin"/> : <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/> }
         </ListItemIcon>
@@ -85,15 +106,24 @@ class Streams extends Component {
           </div>
           <MenuList>
             <MenuItem selected={ selectedItem == "all"}>
+              <ListItemIcon>
+                <AssessmentIcon />
+              </ListItemIcon>
               <ListItemText primary="All" />
             </MenuItem>
             <MenuItem selected={ selectedItem == "unread"}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
               <ListItemText primary="Unread" />
             </MenuItem>
             <MenuItem selected={ selectedItem == "today"}>
+              <ListItemIcon>
+                <TodayIcon />
+              </ListItemIcon>
               <ListItemText primary="Today" />
             </MenuItem>
-            </MenuList> 
+          </MenuList> 
           <MenuList className="listing-subscriptions">
             {
               this.listStreams(streams, selectedItem) 

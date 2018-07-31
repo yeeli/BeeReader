@@ -3,7 +3,7 @@ import * as StreamsActions from '~/actions/streams'
 const defaultState = {
   isFetching: false,
   isLoaded: false,
-  items: [],
+  items: []
 }
 
 const Streams = (state = [], action) => {

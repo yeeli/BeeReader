@@ -9,7 +9,7 @@ class Feeds extends Component {
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { entries, selectedItem,  clickFeed, height } = this.props
-    const nheight = height - 100
+    const nheight = height - 50
     return(
       <div className="block-feeds">
         <div className="block-hd" style={winStyle}></div>
@@ -30,7 +30,7 @@ class Feeds extends Component {
           </List>
           {_.isEmpty(entries) && <div className="listing-feeds-blank" style={{height: `${nheight - 40}px`}}></div>}
         </div>
-        <div className="block-ft">footer</div>
+        {/*<div className="block-ft">footer</div>*/}
       </div>
     )
   }

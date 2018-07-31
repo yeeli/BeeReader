@@ -60,7 +60,7 @@ const createWindow = async () =>{
   */
 
   //mainWindow.webContents.openDevTools();
- const ses = mainWindow.webContents.session
+  const ses = mainWindow.webContents.session
   console.log(ses.getUserAgent())
 
   mainWindow.on('closed', () => {

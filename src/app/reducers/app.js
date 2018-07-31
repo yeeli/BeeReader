@@ -1,7 +1,9 @@
 import * as AppActions from '~/actions/app'
 
 const defaultState = {
-  subscribeRss: {}
+  subscribeRss: {},
+  selectedStream: 'all',
+  selectedEntry: null
 }
 
 const App = (state = defaultState, action) => {

@@ -50,7 +50,7 @@ class ReaderContainer extends Component {
     this.props.dispatch(StreamsActions.fetchStreams())
     this.props.dispatch(EntriesActions.fetchEntries())
 
-    window.addEventListener("resize", this.handleWindowResize.bind(this))
+    window.addEventListener("resize", this.handleWindowResize)
 
     interact('.resize1').draggable({ onmove: window.dragMoveListener })
       .on('dragmove', self.handleResizeSubscriptions);
@@ -85,6 +85,30 @@ class ReaderContainer extends Component {
     }
   }
 
+  handleWindowResize = (event) => {
+    let browserWidth = document.body.scrollWidth
+    let browserHeight = window.outerHeight
+    let { subscriptionsWidth, feedsWidth, contentWidth } = this.state
+    if( browserWidth < (subscriptionsWidth + feedsWidth + 500)) {
+      contentWidth = 500
+      if(browserWidth - subscriptionsWidth - 500 > 250) {
+        feedsWidth = browserWidth - subscriptionsWidth - 500
+      } else {
+        subscriptionsWidth = browserWidth - 750
+      }
+    } else {
+      contentWidth = browserWidth - subscriptionsWidth - feedsWidth
+    }
+    this.setState({
+      browserHeight: browserHeight, 
+      browserWidth: browserWidth,  
+      contentWidth: contentWidth, 
+      feedsWidth: feedsWidth, 
+      subscriptionsWidth: subscriptionsWidth  
+    })
+  }
+
+
   handleResizeSubscriptions = (event) => {
     var target = this.refs.paneSubscriptions;
     var split = event.target
@@ -110,28 +134,6 @@ class ReaderContainer extends Component {
     }
   }
 
-  handleWindowResize = (event) => {
-    let browserWidth = document.body.scrollWidth
-    let browserHeight = window.outerHeight
-    let { subscriptionsWidth, feedsWidth, contentWidth } = this.state
-    if( browserWidth < (subscriptionsWidth + feedsWidth + 500)) {
-      contentWidth = 500
-      if(browserWidth - subscriptionsWidth - 500 > 250) {
-        feedsWidth = browserWidth - subscriptionsWidth - 500
-      } else {
-        subscriptionsWidth = browserWidth - 750
-      }
-    } else {
-      contentWidth = browserWidth - subscriptionsWidth - feedsWidth
-    }
-    this.setState({
-      browserHeight: browserHeight, 
-      browserWidth: browserWidth,  
-      contentWidth: contentWidth, 
-      feedsWidth: feedsWidth, 
-      subscriptionsWidth: subscriptionsWidth  
-    })
-  }
 
   // Subscription Events
 
@@ -163,6 +165,9 @@ class ReaderContainer extends Component {
     const { feed_url } = this.props.App.subscribeRss
     this.props.dispatch(StreamsActions.addStream(feed_url))
     this.setState({ openSubscribeStream: false })
+  }
+
+  handleUnsubscribeStream = (event, id) => {
   }
 
   handleNewFolder = (event, name) => {
