@@ -41,7 +41,7 @@ class Subscriptions extends Component {
   setStream = (stream, selectedItem) => {
     let selected = stream.id == selectedItem.id && selectedItem.type == "stream"
     return (
-      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={(e) => { this.props.onFilter(e, { type: 'stream', id: stream.id})}} onContextMenu={ (e) => this.rightMenu(e, stream) }>
+      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={ this.props.onFilter({ type: 'stream', id: stream.id}) } onContextMenu={ (e) => this.rightMenu(e, stream) }>
         <ListItemIcon>
           { stream.sync ? <ToysIcon style={{ color: '#fff', fontSize: '15px', marginRight: 0}}  className="icon-spin"/> : <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/> }
         </ListItemIcon>
@@ -57,17 +57,17 @@ class Subscriptions extends Component {
     )
   }
 
-  setCategory = (category, selectedItem) => {
+  setCategory = (category, selectedItem, opened) => {
     let selected = category.id == selectedItem.id && selectedItem.type == "category"
     let stream_ids = category.stream_ids.split(",")
     let streams = _.filter(this.props.streams.items, (stream) => { 
       return _.includes(stream_ids, stream.id.toString())
     })
-
+    let cateOpened =  opened == 1 ? true : false
     return (
       <div key={category.id}>
-        <MenuItem selected={selected} onClick={(e) =>{ this.props.onFilter(e, {  type: 'category', id: category.id })}} className="category-item" key={category.id}>
-          {category.open ? <ExpandMore  style={{ color: '#fff', fontSize: '15px', marginRight: 0}} /> : <ChevronRight style={{color: "#fff", fontSize: '15px', marginRight: 0}}/>  }
+        <MenuItem selected={selected} onClick={ this.props.onFilter({  type: 'category', id: category.id }) } className="category-item" key={category.id}>
+          {cateOpened ? <ExpandMore  style={{ color: '#fff', fontSize: '15px', marginRight: 0}} /> : <ChevronRight style={{color: "#fff", fontSize: '15px', marginRight: 0}}/>  }
           <ListItemText inset primary={category.title} className="category-title"/>
           { category.entries_count > 0 && 
               (
@@ -77,7 +77,7 @@ class Subscriptions extends Component {
               )
           }
         </MenuItem>
-          <Collapse in={true} timeout="auto" unmountOnExit >
+          <Collapse in={ cateOpened } timeout="auto" unmountOnExit >
             <MenuList disablePadding className="category-subscriptions">
               { streams.map((stream) => { return this.setStream(stream, selectedItem) }) }
             </MenuList>
@@ -91,6 +91,7 @@ class Subscriptions extends Component {
     const {items} = this.props.folders
     const streams = this.props.streams.items
     const categories = this.props.categories.items
+
     return items.map( folder => {
       let selected = folder.source_id == selectedItem
       if(folder.source_type === "Stream") {
@@ -105,7 +106,7 @@ class Subscriptions extends Component {
         let category = _.find(categories, {id: folder.source_id})
         return (
           <div key={folder.id}>
-            { this.setCategory(category, selectedItem)  }
+            { this.setCategory(category, selectedItem, folder.opened)  }
         </div>
         )
       }
@@ -125,19 +126,19 @@ class Subscriptions extends Component {
             <span>Rss</span>
           </div>
           <MenuList className="listing-filters">
-            <MenuItem selected={ selectedItem.type == "all"} onClick={(e) =>{ this.props.onFilter(e, {  type: 'all' })}}>
+            <MenuItem selected={ selectedItem.type == "all"} onClick={ this.props.onFilter({  type: 'all' }) }>
               <ListItemIcon>
                 <AssessmentIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
               <ListItemText primary="All" className="filter-name"/>
             </MenuItem>
-            <MenuItem selected={ selectedItem.type == "unread"} onClick={(e) =>{ this.props.onFilter(e, {  type: 'unread' })}}>
+            <MenuItem selected={ selectedItem.type == "unread"} onClick={ this.props.onFilter({  type: 'unread' }) }>
               <ListItemIcon>
                 <InboxIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
               <ListItemText primary="Unread" className="filter-name" />
             </MenuItem>
-            <MenuItem selected={ selectedItem.type == "today"} onClick={(e) =>{ this.props.onFilter(e, {  type: 'today' })}}>
+            <MenuItem selected={ selectedItem.type == "today"} onClick={ this.props.onFilter({  type: 'today' }) }>
               <ListItemIcon>
                 <TodayIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>

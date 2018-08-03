@@ -8,7 +8,7 @@ export const load = (items) => ({
   items: items
 })
 
-export const fetchStreams = () => (dispatch,state) => {
+export const fetchStreams = () => dispatch => {
   return dispatch({
     type: REQUEST, 
     sync: { 
@@ -24,7 +24,7 @@ export const add = (item) => ({
   item: item
 })
 
-export const addStream = (url, categories) => (dispatch, state) => {
+export const addStream = (url, categories) => dispatch => {
   return dispatch({
     type: REQUEST,
     sync: {
@@ -36,6 +36,6 @@ export const addStream = (url, categories) => (dispatch, state) => {
       }
     }
   }).then(res => {
-    console.log(res)
+    dispatch(add(res.data.streams))
   })
 }

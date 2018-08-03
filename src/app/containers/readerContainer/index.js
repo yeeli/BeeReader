@@ -9,8 +9,8 @@ import interact from 'interactjs'
 // Components
 import Subscriptions from '~/components/subscriptions'
 import Feeds from '~/components/feeds'
-import Content from '~/components/Content'
-import WindowMenu from '~/components/WindowMenu'
+import Content from '~/components/content'
+import WindowMenu from '~/components/windowMenu'
 import AddStreamDialog from '~/components/dialogs/addStream'
 import SubscribeStreamDialog from '~/components/dialogs/subscribeStream'
 
@@ -34,7 +34,7 @@ class ReaderContainer extends Component {
     contentWidth: 500,
     openNewStream: false,
     openSubscribeStream: false,
-    selectedStream: 'all',
+    selectedStream: { type: 'all' },
     selectedEntry: null
   }
 
@@ -129,7 +129,7 @@ class ReaderContainer extends Component {
     this.setState({ openNewStream: false })
   }
 
-  handleSearchStream = (event, value) => {
+  handleSearchStream = value => event => {
     this.props.dispatch(AppActions.fetchRss(value))
     this.setState({ openNewStream: false, openSubscribeStream: true })
   }
@@ -138,26 +138,31 @@ class ReaderContainer extends Component {
     this.setState({ openSubscribeStream: false })
   }
 
-  handleSubscribeStream = (event, categories = []) => {
+  handleSubscribeStream = (categories = []) => event => {
     const { feed_url } = this.props.App.subscribeRss
     this.props.dispatch(StreamsActions.addStream(feed_url, categories))
     this.setState({ openSubscribeStream: false })
   }
 
-  handleUnsubscribeStream = (event, id) => {
+  handleUnsubscribeStream = (id) => event => {
   }
 
-  handleNewFolder = (event, name) => {
+  handleNewFolder = name => event => {
     this.props.dispatch(CategoriesActions.addCategory(name))
   }
 
-  handleFilter = (event, selected) => {
-    this.props.dispatch(EntriesActions.filter(selected.type))
-    if(selected.type == "stream") {
-      this.props.dispatch(DataActions.clearData())
+  handleFilter = selected => event => {
+    let ids = []
+    this.props.dispatch(DataActions.clearData())
+    if(selected.type == 'stream') {
+      ids = [selected.id]
     }
     if(selected.type == "category") {
+      this.props.dispatch(FoldersActions.openFolder(selected))
+      let category = _.find(this.props.Categories.items, { id: selected.id})
+      ids = category.stream_ids.split(",").map( (id) => { return parseInt(id) })
     }
+    this.props.dispatch(EntriesActions.filter(selected.type, ids))
     this.setState({ selectedStream: selected })
   }
 
@@ -169,10 +174,16 @@ class ReaderContainer extends Component {
     this.setState({ selectedEntry: id })
   }
 
-
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
     const { App, Folders, Account, Entries, Data, Categories, Streams } = this.props
+    let dataContent = Data.item
+
+    if(Data.isLoaded && !_.isNull(dataContent) && !_.isNull(this.state.selectedEntry)) {
+      let entry = _.find(Entries.items, {id: this.state.selectedEntry})
+      dataContent.stream_title = entry.stream_title
+      dataContent.published_at = entry.published_at
+    }
 
     return (
       <div id="reader">
@@ -202,7 +213,7 @@ class ReaderContainer extends Component {
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            { Data.isLoaded && <Content data={Data.item} height={ browserHeight } /> }
+            { Data.isLoaded && <Content data={dataContent} height={ browserHeight } /> }
           </div>
         </div>
         <AddStreamDialog 

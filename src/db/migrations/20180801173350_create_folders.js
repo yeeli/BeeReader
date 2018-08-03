@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     t.integer('account_id').unsigned().notNullable();
     t.string('source_type');
     t.integer('source_id');
+    t.boolean('opened').defaultTo(false);
     t.datetime('deleted_at');
     t.timestamp('created_at').defaultTo(Date.now());
     t.timestamp('updated_at').defaultTo(Date.now());

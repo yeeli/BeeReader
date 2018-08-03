@@ -40,15 +40,16 @@ const Entries = (state = defaultState, action) => {
         }
         return item
       })
+      var filterEntries = state.filterItems.map( item => {
+        if(item.id == action.id) {
+          item['read_at'] = Date.now()
+        }
+        return item
+      })
       return {
         ...state,
         items: entries,
-        filterItems: entries
-      }
-    case EntriesActions.FILTER_ALL:
-      return {
-        ...state,
-        filterItems: state.items  
+        filterItems: filterEntries
       }
     case EntriesActions.FILTER_UNREAD:
       var entries = _.filter(state.items, (entry) => { return _.isNull(entry.read_at)})
@@ -61,6 +62,18 @@ const Entries = (state = defaultState, action) => {
         let date = new Date()
         return entry.published_at > new Date(date.toDateString()).getTime() 
       })
+      return {
+        ...state,
+        filterItems: entries 
+      }
+    case EntriesActions.FILTER_STREAM:
+      if(_.isEmpty(action.ids)) {
+        var entries = state.items
+      } else {
+        var entries = _.filter(state.items, (entry) => { 
+          return _.includes(action.ids, entry.stream_id) 
+        })
+      }
       return {
         ...state,
         filterItems: entries 

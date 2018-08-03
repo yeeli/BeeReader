@@ -21,7 +21,7 @@ class Content extends Component {
       let children = null
       children = processNodes(node.children, this.transform);
       return React.createElement('a', {onClick: (event) => { this.handleClickEvent(event, node.attribs.href)}, href: 'javascript:;', key: Math.random()}, children)
-     }
+    }
     else if(node.type === 'tag' && _.hasIn(node.attribs, 'class')) {
       _.unset(node.attribs, 'class')
       _.unset(node.attribs, 'classname')
@@ -41,11 +41,21 @@ class Content extends Component {
     this.setState({showData: url})
   }
   renderEntry(data) {
+    let date = new Date(data.published_at)
     return (
       <div className="entry">
         <div className="entry-hd">
-          <div className="entry-title"><a href='javascript:;' onClick={ (event) => { this.handleClickEvent(event, data.url) } }>{ data.title }</a></div>
+          <div className="entry-title">
+            <a href='javascript:;' onClick={ (event) => { this.handleClickEvent(event, data.url) } }>
+              { data.title }
+            </a>
+          </div>
           <div className="entry-info">
+            <span>{ data.stream_title }</span>
+            <span className="dot">&nbsp;•&nbsp;</span>
+            <span>{ data.author }</span>
+            <span className="dot">&nbsp;•&nbsp;</span>
+            <span>{ date.toDateString()  }</span>
           </div>
         </div>
         <div className="entry-bd">
@@ -58,7 +68,7 @@ class Content extends Component {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { data, height } = this.props
     const nheight = height - 50
-    
+
     return(
       <div className="block-entry">
         <div className="block-hd" style={winStyle}>

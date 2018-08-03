@@ -36,7 +36,10 @@ ipcMain.on('/streams/create', (event, arg, ktm) => {
   Sync.createStream(arg.account, arg.url, arg.categories).then( res => {
     event.sender.send(`/streams/createResponse?ktm=${ktm}`, {
       meta: { status: 'success' },
-      data: { stream: res }
+      data: { 
+        stream: res.stream,
+        folders: res.folders
+      }
     })
   }).catch(e => {
      event.sender.send(`/streams/createResponse?ktm=${ktm}`, {

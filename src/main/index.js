@@ -36,10 +36,10 @@ const createWindow = async () =>{
 
   // windows infomation
   let win = {
-    width: 900, 
+    width: 1100, 
     height: 600, 
     frame: false, 
-    minWidth: 900, 
+    minWidth: 1100, 
     minHeight: 600
   }
 

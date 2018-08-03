@@ -8,7 +8,7 @@ const createStream = async (account, uri, categories = []) => {
   let streams = await Model.Stream.where({account_id: account, oid: uri})
   let rss = new Rss(uri)
   let feed = await rss.getFeed()
-  let entries = []
+  let newFolders = [] 
 
   if( streams.length > 0 ){
     return Promise.reject('stream exist')
@@ -27,23 +27,25 @@ const createStream = async (account, uri, categories = []) => {
       Model.Stream.createCategoryStreams(category, stream.id)
       let folders = await Model.Folder.where({account_id: account, source_type: 'Category', source_id: category, state: 'active'})
       if(folders.length <= 0 ) {
-        Model.Folder.create({
+        let folder = await Model.Folder.create({
           account_id: account,
           source_type: 'Category',
           source_id: category,
           state: 'active'
         })
+        newFolders.push(folder)
       }
     }
   } else {
-    Model.Folder.create({
+    let folder = await Model.Folder.create({
       account_id: account,
       source_type: 'Stream',
       source_id: stream.id,
       state: 'active'
     })
+    newFolders.push(folder)
   }
-  return Promise.resolve(stream)
+  return Promise.resolve({ stream: stream, folders: newFolders  })
 }
 
 const createCategory = async (account, name) => {

@@ -2,9 +2,9 @@ export const REQUEST = "ENTRIES_REQUEST"
 export const LOAD = "ENTRIES_LOAD"
 export const ADD = "ENTRIES_ADD"
 
-export const FILTER_ALL = "ENTRIES_FILTER_ALL"
 export const FILTER_UNREAD = "ENTRIES_FILTER_UNREAD"
 export const FILTER_TODAY = "ENTRIES_FILTER_TODAY"
+export const FILTER_STREAM = "ENTRIES_FILTER_STREAM"
 
 export const ENTRY_REQUEST = "ENTRY_REQUEST"
 export const READ = "ENTRY_READ"
@@ -61,8 +61,8 @@ export const readEntry = (id) => (dispatch, state) => {
   })
 }
 
-export const filter = (type) => (dispatch, state) => {
-  let filter_type = FILTER_ALL
+export const filter = (type, ids = []) => (dispatch, state) => {
+  let filter_type = FILTER_STREAM
 
   if(type == 'unread') {
     filter_type = FILTER_UNREAD
@@ -71,6 +71,7 @@ export const filter = (type) => (dispatch, state) => {
     filter_type = FILTER_TODAY
   }
   return dispatch({
-    type: filter_type
+    type: filter_type,
+    ids:  ids
   })
 }

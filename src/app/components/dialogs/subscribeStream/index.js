@@ -104,7 +104,7 @@ class SubscribeStream extends Component {
                   />
                 </Grid>
                 <Grid item xs={2} style={{textAlign: "right"}}>
-                  <Button variant="contained" color="primary" onClick={(e) => { this.props.onNewFolder(e, this.state.folderName)}} >Save</Button>
+                  <Button variant="contained" color="primary" onClick={ this.props.onNewFolder(this.state.folderName) } >Save</Button>
                 </Grid>
               </Grid>
             </div>
@@ -114,7 +114,7 @@ class SubscribeStream extends Component {
           <Button onClick={this.props.onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={ (e) => { this.props.onSubscribe(e, this.state.checked) }} color="primary" autoFocus>
+          <Button onClick={ this.props.onSubscribe(this.state.checked) } color="primary" autoFocus>
             Subscribe
           </Button>
         </DialogActions>

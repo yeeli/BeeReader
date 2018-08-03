@@ -40,7 +40,7 @@ class AddStream extends Component {
           <Button onClick={this.props.onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={ (e) => { this.props.onSearch(e, this.state.url) }} color="primary" autoFocus>
+          <Button onClick={  this.props.onSearch(this.state.url) } color="primary" autoFocus>
             Search
           </Button>
         </DialogActions>
