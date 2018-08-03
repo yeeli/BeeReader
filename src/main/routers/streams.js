@@ -33,10 +33,15 @@ ipcMain.on('/streams', (event, arg, ktm) => {
  */
 
 ipcMain.on('/streams/create', (event, arg, ktm) => {
-  Sync.createStream(arg.account, arg.url).then( res => {
+  Sync.createStream(arg.account, arg.url, arg.categories).then( res => {
     event.sender.send(`/streams/createResponse?ktm=${ktm}`, {
       meta: { status: 'success' },
       data: { stream: res }
+    })
+  }).catch(e => {
+     event.sender.send(`/streams/createResponse?ktm=${ktm}`, {
+      meta: { status: 'failed' },
+      data: { error_message: e }
     })
   })
 })
@@ -51,11 +56,11 @@ ipcMain.on('/streams/create', (event, arg, ktm) => {
  *
  */
 
-ipcMain.on('/streams/destroy', (event, arg) => {
+ipcMain.on('/streams/destroy', (event, arg, ktm) => {
   
 })
 
-ipcMain.on('/streams/rss', (event, arg) => {
+ipcMain.on('/streams/rss', (event, arg, ktm) => {
   let rss = new Rss(arg.url)
   rss.getFeed().then(res => {
     event.sender.send(`/streams/rssResponse?ktm=${ktm}`, {

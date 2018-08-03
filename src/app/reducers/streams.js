@@ -6,7 +6,7 @@ const defaultState = {
   items: []
 }
 
-const Streams = (state = [], action) => {
+const Streams = (state = defaultState, action) => {
   switch(action.type) {
     case StreamsActions.REQUEST:
       return {

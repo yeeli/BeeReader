@@ -6,8 +6,8 @@ exports.up = function(knex, Promise) {
     t.string('author');
     t.string('url');
     t.text('content');
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.timestamp('created_at').defaultTo(Date.now());
+    t.timestamp('updated_at').defaultTo(Date.now());
   
     t.foreign('entry_id').references('id').inTable('entries');
    }) 

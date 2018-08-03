@@ -22,7 +22,7 @@ function Transition(props) {
 
 class SubscribeStream extends Component {
   state = {
-    checked: [1],
+    checked: [],
     folderName: ''
   }
 
@@ -81,6 +81,7 @@ class SubscribeStream extends Component {
                     <ListItemSecondaryAction>
                       <Switch
                         onChange={this.handleToggle(category.id)}
+                        checked={ this.state.checked.indexOf(category.id) !== -1 }
                       />
                     </ListItemSecondaryAction>
                   </ListItem>
@@ -113,7 +114,7 @@ class SubscribeStream extends Component {
           <Button onClick={this.props.onClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={ (e) => { this.props.onSubscribe(e) }} color="primary" autoFocus>
+          <Button onClick={ (e) => { this.props.onSubscribe(e, this.state.checked) }} color="primary" autoFocus>
             Subscribe
           </Button>
         </DialogActions>

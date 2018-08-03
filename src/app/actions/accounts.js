@@ -1,9 +1,9 @@
 export const REQUEST = "ACCOUNT_REQUEST"
 export const LOAD = "ACCOUNT_LOAD"
 
-export const load = (result) => ({
+export const load = (account) => ({
   type: LOAD,
-  items: result.data.account
+  account: account 
 })
 
 export const fetchAccount = () => (dispatch, state) => {
@@ -11,6 +11,6 @@ export const fetchAccount = () => (dispatch, state) => {
     type: REQUEST, 
     sync: {url: "accountsPath"}
   }).then(res => {
-    dispatch(load(res))
+    dispatch(load(res.data.account))
   })
 }

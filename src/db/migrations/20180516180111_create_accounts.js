@@ -11,8 +11,8 @@ exports.up = function(knex, Promise) {
     t.integer('sort');
     t.datetime('last_synced_at');
     t.string('state');
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.timestamp('created_at').defaultTo(Date.now());
+    t.timestamp('updated_at').defaultTo(Date.now());
   })
 };
 

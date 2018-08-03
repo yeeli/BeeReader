@@ -66,6 +66,7 @@ class Stream extends Model {
   static async createCategoryStreams(category_id, stream_id) {
     return await knex("categories_streams").insert({ category_id: category_id,  stream_id: stream_id})
   }
+
 }
 
 class Entry extends Model {
@@ -80,11 +81,18 @@ class Data extends Model {
   }
 }
 
+class Folder extends Model {
+  constructor() {
+    super()
+  }
+}
+
 
 module.exports = {
   Account, 
   Category,
   Stream,
   Entry,
-  Data
+  Data,
+  Folder
 }

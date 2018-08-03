@@ -11,8 +11,8 @@ exports.up = function(knex, Promise) {
     t.integer('entries_count').defaultTo(0);
     t.integer('sort');
     t.string('state');
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.timestamp('created_at').defaultTo(Date.now());
+    t.timestamp('updated_at').defaultTo(Date.now());
 
     t.foreign('account_id').references('id').inTable('accounts');
   })

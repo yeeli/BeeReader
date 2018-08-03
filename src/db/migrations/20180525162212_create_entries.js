@@ -8,14 +8,14 @@ exports.up = function(knex, Promise) {
     t.text('summary');
     t.jsonb('keywords', '[]');
     t.jsonb('cover', '{}');
-    t.boolean('unread').defaultTo(false);
-    t.boolean('starred').defaultTo(false);
+     //t.boolean('unread').defaultTo(false);
+     //t.boolean('starred').defaultTo(false);
     t.boolean('cached').defaultTo(false);
     t.datetime('published_at');
     t.datetime('starred_at');
     t.datetime('read_at');
-    t.timestamp('created_at').defaultTo(knex.fn.now());
-    t.timestamp('updated_at').defaultTo(knex.fn.now());
+    t.timestamp('created_at').defaultTo(Date.now());
+    t.timestamp('updated_at').defaultTo(Date.now());
     t.string('state');
   
     t.foreign('stream_id').references('id').inTable('streams');

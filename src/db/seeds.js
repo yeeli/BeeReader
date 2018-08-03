@@ -4,12 +4,14 @@ Model.Account.where({service: 'Rss'}).then(res => {
   if(res.length < 1) {
     console.log("create local account rss")
     Model.Account.create({
-      oid: new Date().getTime(),
+      oid: Date.now(),
       title: 'local',
       service: 'Rss',
       username: 'rss',
       sort: 0,
       state: 'active'
+    }).then(() => { 
+      process.exit(0)
     })
   }
 })

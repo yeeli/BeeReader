@@ -3,7 +3,10 @@ import * as AccountsActions from '~/actions/accounts'
 const defaultState = {
   isFetching: false,
   isLoaded: false,
-  items: []
+  items: [],
+  entries_count: 0,
+  unread_count: 0,
+  today_count: 0
 }
 
 const Account = (state = defaultState, action) => {
@@ -19,7 +22,7 @@ const Account = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         isLoaded: true,
-        items: action.items
+        items: action.account
       }
     default:
       return state

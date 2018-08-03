@@ -24,14 +24,15 @@ export const add = (item) => ({
   item: item
 })
 
-export const addStream = (url) => (dispatch, state) => {
+export const addStream = (url, categories) => (dispatch, state) => {
   return dispatch({
     type: REQUEST,
     sync: {
       url: 'createStreamsPath',
       params: {
         account: 1,
-        url: url
+        url: url,
+        categories: categories
       }
     }
   }).then(res => {

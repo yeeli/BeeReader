@@ -2,6 +2,13 @@ export const REQUEST = "ENTRIES_REQUEST"
 export const LOAD = "ENTRIES_LOAD"
 export const ADD = "ENTRIES_ADD"
 
+export const FILTER_ALL = "ENTRIES_FILTER_ALL"
+export const FILTER_UNREAD = "ENTRIES_FILTER_UNREAD"
+export const FILTER_TODAY = "ENTRIES_FILTER_TODAY"
+
+export const ENTRY_REQUEST = "ENTRY_REQUEST"
+export const READ = "ENTRY_READ"
+
 export const load = (items) => ({
   type: LOAD,
   items: items
@@ -18,7 +25,7 @@ export const fetchEntries = () => (dispatch, state) => {
     sync: { 
       url: 'entriesPath',
       params: {
-        account_id: 1
+        account: 1
       }
     }
   }).then(res => {
@@ -32,12 +39,38 @@ export const syncEntries = (stream) => (dispatch, state) => {
     sync: {
       url: 'syncEntriesPath',
       params: {
-        stream_id: stream
+        stream: stream
       }
     }
   }).then(res => {
-    console.log(res.data)
     dispatch(add(res.data.entries))
   })
+}
 
+export const readEntry = (id) => (dispatch, state) => {
+  return dispatch({
+    type: ENTRY_REQUEST,
+    sync: {
+      url: 'readEntriesPath',
+      params: {
+        id: id
+      }
+    }
+  }).then(res => {
+    dispatch({ type: READ, id: id})
+  })
+}
+
+export const filter = (type) => (dispatch, state) => {
+  let filter_type = FILTER_ALL
+
+  if(type == 'unread') {
+    filter_type = FILTER_UNREAD
+  }
+  if(type == 'today') {
+    filter_type = FILTER_TODAY
+  }
+  return dispatch({
+    type: filter_type
+  })
 }

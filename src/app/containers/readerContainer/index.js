@@ -7,15 +7,16 @@ import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
 
 // Components
-import Streams from '~/components/streams'
+import Subscriptions from '~/components/subscriptions'
 import Feeds from '~/components/feeds'
-import Entry from '~/components/entry'
+import Content from '~/components/Content'
 import WindowMenu from '~/components/WindowMenu'
 import AddStreamDialog from '~/components/dialogs/addStream'
 import SubscribeStreamDialog from '~/components/dialogs/subscribeStream'
 
 // Actions
 import  * as AppActions from '~/actions/app'
+import  * as FoldersActions from '~/actions/folders'
 import  * as CategoriesActions from '~/actions/categories'
 import  * as StreamsActions from '~/actions/streams'
 import  * as EntriesActions from '~/actions/entries'
@@ -31,8 +32,6 @@ class ReaderContainer extends Component {
     subscriptionsWidth: 250,
     feedsWidth: 320,
     contentWidth: 500,
-    streamsList : [], 
-    entriesList: [],
     openNewStream: false,
     openSubscribeStream: false,
     selectedStream: 'all',
@@ -46,6 +45,7 @@ class ReaderContainer extends Component {
 
   componentDidMount() {
     let self = this
+    this.props.dispatch(FoldersActions.fetchFolders())
     this.props.dispatch(CategoriesActions.fetchCategories())
     this.props.dispatch(StreamsActions.fetchStreams())
     this.props.dispatch(EntriesActions.fetchEntries())
@@ -60,29 +60,6 @@ class ReaderContainer extends Component {
   }
 
   componentDidUpdate(){
-    const { Categories, Streams,  Entries } = this.props
-    const streams = Streams.items
-
-    if(Entries.isLoaded && !this.state.synced ) {
-      /*let streamsList = Categories.items.map(category => {
-        let subs = []
-        if(!_.isNil(category.stream_ids)) {
-          subs = category.stream_ids.split(",").map( stream => {
-            let index = _.findIndex(subscriptions, (s) => { return stream == s.id.toString() })
-            if(index != -1) {
-              return subscriptions[index]
-            }
-          })
-        }
-        return {...category, streams: streams, open: false}
-      })
-        */
-      this.setState({
-        entriesList: Entries.items,
-        streamsList: streams,
-        synced: true
-      })
-    }
   }
 
   handleWindowResize = (event) => {
@@ -163,7 +140,7 @@ class ReaderContainer extends Component {
 
   handleSubscribeStream = (event, categories = []) => {
     const { feed_url } = this.props.App.subscribeRss
-    this.props.dispatch(StreamsActions.addStream(feed_url))
+    this.props.dispatch(StreamsActions.addStream(feed_url, categories))
     this.setState({ openSubscribeStream: false })
   }
 
@@ -174,39 +151,20 @@ class ReaderContainer extends Component {
     this.props.dispatch(CategoriesActions.addCategory(name))
   }
 
-  handleClickCategory = (event, id) => {
-    let entries = []
-    let changeStreams = this.state.streamsList.map((category) => {
-      if(category.id == id) {
-        if (category.open) {
-          entries = _.takeWhile(this.props.Entries.items, (o) => { return _.includes(category.stream_ids.split(","), o.stream_id) })
-          return {...category, open: false}
-        } else {
-          return {...category, open: true}
-        }
-      } else {
-        return category
-      }
-    })
-    this.setState({streamsList: changeStreams, entriesList: entries })
-  }
-
-
-  handleClickStream = (event, id) => {
-    let entries = []
-    for(let entry of this.props.Entries.items){ 
-      if(id === entry.stream_id) {
-        entries.push(entry)
-      }
+  handleFilter = (event, selected) => {
+    this.props.dispatch(EntriesActions.filter(selected.type))
+    if(selected.type == "stream") {
+      this.props.dispatch(DataActions.clearData())
     }
-    
-    this.props.dispatch(DataActions.clearData())
-    this.setState({entriesList: entries, selectedStream: id})
+    if(selected.type == "category") {
+    }
+    this.setState({ selectedStream: selected })
   }
 
   // Feed Events
 
   handleClickFeed = (event, id) => {
+    this.props.dispatch(EntriesActions.readEntry(id))
     this.props.dispatch(DataActions.fetchData(id))
     this.setState({ selectedEntry: id })
   }
@@ -214,8 +172,7 @@ class ReaderContainer extends Component {
 
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
-    const { App, Account, Entries, Data, Categories } = this.props
-    let entries = []
+    const { App, Folders, Account, Entries, Data, Categories, Streams } = this.props
 
     return (
       <div id="reader">
@@ -223,12 +180,13 @@ class ReaderContainer extends Component {
         <WindowMenu />
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
-            <Streams  
+            <Subscriptions  
               height={browserHeight} 
-              streams={ streamsList }
+              folders={Folders}
+              categories={Categories}
+              streams= {Streams}
               selectedItem={ this.state.selectedStream }
-              onClickStream={ this.handleClickStream } 
-              onClickCategory={ this.handleClickCategory }  
+              onFilter={ this.handleFilter } 
               onClickSync={ this.handleClickSync }  
               onClickNewStream={ this.handleClickNewStream } 
             />
@@ -237,14 +195,14 @@ class ReaderContainer extends Component {
           <div className="pane pane-feeds" ref="paneFeeds" style={{flex: `0 0 ${feedsWidth}px`}}>
             <Feeds 
               height={ browserHeight } 
-              entries={ Entries.items } 
+              entries={ Entries.filterItems } 
               selectedItem={ this.state.selectedEntry }
               clickFeed={ this.handleClickFeed }
             />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            { Data.isLoaded && <Entry data={Data.item} /> }
+            { Data.isLoaded && <Content data={Data.item} height={ browserHeight } /> }
           </div>
         </div>
         <AddStreamDialog 
@@ -268,8 +226,8 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const { App, Categories, Streams, Entries, Data } = state
-  return { App, Categories, Streams, Entries, Data }
+  const { App, Folders, Categories, Streams, Entries, Data } = state
+  return { App, Folders, Categories, Streams, Entries, Data }
 }
 
 export default connect(mapStateToProps)(ReaderContainer)

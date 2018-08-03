@@ -24,11 +24,21 @@
       display: block
       &.item-selected
         background: rgba(0, 0, 0, 0.14)
+      &.read
+        .feed-title
+          color: #777
     .feed-info
       margin-bottom: 5px
+      clear: both
+      position: relative
+      overflow: hidden
       span
         font-size: 12px
         color: rgba(0, 0, 0, 0.54)
+      .feed-stream
+        float: left
+      .feed-date
+        float: right
     .feed-detail
       padding: 0
       .feed-title

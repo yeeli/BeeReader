@@ -14,10 +14,16 @@ const Sync = require('../sync')
 ipcMain.on('/categories', (event, arg, ktm) => {
   Category.withStreams().then(res => {
     event.sender.send(`/categoriesResponse?ktm=${ktm}`, {
-        meta: { status: 'success' }, 
-        data: { categories: res }
-      })
-   })
+      meta: { status: 'success' }, 
+      data: { categories: res }
+    })
+  }).catch( e => {
+    event.sender.send(`/categoriesResponse?ktm=${ktm}`, {
+      meta: { status: 'failed' }, 
+      data: { error_message: e }
+    })
+  }
+  )
 })
 
 /*
@@ -51,5 +57,5 @@ ipcMain.on('/categories/create', (event, arg, ktm) => {
  */
 
 ipcMain.on('/categories/destroy', (event, arg, ktm) => {
-  
+
 })

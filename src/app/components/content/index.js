@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser'
 import _ from 'lodash'
 
-class Entry extends Component {
+class Content extends Component {
   entryRef = React.createRef()
 
   state = {
@@ -56,13 +56,14 @@ class Entry extends Component {
   }
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { data } = this.props
+    const { data, height } = this.props
+    const nheight = height - 50
     
     return(
       <div className="block-entry">
         <div className="block-hd" style={winStyle}>
         </div>
-        <div className="block-bd" ref={this.entryRef}>
+        <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
           { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }}></webview> }
           { data && ( !this.state.showData && this.renderEntry(data))}
         </div>
@@ -71,11 +72,11 @@ class Entry extends Component {
   }
 }
 
-Entry.propTypes = {
+Content.propTypes = {
   data: PropTypes.object
 }
 
 
 import './index.sass'
 
-export default Entry
+export default Content
