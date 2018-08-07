@@ -1,6 +1,7 @@
 const {ipcMain} = require('electron')
 const { Category } = require('../model')
 const Sync = require('../sync')
+const _ = require('lodash')
 
 /*
  * /categories
@@ -38,6 +39,7 @@ ipcMain.on('/categories', (event, arg, ktm) => {
 
 ipcMain.on('/categories/create', (event, arg, ktm) => {
   Sync.createCategory(arg.account_id, arg.title).then(res => {
+    res["stream_ids"] = ""
     event.sender.send(`/categories/createResponse?ktm=${ktm}`, {
       meta: { status: 'success' },
       data: { category: res }

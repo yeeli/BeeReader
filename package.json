@@ -10,8 +10,8 @@
     "rebuild": "electron-rebuild -f -w sqlite3",
     "migration": "knex --knexfile src/config/database.js --cwd src/db/ migrate:make",
     "rollback": "knex --knexfile src/config/database.js --cwd src/db/ migrate:rollback",
-    "db:dev:migrate": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/db/migrate.js",
-    "db:dev:seeds": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/db/seeds.js",
+    "db:dev:migrate": "cross-env NODE_ENV=development NODE_FROM=console node -r babel-register  -r babel-polyfill ./src/db/migrate.js",
+    "db:dev:seeds": "cross-env NODE_ENV=development NODE_FROM=console node -r babel-register  -r babel-polyfill ./src/db/seeds.js",
     "sync": "cross-env NODE_ENV=development node -r babel-register  -r babel-polyfill ./src/main/test_sync.js"
   },
   "devDependencies": {

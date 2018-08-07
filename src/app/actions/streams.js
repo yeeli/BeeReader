@@ -1,7 +1,13 @@
+import  * as EntriesActions from '~/actions/entries'
+import  * as FoldersActions from '~/actions/folders'
+import  * as CategoriesActions from '~/actions/categories'
+
 export const REQUEST = "STREAMS_REQUEST"
+export const ADD_REQUEST = "STREAMS_ADD_REQUEST"
 export const LOAD = "STREAMS_LOAD"
 export const ADD = "STREAMS_ADD"
 export const SYNCING = "STREAMS_SYNCING"
+
 
 export const load = (items) => ({
   type: LOAD,
@@ -26,7 +32,7 @@ export const add = (item) => ({
 
 export const addStream = (url, categories) => dispatch => {
   return dispatch({
-    type: REQUEST,
+    type: ADD_REQUEST,
     sync: {
       url: 'createStreamsPath',
       params: {
@@ -36,6 +42,12 @@ export const addStream = (url, categories) => dispatch => {
       }
     }
   }).then(res => {
-    dispatch(add(res.data.streams))
+    if(res.meta.status == "success") {
+      let stream = res.data.stream
+      dispatch(add(stream))
+      dispatch(CategoriesActions.fetchCategories())
+      dispatch(FoldersActions.add(res.data.folders))
+      dispatch(EntriesActions.syncEntries(stream.id))
+    }
   })
 }

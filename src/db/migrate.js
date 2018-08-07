@@ -4,11 +4,13 @@ const config = require('../config/database')
 const database = config[process.env.NODE_ENV]
 const knex = require('knex')(database)
 
-function makeMigrate() {
+const makeMigrate = () => {
   knex.migrate
   .latest({directory: migrationsPath})
   .then(function(){
-    process.exit(0)
+    if (process.env.NODE_ENV === 'development' && process.env.NODE_FROM === 'console') {
+      process.exit(0)
+    }
   }).catch(function(e){
     console.log(e);
   });

@@ -24,9 +24,6 @@ export const fetchFolders = () => dispatch => {
   })
 }
 
-export const addFolders = () => dispatch => {
-}
-
 export const openFolder = (folder) => dispatch => {
   return dispatch({
     type: OPEN,

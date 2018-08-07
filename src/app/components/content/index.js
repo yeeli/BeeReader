@@ -34,7 +34,9 @@ class Content extends Component {
   }
 
   componentWillUpdate() {
-    this.entryRef.current.scrollTop = 0
+    if(this.props.changeContent){
+      this.entryRef.current.scrollTop = 0
+    }
   }
 
   handleClickEvent = (event, url) => {

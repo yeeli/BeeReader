@@ -3,7 +3,8 @@ import * as AppActions from '~/actions/app'
 const defaultState = {
   subscribeRss: {},
   selectedStream: 'all',
-  selectedEntry: null
+  selectedEntry: null,
+  syncing: false
 }
 
 const App = (state = defaultState, action) => {
@@ -12,6 +13,16 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         subscribeRss: action.item
+      }
+    case AppActions.SYNCING:
+      return {
+        ...state,
+        syncing: true
+      }
+    case AppActions.SYNCED:
+      return {
+        ...state,
+        syncing: false
       }
     default:
       return state

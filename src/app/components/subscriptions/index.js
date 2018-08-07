@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import MenuList from '@material-ui/core/MenuList'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -9,9 +10,9 @@ import ChevronRight from '@material-ui/icons/ChevronRight';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse'
 import Badge from '@material-ui/core/Badge'
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import SyncIcon from '@material-ui/icons/Sync'
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@material-ui/icons/AddBox'
 import RssIcon from '@material-ui/icons/RssFeed'
 import ToysIcon from '@material-ui/icons/Toys'
 import InboxIcon from '@material-ui/icons/Inbox'
@@ -144,6 +145,12 @@ class Subscriptions extends Component {
               </ListItemIcon>
               <ListItemText primary="Today" className="filter-name" />
             </MenuItem>
+            <MenuItem  onClick={ this.props.onClickNewStream }>
+              <ListItemIcon>
+                <AddIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }}/>
+              </ListItemIcon>
+              <ListItemText primary="Add Subscription" className="filter-name" />
+            </MenuItem>
           </MenuList> 
           <MenuList className="listing-subscriptions">
             {
@@ -152,12 +159,11 @@ class Subscriptions extends Component {
           </MenuList>
         </div>
         <div className="block-ft">
-          <IconButton aria-label="sync" className="btn-sync" onClick={ this.props.onClickSync }>
-            <SyncIcon />
-          </IconButton>
-          <IconButton aria-label="add" className="btn-add" onClick={ this.props.onClickNewStream }>
-            <AddIcon />
-          </IconButton>
+          <div className="subscription-actions">
+          <Button variant="fab" color="primary" mini aria-label="Sync" className="btn-sync" onClick={ this.props.onClickSync }>
+            <SyncIcon className={`${ this.props.syncing ? 'icon-spin' : '' }`} />
+          </Button>
+          </div>
         </div>
       </div>
     )

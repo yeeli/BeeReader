@@ -15,17 +15,19 @@ class Rss extends Service {
     this.feed = await this.parser.parseURL(this.uri)
     let icon = await this.getIcon()
     let link = this.feed.link.trim()
-    return {
+    let entries = await this.getEntries()
+    let item = {
       title: this.feed.title,
       link: link,
       description: this.feed.description,
       feed_url: this.feed.feedUrl || this.uri,
       icon: icon,
-      items: this.getEntries()
+      items: entries
     }
+    return Promise.resolve(item)
   }
 
-  getEntries() {
+  async getEntries() {
     return this.feed.items.map(res => {
       let content = ""
       let summary = null
@@ -56,7 +58,7 @@ class Rss extends Service {
         iconLink = i.href
       }
     }
-    if(!iconLink.match(/^http/)){
+    if(iconLink != null && !iconLink.match(/^http/)){
       iconLink = 'http:' + iconLink
     }
     return iconLink

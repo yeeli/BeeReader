@@ -21,6 +21,15 @@ const Streams = (state = defaultState, action) => {
         isLoaded: true,
         items: action.items
       }
+    case StreamsActions.ADD:
+      let streams = state.items
+      streams.push(action.item)
+      return {
+        ...state,
+        isFetching: false,
+        isLoaded: true,
+        items: streams
+      }
     case StreamsActions.SYNCING:
       console.log(action)
       let items = state.items.map( (item) =>{

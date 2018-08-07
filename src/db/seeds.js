@@ -11,7 +11,9 @@ Model.Account.where({service: 'Rss'}).then(res => {
       sort: 0,
       state: 'active'
     }).then(() => { 
-      process.exit(0)
+      if (process.env.NODE_ENV === 'development' && process.env.NODE_FROM === 'console') {
+        process.exit(0)
+      }
     })
   }
 })

@@ -35,7 +35,8 @@ class ReaderContainer extends Component {
     openNewStream: false,
     openSubscribeStream: false,
     selectedStream: { type: 'all' },
-    selectedEntry: null
+    selectedEntry: null,
+    changeEntry: false
   }
 
   constructor(props) {
@@ -57,9 +58,6 @@ class ReaderContainer extends Component {
 
     interact('.resize2').draggable({ onmove: window.dragMoveListener})
       .on('dragmove', self.handleResizeFeeds);
-  }
-
-  componentDidUpdate(){
   }
 
   handleWindowResize = (event) => {
@@ -116,9 +114,11 @@ class ReaderContainer extends Component {
 
   handleClickSync = (event) =>  {
     const {items} = this.props.Streams
+    this.props.dispatch(AppActions.syncing())
     for(let stream of items) {
       this.props.dispatch(EntriesActions.syncEntries(stream.id))
     }
+    this.props.dispatch(AppActions.synced())
   }
 
   handleClickNewStream = (event) => {
@@ -171,19 +171,21 @@ class ReaderContainer extends Component {
   handleClickFeed = (event, id) => {
     this.props.dispatch(EntriesActions.readEntry(id))
     this.props.dispatch(DataActions.fetchData(id))
-    this.setState({ selectedEntry: id })
+    this.setState({ selectedEntry: id, changeEntry: true })
   }
 
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
     const { App, Folders, Account, Entries, Data, Categories, Streams } = this.props
     let dataContent = Data.item
+    let contentChange = this.state.changeEntry
 
     if(Data.isLoaded && !_.isNull(dataContent) && !_.isNull(this.state.selectedEntry)) {
       let entry = _.find(Entries.items, {id: this.state.selectedEntry})
       dataContent.stream_title = entry.stream_title
       dataContent.published_at = entry.published_at
     }
+    this.state.changeEntry = false
 
     return (
       <div id="reader">
@@ -200,6 +202,7 @@ class ReaderContainer extends Component {
               onFilter={ this.handleFilter } 
               onClickSync={ this.handleClickSync }  
               onClickNewStream={ this.handleClickNewStream } 
+              syncing={App.syncing}
             />
           </div>
           <div className="resizer vertical resize1"/>
@@ -213,7 +216,7 @@ class ReaderContainer extends Component {
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            { Data.isLoaded && <Content data={dataContent} height={ browserHeight } /> }
+            { Data.isLoaded && <Content data={dataContent} height={ browserHeight } contentChang={ contentChange }/> }
           </div>
         </div>
         <AddStreamDialog 

@@ -27,7 +27,7 @@ const Categories = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         isLoaded: true,
-        items: state.items
+        item: state.item
       }
     default:
       return state

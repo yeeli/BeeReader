@@ -70,6 +70,13 @@ ipcMain.on('/streams/rss', (event, arg, ktm) => {
       meta: { status: 'success'},
       data: { rss: res }
     })
+  }).catch(e => {
+    console.log(e)
+    event.sender.send(`/streams/rssResponse?ktm=${ktm}`, {
+      meta: { status: 'failed'},
+      data: { error_message: e }
+    })
+
   })
 })
 
