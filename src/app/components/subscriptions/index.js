@@ -116,9 +116,10 @@ class Subscriptions extends Component {
 
   render () {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { folders, categories, streams, height, selectedItem } = this.props
+    const { folders, categories, streams, height, selectedItem, syncing } = this.props
 
     const nheight = height - 100
+    console.log(syncing)
     return(
       <div className="block-subscriptions">
         <div className="block-hd" style={winStyle}></div>
@@ -161,7 +162,7 @@ class Subscriptions extends Component {
         <div className="block-ft">
           <div className="subscription-actions">
           <Button variant="fab" color="primary" mini aria-label="Sync" className="btn-sync" onClick={ this.props.onClickSync }>
-            <SyncIcon className={`${ this.props.syncing ? 'icon-spin' : '' }`} />
+            <SyncIcon className={`${ syncing ? 'icon-spin' : '' }`} />
           </Button>
           </div>
         </div>

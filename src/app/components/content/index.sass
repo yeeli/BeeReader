@@ -6,8 +6,24 @@
   .block-hd
     height: 50px
     border-bottom: 1px solid rgba(199, 199, 199, 0.52)
+    .content-actions
+      text-align: right
   .block-bd
     overflow-y: auto
+    .entry-qrcode-modal
+      position: absolute
+      background: rgba(0, 0,0, 0.3)
+      left: 0
+      top: 0
+      bottom: 0
+      right: 0
+      z-index: 999
+      text-align: center
+      line-height: 100%
+      .entry-qrcode-body
+        background: #fff
+        display: inline-block
+        padding: 10px
     .entry
       min-width: 450px
       max-width: 700px

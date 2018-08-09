@@ -1,13 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser'
+import Button from '@material-ui/core/Button'
 import _ from 'lodash'
+import QRCode from 'qrcode.react'
 
 class Content extends Component {
   entryRef = React.createRef()
+  webviewRef = React.createRef()
 
   state = {
-    showData: null
+    showData: null,
+    open: false,
+    webLoading: false
+  }
+
+  constructor(props) {
+    super(props)
   }
 
   transform = (node, index) => {
@@ -38,10 +47,28 @@ class Content extends Component {
       this.entryRef.current.scrollTop = 0
     }
   }
+  componentDidUpdate() {
+    let that = this
+    if(this.state.showData){
+    let webview = document.querySelector('webview')
+    webview.addEventListener('dom-ready', () => {
+      that.setState({webLoading: false})
+    })
+    }
+  }
 
   handleClickEvent = (event, url) => {
-    this.setState({showData: url})
+    this.setState({showData: url, webLoading: true})
   }
+
+ handleOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   renderEntry(data) {
     let date = new Date(data.published_at)
     return (
@@ -74,10 +101,23 @@ class Content extends Component {
     return(
       <div className="block-entry">
         <div className="block-hd" style={winStyle}>
+          <div>{ this.state.webLoading && "loading" }</div>
+          <div className="content-actions">
+              <Button onClick={this.handleOpen}>share</Button>
+          </div>
         </div>
         <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
-          { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }}></webview> }
+          { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
           { data && ( !this.state.showData && this.renderEntry(data))}
+        <div className="entry-qrcode-modal"
+          onClick={this.handleClose}
+          style={{display: `${ this.state.open ? 'block' : 'none' }`}}
+        >
+          <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
+            { data && <QRCode value={ data.url } size={250} /> }
+          </div>
+        </div>
+
         </div>
       </div>
     )

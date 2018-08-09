@@ -81,14 +81,12 @@ const syncStream = async (id) => {
 const syncWithRss = async (streams) => {
   let stream = streams[0]
   let rss = new Rss(stream.oid)
-  let feed = await rss.getFeed()
-  console.log(feed.title)
   let entries = []
+  let feed = await rss.getFeed()
   for(let item of feed.items) {
-    itemLink = await url.parse(item.link)
-    link = itemLink.href
+    let itemLink = url.parse(item.link)
+    let link = itemLink.href
     let entryData = await Model.Entry.where({ account_id: stream.account_id, oid: link, state: 'active'})
-    console.log(stream.oid, link, _.isEmpty(entryData))
     if(_.isEmpty(entryData)){
       let entryInfo = {
         oid: link,

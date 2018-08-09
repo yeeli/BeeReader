@@ -79,7 +79,8 @@ class ReaderContainer extends Component {
       browserWidth: browserWidth,  
       contentWidth: contentWidth, 
       feedsWidth: feedsWidth, 
-      subscriptionsWidth: subscriptionsWidth  
+      subscriptionsWidth: subscriptionsWidth,
+      changeEntry: false
     })
   }
 
@@ -185,7 +186,6 @@ class ReaderContainer extends Component {
       dataContent.stream_title = entry.stream_title
       dataContent.published_at = entry.published_at
     }
-    this.state.changeEntry = false
 
     return (
       <div id="reader">
