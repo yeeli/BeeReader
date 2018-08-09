@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Snackbar from '@material-ui/core/Snackbar'
 
 import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
@@ -16,6 +17,7 @@ import SubscribeStreamDialog from '~/components/dialogs/subscribeStream'
 
 // Actions
 import  * as AppActions from '~/actions/app'
+import  * as AccountsActions from '~/actions/accounts'
 import  * as FoldersActions from '~/actions/folders'
 import  * as CategoriesActions from '~/actions/categories'
 import  * as StreamsActions from '~/actions/streams'
@@ -36,7 +38,9 @@ class ReaderContainer extends Component {
     openSubscribeStream: false,
     selectedStream: { type: 'all' },
     selectedEntry: null,
-    changeEntry: false
+    changeEntry: false,
+    tipsOpen: false,
+    tipsMsg: ''
   }
 
   constructor(props) {
@@ -45,7 +49,6 @@ class ReaderContainer extends Component {
   }
 
   componentDidMount() {
-    let self = this
     this.props.dispatch(FoldersActions.fetchFolders())
     this.props.dispatch(CategoriesActions.fetchCategories())
     this.props.dispatch(StreamsActions.fetchStreams())
@@ -141,7 +144,7 @@ class ReaderContainer extends Component {
   handleSubscribeStream = (categories = []) => event => {
     const { feed_url } = this.props.App.subscribeRss
     this.props.dispatch(StreamsActions.addStream(feed_url, categories))
-    this.setState({ openSubscribeStream: false })
+    this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
   }
 
   handleUnsubscribeStream = (id) => event => {
@@ -174,6 +177,10 @@ class ReaderContainer extends Component {
     this.setState({ selectedEntry: id, changeEntry: true })
   }
 
+  handleTipsClose = (event) => {
+    this.setState({tipsOpen: false})
+  }
+
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
     const { App, Folders, Account, Entries, Data, Categories, Streams } = this.props
@@ -195,6 +202,7 @@ class ReaderContainer extends Component {
             <Subscriptions  
               height={browserHeight} 
               folders={Folders}
+              account={App.currentAccount}
               categories={Categories}
               streams= {Streams}
               selectedItem={ this.state.selectedStream }
@@ -230,6 +238,17 @@ class ReaderContainer extends Component {
           onNewFolder = { this.handleNewFolder }
           categories = {Categories.items} 
           rss={App.subscribeRss}
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal:  'center' }}
+          open={ this.state.tipsOpen }
+          onClose={this.handleTipsClose }
+          style={{marginTop: '10px'}}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          autoHideDuration={1000}
+          message={ <span id="message-id">{this.state.tipsMsg}</span> }
         />
       </div>
     )

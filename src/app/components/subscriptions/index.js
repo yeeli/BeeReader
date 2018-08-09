@@ -50,7 +50,7 @@ class Subscriptions extends Component {
         { stream.entries_count > 0 && 
             (
               <ListItemSecondaryAction>
-                <span className="subscription-count">{ stream.entries_count }</span>
+                <span className="subscription-count">{ stream.unread_count }</span>
               </ListItemSecondaryAction>
             )
         }

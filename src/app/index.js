@@ -6,6 +6,8 @@ import { AppContainer } from 'react-hot-loader'
 import Root from '~/containers/root';
 import { configureStore, history } from './store/configureStore'
 
+import  * as AccountsActions from '~/actions/accounts'
+
 
 // Disable Electron App Drop File
 document.addEventListener('dragover', function (event) {
@@ -20,6 +22,7 @@ document.addEventListener('drop', function (event) {
 
 
 const store = configureStore()
+store.dispatch(AccountsActions.fetchAccounts())
 
 const render = Component => {
   ReactDOM.render(

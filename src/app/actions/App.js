@@ -2,6 +2,7 @@ export const LOAD_RSS = "LOAD_RSS"
 export const REQUEST_RSS = "REQUEST_RSS"
 export const SYNCING = "SYNCING"
 export const SYNCED = "SYNCED"
+export const LOAD_ACCOUNT = "LOAD_ACCOUNT"
 
 export const load_rss = (item) => ({
   type: LOAD_RSS,
@@ -30,4 +31,9 @@ export const syncing = () => ({
 
 export const synced = () => ({
   type: SYNCED
+})
+
+export const setCurrentAccount = (account) => ({
+  type: LOAD_ACCOUNT,
+  item: account
 })

@@ -7,6 +7,7 @@ export const ADD_REQUEST = "STREAMS_ADD_REQUEST"
 export const LOAD = "STREAMS_LOAD"
 export const ADD = "STREAMS_ADD"
 export const SYNCING = "STREAMS_SYNCING"
+export const UPDATE = "STREAMS_UPDATE"
 
 
 export const load = (items) => ({
@@ -49,5 +50,13 @@ export const addStream = (url, categories) => dispatch => {
       dispatch(FoldersActions.add(res.data.folders))
       dispatch(EntriesActions.syncEntries(stream.id))
     }
+  })
+}
+
+export const update = (stream, count) => dispatch => {
+  return dispatch({
+    type: UPDATE,
+    stream: stream,
+    count: count
   })
 }

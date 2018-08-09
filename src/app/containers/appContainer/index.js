@@ -12,11 +12,16 @@ import * as AccountsActions from '~/actions/accounts'
 
 
 class AppContainer extends Component {
-  componentDidMount() {
-    this.props.dispatch(AccountsActions.fetchAccount())
+
+  componentWillMount() {
+    const {Accounts} = this.props
+    if(Accounts.items.length == 0 ) {
+      this.props.dispatch(AccountsActions.createAccount('Rss'))
+    }
   }
+
   render () {
-    if(this.props.accounts.length > 0 ) {
+    if(this.props.Accounts.items.length > 0 ) {
       return <Redirect to='/reader' />
     }
     return (
@@ -32,7 +37,8 @@ class AppContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  return { accounts: state.Accounts.items }
+  const { Accounts } = state
+  return { Accounts }
 }
 
 

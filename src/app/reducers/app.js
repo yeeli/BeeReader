@@ -4,7 +4,8 @@ const defaultState = {
   subscribeRss: {},
   selectedStream: 'all',
   selectedEntry: null,
-  syncing: false
+  syncing: false,
+  currentAccount: {}
 }
 
 const App = (state = defaultState, action) => {
@@ -23,6 +24,11 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         syncing: false
+      }
+    case AppActions.LOAD_ACCOUNT:
+      return {
+        ...state,
+        currentAccount: action.account
       }
     default:
       return state

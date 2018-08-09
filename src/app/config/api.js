@@ -1,6 +1,7 @@
 const urls = {}
 
 urls.accountsPath = '/accounts'
+urls.createAccountsPath = '/accounts/create'
 urls.foldersPath = '/folders'
 urls.categoriesPath = '/categories'
 urls.createCategoriesPath = '/categories/create'

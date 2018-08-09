@@ -51,32 +51,10 @@ const Entries = (state = defaultState, action) => {
         items: entries,
         filterItems: filterEntries
       }
-    case EntriesActions.FILTER_UNREAD:
-      var entries = _.filter(state.items, (entry) => { return _.isNull(entry.read_at)})
+    case EntriesActions.FILTER:
       return {
         ...state,
-        filterItems: entries 
-      }
-    case EntriesActions.FILTER_TODAY:
-      var entries = _.filter(state.items, (entry) => { 
-        let date = new Date()
-        return entry.published_at > new Date(date.toDateString()).getTime() 
-      })
-      return {
-        ...state,
-        filterItems: entries 
-      }
-    case EntriesActions.FILTER_STREAM:
-      if(_.isEmpty(action.ids)) {
-        var entries = state.items
-      } else {
-        var entries = _.filter(state.items, (entry) => { 
-          return _.includes(action.ids, entry.stream_id) 
-        })
-      }
-      return {
-        ...state,
-        filterItems: entries 
+        filterItems: action.items
       }
     default:
       return state

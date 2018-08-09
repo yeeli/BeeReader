@@ -31,10 +31,23 @@ const Streams = (state = defaultState, action) => {
         items: streams
       }
     case StreamsActions.SYNCING:
-      console.log(action)
-      let items = state.items.map( (item) =>{
+      var items = state.items.map( (item) =>{
         if(action.id == item.id) {
           item['sync'] = true
+        }
+        return item
+      })
+      return {
+        ...state,
+        items: items
+      }
+    case StreamsActions.UPDATE:
+      var items = state.items.map( (item) =>{
+        if(action.stream == item.id) {
+          item['sync'] = false
+          var count = item.unread_count + action.count
+          item['unread_count'] = count
+          item['entries_count'] = count
         }
         return item
       })

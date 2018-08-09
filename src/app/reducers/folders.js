@@ -36,7 +36,6 @@ const Folders = (state = defaultState, action) => {
         }
         return folder
       })
-      console.log(folders)
       return {
         ...state,
         items: folders

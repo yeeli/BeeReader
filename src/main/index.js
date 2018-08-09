@@ -5,7 +5,6 @@ const url = require('url');
 const paths = require('../config/paths')
 
 require('../db/migrate')
-require('../db/seeds')
 require('./routers')
 
 let mainWindow

@@ -1,12 +1,10 @@
 import * as AccountsActions from '~/actions/accounts'
+import _ from 'lodash'
 
 const defaultState = {
   isFetching: false,
   isLoaded: false,
-  items: [],
-  entries_count: 0,
-  unread_count: 0,
-  today_count: 0
+  items: []
 }
 
 const Account = (state = defaultState, action) => {
@@ -24,6 +22,16 @@ const Account = (state = defaultState, action) => {
         isLoaded: true,
         items: action.account
       }
+    case AccountsActions.ADD:
+      let accounts = state.items
+      accounts.push(action.account)
+      return {
+        ...state,
+        isFetching: false,
+        isLoaded: true,
+        items: accounts
+      }
+
     default:
       return state
   }
