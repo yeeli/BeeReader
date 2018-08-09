@@ -1,3 +1,5 @@
+import  * as AppActions from '~/actions/app'
+
 export const REQUEST = "ENTRIES_REQUEST"
 export const LOAD = "ENTRIES_LOAD"
 export const ADD = "ENTRIES_ADD"
@@ -43,6 +45,11 @@ export const syncEntries = (stream) => (dispatch, state) => {
       }
     }
   }).then(res => {
+    let streams = state().Streams.items
+
+    if(streams[streams.length -1].id === stream){
+      dispatch(AppActions.synced())
+    }
     dispatch(add(res.data.entries))
   })
 }

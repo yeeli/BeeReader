@@ -119,7 +119,6 @@ class Subscriptions extends Component {
     const { folders, categories, streams, height, selectedItem, syncing } = this.props
 
     const nheight = height - 100
-    console.log(syncing)
     return(
       <div className="block-subscriptions">
         <div className="block-hd" style={winStyle}></div>

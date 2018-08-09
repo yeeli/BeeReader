@@ -119,7 +119,6 @@ class ReaderContainer extends Component {
     for(let stream of items) {
       this.props.dispatch(EntriesActions.syncEntries(stream.id))
     }
-    this.props.dispatch(AppActions.synced())
   }
 
   handleClickNewStream = (event) => {
