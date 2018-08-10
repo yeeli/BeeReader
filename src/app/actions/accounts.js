@@ -29,6 +29,7 @@ export const createAccount = (service) => (dispatch, state) => {
   }).then(res => {
     if(res.meta.status == "success") {
       dispatch(add(res.data.account))
+      Promise.resolve(res.data.account)
     }
   })
 }

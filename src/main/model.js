@@ -73,6 +73,10 @@ class Entry extends Model {
   constructor() {
     super()
   }
+
+  static async updateCount(entry_id) {
+
+  }
 }
 
 class Data extends Model {
@@ -86,7 +90,6 @@ class Folder extends Model {
     super()
   }
 }
-
 
 module.exports = {
   Account, 

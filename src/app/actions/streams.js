@@ -8,6 +8,7 @@ export const LOAD = "STREAMS_LOAD"
 export const ADD = "STREAMS_ADD"
 export const SYNCING = "STREAMS_SYNCING"
 export const UPDATE = "STREAMS_UPDATE"
+export const READ = "STREAMS_READ"
 
 
 export const load = (items) => ({
@@ -58,5 +59,12 @@ export const update = (stream, count) => dispatch => {
     type: UPDATE,
     stream: stream,
     count: count
+  })
+}
+
+export const read = (stream) => dispatch => {
+  return dispatch({
+    type: READ,
+    stream: stream
   })
 }

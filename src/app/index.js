@@ -7,6 +7,7 @@ import Root from '~/containers/root';
 import { configureStore, history } from './store/configureStore'
 
 import  * as AccountsActions from '~/actions/accounts'
+import  * as AppActions from '~/actions/app'
 
 
 // Disable Electron App Drop File
@@ -22,7 +23,9 @@ document.addEventListener('drop', function (event) {
 
 
 const store = configureStore()
-store.dispatch(AccountsActions.fetchAccounts())
+store.dispatch(AccountsActions.fetchAccounts()).then( res => {
+  store.dispatch(AppActions.setCurrentAccount('Rss'))
+})
 
 const render = Component => {
   ReactDOM.render(

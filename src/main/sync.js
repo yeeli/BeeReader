@@ -74,6 +74,8 @@ const syncStream = async (id) => {
   if(entries.length > 0) {
     await Model.Stream.connection().where({id: stream.id}).increment('entries_count', entries.length)
     await Model.Stream.connection().where({id: stream.id}).increment('unread_count', entries.length)
+    await Model.Account.connection().where({id: account.id}).increment('entries_count', entries.length)
+    await Model.Account.connection().where({id: account.id}).increment('unread_count', entries.length)
   }
   return Promise.resolve(entries)
 }

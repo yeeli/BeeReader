@@ -71,28 +71,31 @@ export const readEntry = (id) => (dispatch, state) => {
       }
     }
   }).then(res => {
-    dispatch(StreamsActions.update(entry.stream_id, -1))
+    dispatch(StreamsActions.read(entry.stream_id))
     dispatch({ type: READ, id: id})
   })
 }
 
-export const filter = (type, ids = []) => (dispatch, state) => {
+export const filter = (type, ids = []) => (dispatch, getState) => {
   let filter_type = FILTER_STREAM
-  let entries = state().Entries.items
+  let entries = getState().Entries.items
   switch(type){
     case 'unread':
-      entries = _.filter(entries, (entry) => { return _.isNull(entry.read_at)})
+      entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at)})
+      break
     case 'today':
       entries = _.filter(entries, (entry) => { 
         let date = new Date()
         return entry.published_at > new Date(date.toDateString()).getTime() 
       })
+      break
     default: 
       if(!_.isEmpty(ids)) {
         entries = _.filter(entries, (entry) => { 
           return _.includes(ids, entry.stream_id) 
         })
       }
+      break
   }
   return dispatch({
     type: FILTER,

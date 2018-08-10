@@ -2,14 +2,14 @@ export const LOAD_RSS = "LOAD_RSS"
 export const REQUEST_RSS = "REQUEST_RSS"
 export const SYNCING = "SYNCING"
 export const SYNCED = "SYNCED"
-export const LOAD_ACCOUNT = "LOAD_ACCOUNT"
+export const SET_ACCOUNT = "APP_SET_ACCOUNT"
 
 export const load_rss = (item) => ({
   type: LOAD_RSS,
   item: item
 })
 
-export const fetchRss = (url) => (dispatch, state) => {
+export const fetchRss = (url) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_RSS,
     sync: { 
@@ -33,7 +33,11 @@ export const synced = () => ({
   type: SYNCED
 })
 
-export const setCurrentAccount = (account) => ({
-  type: LOAD_ACCOUNT,
-  item: account
-})
+export const setCurrentAccount = (service) => (dispatch, getState) => {
+  let accounts = getState().Accounts.items
+  let account = _.find(accounts, {service: service})
+  dispatch({
+    type: SET_ACCOUNT,
+    account: account
+  })
+}

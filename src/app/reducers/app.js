@@ -25,7 +25,7 @@ const App = (state = defaultState, action) => {
         ...state,
         syncing: false
       }
-    case AppActions.LOAD_ACCOUNT:
+    case AppActions.SET_ACCOUNT:
       return {
         ...state,
         currentAccount: action.account

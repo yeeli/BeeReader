@@ -55,6 +55,19 @@ const Streams = (state = defaultState, action) => {
         ...state,
         items: items
       }
+    case StreamsActions.READ:
+      var items = state.items.map( (item) =>{
+        if(action.stream == item.id) {
+          var count = item.unread_count - 1
+          item['unread_count'] = count
+        }
+        return item
+      })
+      return {
+        ...state,
+        items: items
+      }
+
     default:
       return state
   }
