@@ -124,9 +124,6 @@ class Subscriptions extends Component {
       <div className="block-subscriptions">
         <div className="block-hd" style={winStyle}></div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
-          <div className="account">
-            <span>Rss</span>
-          </div>
           <MenuList className="listing-filters">
             <MenuItem selected={ selectedItem.type == "all"} onClick={ this.props.onFilter({  type: 'all' }) } className="filter-item">
               <ListItemIcon>
