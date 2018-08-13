@@ -1,5 +1,6 @@
 import * as AppActions from '~/actions/app'
 import * as StreamsActions from '~/actions/streams'
+import  * as FoldersActions from '~/actions/folders'
 
 export const REQUEST = "ENTRIES_REQUEST"
 export const LOAD = "ENTRIES_LOAD"
@@ -54,6 +55,7 @@ export const syncEntries = (stream) => (dispatch, state) => {
     }
     dispatch(StreamsActions.update(stream, res.data.entries.length))
     dispatch(add(res.data.entries))
+    dispatch(filter())
   })
 }
 
@@ -76,10 +78,21 @@ export const readEntry = (id) => (dispatch, state) => {
   })
 }
 
-export const filter = (type, ids = []) => (dispatch, getState) => {
+export const filter = () => (dispatch, getState) => {
   let filter_type = FILTER_STREAM
   let entries = getState().Entries.items
-  switch(type){
+  let categories = getState().Categories.items
+  let ids = []
+  let selected = getState().App.selectedStream
+  if(selected.type == 'stream') {
+      ids = [selected.id]
+    }
+  if(selected.type == "category") {
+    dispatch(FoldersActions.openFolder(selected))
+    let category = _.find(categories, { id: selected.id})
+    ids = category.stream_ids.split(",").map( (id) => { return parseInt(id) })
+  }
+  switch(selected.type){
     case 'unread':
       entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at)})
       break

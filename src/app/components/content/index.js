@@ -2,17 +2,20 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser'
 import Button from '@material-ui/core/Button'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import _ from 'lodash'
 import QRCode from 'qrcode.react'
 
 class Content extends Component {
   entryRef = React.createRef()
   webviewRef = React.createRef()
+  timer = null
 
   state = {
     showData: null,
     open: false,
-    webLoading: false
+    webLoading: 0,
+    showLoading: false
   }
 
   constructor(props) {
@@ -38,27 +41,38 @@ class Content extends Component {
       return convertNodeToElement(node, index, this.transform)
     }
   }
-  componentWillReceiveProps() {
-    this.setState({ showData: null })
-  }
 
   componentWillUpdate() {
     if(this.props.changeContent){
       this.entryRef.current.scrollTop = 0
-    }
+    }  
   }
   componentDidUpdate() {
     let that = this
     if(this.state.showData){
       let webview = document.querySelector('webview')
       webview.addEventListener('dom-ready', () => {
-        that.setState({webLoading: false})
+        that.setState({ webLoading: 100 })
       })
+      if (this.state.showLoading == false) {
+        clearInterval(this.timer)
+      }
     }
   }
 
+  progress = () => {
+    const { webLoading } = this.state;
+    if (webLoading === 100) {
+      this.setState({showLoading: false})
+    } else {
+      const diff = Math.random() * 10;
+      this.setState({ webLoading: Math.min(webLoading + diff, 100) });
+    } 
+  };
+
   handleClickEvent = (event, url) => {
-    this.setState({showData: url, webLoading: true})
+    this.timer = setInterval(this.progress, 500);
+    this.setState({showData: url, webLoading: 0, showLoading: true})
   }
 
   handleOpen = () => {
@@ -72,7 +86,7 @@ class Content extends Component {
   renderEntry(data) {
     let date = new Date(data.published_at)
     return (
-      <div className="entry">
+      <div className="entry" id="entry_content">
         <div className="entry-hd">
           <div className="entry-title">
             <a href='javascript:;' onClick={ (event) => { this.handleClickEvent(event, data.url) } }>
@@ -97,16 +111,15 @@ class Content extends Component {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { data, height } = this.props
     const nheight = height - 50
-
     return(
-      <div className="block-entry">
+      <div className="block-entry" id="a">
         <div className="block-hd" style={winStyle}>
-          <div>{ this.state.webLoading && "loading" }</div>
           <div className="content-actions">
             <Button onClick={this.handleOpen}>share</Button>
           </div>
         </div>
         <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
+          { this.state.showData && this.state.showLoading && <LinearProgress variant="determinate" value={this.state.webLoading} /> }
           { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
           { data && ( !this.state.showData && this.renderEntry(data))}
           <div className="entry-qrcode-modal"

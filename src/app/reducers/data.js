@@ -6,7 +6,7 @@ const defaultState = {
   item: {}
 }
 
-const Data = (state = [], action) => {
+const Data = (state = defaultState, action) => {
   switch(action.type) {
     case DataActions.REQUEST:
       return {
@@ -20,6 +20,12 @@ const Data = (state = [], action) => {
         isFetching: false,
         isLoaded: true,
         item: action.item
+      }
+    case DataActions.CLEAR:
+      return {
+        ...state,
+        isFetching: false,
+        isLoaded: false,
       }
     default:
       return state

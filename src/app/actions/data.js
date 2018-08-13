@@ -1,5 +1,6 @@
 export const REQUEST = "DATA_REQUEST"
 export const LOAD = "DATA_LOAD"
+export const CLEAR = "DATA_CLEAR"
 
 export const load = (item) => ({
   type: LOAD,
@@ -22,6 +23,5 @@ export const fetchData = (id) => (dispatch, state) => {
 
 
 export const clearData = () => ({
-  type: LOAD,
-  item: null
+  type: CLEAR
 })

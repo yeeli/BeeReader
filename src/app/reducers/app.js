@@ -2,7 +2,7 @@ import * as AppActions from '~/actions/app'
 
 const defaultState = {
   subscribeRss: {},
-  selectedStream: 'all',
+  selectedStream: { type: 'all' },
   selectedEntry: null,
   syncing: false,
   currentAccount: {}
@@ -29,6 +29,25 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         currentAccount: action.account
+      }
+    case AppActions.UPDATE_ACCOUNT:
+     return {
+       ...state,
+       currentAccount: {
+         ...state.currentAction,
+         entries_count: action.entriesCount,
+         unread_count: action.unreadCount
+       }
+     }
+    case AppActions.SET_STREAM:
+      return {
+        ...state,
+        selectedStream: action.selected
+      }
+    case AppActions.SET_ENTRY:
+      return {
+        ...state,
+        selectedEntry: action.selected
       }
     default:
       return state

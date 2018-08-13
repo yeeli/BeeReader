@@ -45,12 +45,7 @@ class WindowMenu extends Component {
     return (
       <div className="block-win-menu" onMouseOver={this.handleHoverMenu}>
         <a href="javscript:;" onClick={ this.handleWindowClose }> 
-          { this.state.hvoer 
-            ?
-             <CircleIcon style={{color: `${ this.state.focus ? '#DD7463' : '#ccc'  }`, fontSize: '18px'}}/>
-            :
-             <CircleIcon style={{color: `${ this.state.focus ? '#DD7463' : '#ccc'  }`, fontSize: '18px'}}/>
-          }
+             <CircleIcon style={{color: `${ this.state.focus ? '#FF6162' : '#ccc'  }`, fontSize: '18px'}}/>
         </a>
         <a href="javascript:;" onClick={ this.handleWindowMin }><CircleIcon style={{color: `${ this.state.focus ? '#EDC262' : '#ccc' }` , fontSize: '18px'}}/></a>
         <a href="javascript:;" onClick={ this.handleWindowMax }><CircleIcon style={{color: `${ this.state.focus ? '#7CC363' : '#ccc' }` , fontSize: '18px'}}/></a>

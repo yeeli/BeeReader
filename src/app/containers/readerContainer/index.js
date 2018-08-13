@@ -36,9 +36,6 @@ class ReaderContainer extends Component {
     contentWidth: 500,
     openNewStream: false,
     openSubscribeStream: false,
-    selectedStream: { type: 'all' },
-    selectedEntry: null,
-    changeEntry: false,
     tipsOpen: false,
     tipsMsg: ''
   }
@@ -83,7 +80,6 @@ class ReaderContainer extends Component {
       contentWidth: contentWidth, 
       feedsWidth: feedsWidth, 
       subscriptionsWidth: subscriptionsWidth,
-      changeEntry: false
     })
   }
 
@@ -157,16 +153,8 @@ class ReaderContainer extends Component {
   handleFilter = selected => event => {
     let ids = []
     this.props.dispatch(DataActions.clearData())
-    if(selected.type == 'stream') {
-      ids = [selected.id]
-    }
-    if(selected.type == "category") {
-      this.props.dispatch(FoldersActions.openFolder(selected))
-      let category = _.find(this.props.Categories.items, { id: selected.id})
-      ids = category.stream_ids.split(",").map( (id) => { return parseInt(id) })
-    }
-    this.props.dispatch(EntriesActions.filter(selected.type, ids))
-    this.setState({ selectedStream: selected })
+    this.props.dispatch(AppActions.setSelectedStream(selected))
+    this.props.dispatch(EntriesActions.filter())
   }
 
   // Feed Events
@@ -174,7 +162,7 @@ class ReaderContainer extends Component {
   handleClickFeed = (event, id) => {
     this.props.dispatch(EntriesActions.readEntry(id))
     this.props.dispatch(DataActions.fetchData(id))
-    this.setState({ selectedEntry: id, changeEntry: true })
+    this.props.dispatch(AppActions.setSelectedEntry(id))
   }
 
   handleTipsClose = (event) => {
@@ -185,10 +173,9 @@ class ReaderContainer extends Component {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
     const { App, Folders, Account, Entries, Data, Categories, Streams } = this.props
     let dataContent = Data.item
-    let contentChange = this.state.changeEntry
 
-    if(Data.isLoaded && !_.isNull(dataContent) && !_.isNull(this.state.selectedEntry)) {
-      let entry = _.find(Entries.items, {id: this.state.selectedEntry})
+    if(Data.isLoaded && !_.isNull(dataContent) && !_.isNull(App.selectedEntry)) {
+      let entry = _.find(Entries.items, {id: App.selectedEntry})
       dataContent.stream_title = entry.stream_title
       dataContent.published_at = entry.published_at
     }
@@ -205,7 +192,7 @@ class ReaderContainer extends Component {
               account={App.currentAccount}
               categories={Categories}
               streams= {Streams}
-              selectedItem={ this.state.selectedStream }
+              selectedItem={ App.selectedStream }
               onFilter={ this.handleFilter } 
               onClickSync={ this.handleClickSync }  
               onClickNewStream={ this.handleClickNewStream } 
@@ -217,13 +204,13 @@ class ReaderContainer extends Component {
             <Feeds 
               height={ browserHeight } 
               entries={ Entries.filterItems } 
-              selectedItem={ this.state.selectedEntry }
+              selectedItem={ App.selectedEntry }
               clickFeed={ this.handleClickFeed }
             />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            { Data.isLoaded && <Content data={dataContent} height={ browserHeight } contentChang={ contentChange }/> }
+            { Data.isLoaded && <Content data={dataContent} height={ browserHeight } /> }
           </div>
         </div>
         <AddStreamDialog 

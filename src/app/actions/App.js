@@ -3,6 +3,9 @@ export const REQUEST_RSS = "REQUEST_RSS"
 export const SYNCING = "SYNCING"
 export const SYNCED = "SYNCED"
 export const SET_ACCOUNT = "APP_SET_ACCOUNT"
+export const UPDATE_ACCOUNT = "APP_UPDATE_ACCOUNT"
+export const SET_STREAM = "APP_SET_STREAM"
+export const SET_ENTRY = "APP_SET_ENTRY"
 
 export const load_rss = (item) => ({
   type: LOAD_RSS,
@@ -40,4 +43,12 @@ export const setCurrentAccount = (service) => (dispatch, getState) => {
     type: SET_ACCOUNT,
     account: account
   })
+}
+
+export const setSelectedStream = (selected) => (dispatch, getState) => {
+  dispatch({type: SET_STREAM, selected: selected})
+}
+
+export const setSelectedEntry = (selected) => (dispatch, getState) => {
+  dispatch({type: SET_ENTRY, selected: selected})
 }

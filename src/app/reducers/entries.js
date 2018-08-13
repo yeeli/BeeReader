@@ -30,8 +30,7 @@ const Entries = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         isLoaded: true,
-        items: newEntries,
-        filterItems: newEntries
+        items: newEntries
       }
     case EntriesActions.READ:
       var entries = state.items.map( item => {
