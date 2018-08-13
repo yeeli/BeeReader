@@ -50,10 +50,10 @@ class Content extends Component {
   componentDidUpdate() {
     let that = this
     if(this.state.showData){
-    let webview = document.querySelector('webview')
-    webview.addEventListener('dom-ready', () => {
-      that.setState({webLoading: false})
-    })
+      let webview = document.querySelector('webview')
+      webview.addEventListener('dom-ready', () => {
+        that.setState({webLoading: false})
+      })
     }
   }
 
@@ -61,7 +61,7 @@ class Content extends Component {
     this.setState({showData: url, webLoading: true})
   }
 
- handleOpen = () => {
+  handleOpen = () => {
     this.setState({ open: true });
   };
 
@@ -103,20 +103,20 @@ class Content extends Component {
         <div className="block-hd" style={winStyle}>
           <div>{ this.state.webLoading && "loading" }</div>
           <div className="content-actions">
-              <Button onClick={this.handleOpen}>share</Button>
+            <Button onClick={this.handleOpen}>share</Button>
           </div>
         </div>
         <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
           { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
           { data && ( !this.state.showData && this.renderEntry(data))}
-        <div className="entry-qrcode-modal"
-          onClick={this.handleClose}
-          style={{display: `${ this.state.open ? 'block' : 'none' }`}}
-        >
-          <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
-            { data && <QRCode value={ data.url } size={250} /> }
+          <div className="entry-qrcode-modal"
+            onClick={this.handleClose}
+            style={{display: `${ this.state.open ? 'block' : 'none' }`}}
+          >
+            <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
+              { data && <QRCode value={ data.url } size={250} /> }
+            </div>
           </div>
-        </div>
 
         </div>
       </div>
