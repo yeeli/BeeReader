@@ -37,7 +37,7 @@ export const setCurrentAccount = (service) => (dispatch, getState) => {
   let account = _.find(accounts, {service: service})
   dispatch({
     type: SET_ACCOUNT,
-    account: account
+    account: account.id
   })
 }
 

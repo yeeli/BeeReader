@@ -25,10 +25,7 @@ export const fetchEntries = () => (dispatch, state) => {
   return dispatch({
     type: REQUEST, 
     sync: { 
-      url: 'entriesPath',
-      params: {
-        account: 1
-      }
+      url: 'entriesPath'
     }
   }).then(res => {
     dispatch(load(res.data.entries))
@@ -76,6 +73,7 @@ export const readEntry = (id) => (dispatch, state) => {
 }
 
 export const filter = () => (dispatch, getState) => {
+  let account = getState().App.currentAccount
   let entries = getState().Entries.items
   let categories = getState().Categories.items
   let ids = []
@@ -89,13 +87,16 @@ export const filter = () => (dispatch, getState) => {
     ids = category.stream_ids.split(",").map( (id) => { return parseInt(id) })
   }
   switch(selected.type){
+    case 'all':
+      entries = _.filter(entries, (entry) => { return entry.account_id == account })
+      break
     case 'unread':
-      entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at)})
+      entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at) && entry.account_id == account })
       break
     case 'today':
       entries = _.filter(entries, (entry) => { 
         let date = new Date()
-        return entry.published_at > new Date(date.toDateString()).getTime() 
+        return entry.published_at > new Date(date.toDateString()).getTime() && entry.account_id == account
       })
       break
     default: 

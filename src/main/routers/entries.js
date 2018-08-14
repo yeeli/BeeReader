@@ -15,7 +15,7 @@ const Sync = require('../sync')
 
 ipcMain.on('/entries', (event, arg, ktm) => {
   let params = _.isNil(arg) ? {} : arg
-  Entry.where({ "entries.account_id": arg.account }).select("entries.*", "streams.title as stream_title").join('streams', {'streams.id': 'entries.stream_id'}).orderBy('published_at', 'desc').then(res => {
+  Entry.all().select("entries.*", "streams.title as stream_title").join('streams', {'streams.id': 'entries.stream_id'}).orderBy('published_at', 'desc').then(res => {
     event.sender.send(`/entriesResponse?ktm=${ktm}`, {
       meta: { status: 'success' }, 
       data: { entries: res }
