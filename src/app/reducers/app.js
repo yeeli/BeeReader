@@ -1,20 +1,16 @@
 import * as AppActions from '~/actions/app'
+import _ from 'lodash'
 
 const defaultState = {
-  subscribeRss: {},
   selectedStream: { type: 'all' },
   selectedEntry: null,
   syncing: false,
-  currentAccount: {}
+  currentAccount: {},
+  openFolders: []
 }
 
 const App = (state = defaultState, action) => {
   switch(action.type) {
-    case AppActions.LOAD_RSS:
-      return {
-        ...state,
-        subscribeRss: action.item
-      }
     case AppActions.SYNCING:
       return {
         ...state,
@@ -48,6 +44,19 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         selectedEntry: action.selected
+      }
+    case AppActions.OPEN_FOLDER:
+      let openFolders = state.openFolders
+      let folderIndex = openFolders.indexOf(action.id)
+      if (folderIndex != -1){
+        openFolders.splice(folderIndex, 1)
+      } else {
+        openFolders.push(action.id)
+      }
+      console.log(openFolders)
+      return {
+        ...state,
+        openFolders: openFolders
       }
     default:
       return state

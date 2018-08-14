@@ -27,6 +27,7 @@ import  * as DataActions from '~/actions/data'
 import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
+  timer = null
 
   state = {
     browserHeight: window.outerHeight,
@@ -37,7 +38,8 @@ class ReaderContainer extends Component {
     openNewStream: false,
     openSubscribeStream: false,
     tipsOpen: false,
-    tipsMsg: ''
+    tipsMsg: '',
+    subscribeRss: {}
   }
 
   constructor(props) {
@@ -58,6 +60,18 @@ class ReaderContainer extends Component {
 
     interact('.resize2').draggable({ onmove: window.dragMoveListener})
       .on('dragmove', self.handleResizeFeeds);
+
+    //Auto Sync Entries Now
+    this.timer = setInterval(this.syncEntries, 60000)
+  }
+
+
+  syncEntries = () => {
+    const {items} = this.props.Streams
+    this.props.dispatch(AppActions.syncing())
+    for(let stream of items) {
+      this.props.dispatch(EntriesActions.syncEntries(stream.id))
+    }
   }
 
   handleWindowResize = (event) => {
@@ -108,16 +122,11 @@ class ReaderContainer extends Component {
       this.setState({ feedsWidth: width })
     }
   }
-
+  
 
   // Subscription Events
-
   handleClickSync = (event) =>  {
-    const {items} = this.props.Streams
-    this.props.dispatch(AppActions.syncing())
-    for(let stream of items) {
-      this.props.dispatch(EntriesActions.syncEntries(stream.id))
-    }
+    this.syncEntries()
   }
 
   handleClickNewStream = (event) => {
@@ -129,8 +138,13 @@ class ReaderContainer extends Component {
   }
 
   handleSearchStream = value => event => {
-    this.props.dispatch(AppActions.fetchRss(value))
-    this.setState({ openNewStream: false, openSubscribeStream: true })
+    this.props.dispatch(AppActions.fetchRss(value)).then(res => {
+      if(res.meta.status == "success") {
+        this.setState({ subscribeRss: res.data.rss, openNewStream: false, openSubscribeStream: true })
+      } else {
+
+      }
+    })
   }
 
   handleCloseSubscribeStream = () => {
@@ -189,9 +203,10 @@ class ReaderContainer extends Component {
             <Subscriptions  
               height={browserHeight} 
               folders={Folders}
-              account={App.currentAccount}
               categories={Categories}
               streams= {Streams}
+              account={App.currentAccount}
+              app={App}
               selectedItem={ App.selectedStream }
               onFilter={ this.handleFilter } 
               onClickSync={ this.handleClickSync }  
@@ -224,7 +239,7 @@ class ReaderContainer extends Component {
           onSubscribe = { this.handleSubscribeStream }
           onNewFolder = { this.handleNewFolder }
           categories = {Categories.items} 
-          rss={App.subscribeRss}
+          rss={this.state.subscribeRss}
         />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal:  'center' }}

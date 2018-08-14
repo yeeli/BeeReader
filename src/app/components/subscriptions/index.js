@@ -93,6 +93,7 @@ class Subscriptions extends Component {
     const {items} = this.props.folders
     const streams = this.props.streams.items
     const categories = this.props.categories.items
+    const app = this.props.app
 
     return items.map( folder => {
       let selected = folder.source_id == selectedItem
@@ -106,9 +107,10 @@ class Subscriptions extends Component {
       }
       if(folder.source_type === "Category") {
         let category = _.find(categories, {id: folder.source_id})
+        let isOpen = _.includes(app.openFolders, category.id)
         return (
           <div key={folder.id}>
-            { this.setCategory(category, selectedItem, folder.opened)  }
+            { this.setCategory(category, selectedItem, isOpen)  }
         </div>
         )
       }

@@ -7,9 +7,6 @@ export const LOAD = "ENTRIES_LOAD"
 export const ADD = "ENTRIES_ADD"
 
 export const FILTER = "ENTRIES_FILTER"
-export const FILTER_UNREAD = "ENTRIES_FILTER_UNREAD"
-export const FILTER_TODAY = "ENTRIES_FILTER_TODAY"
-export const FILTER_STREAM = "ENTRIES_FILTER_STREAM"
 
 export const ENTRY_REQUEST = "ENTRY_REQUEST"
 export const READ = "ENTRY_READ"
@@ -79,7 +76,6 @@ export const readEntry = (id) => (dispatch, state) => {
 }
 
 export const filter = () => (dispatch, getState) => {
-  let filter_type = FILTER_STREAM
   let entries = getState().Entries.items
   let categories = getState().Categories.items
   let ids = []
@@ -88,7 +84,7 @@ export const filter = () => (dispatch, getState) => {
       ids = [selected.id]
     }
   if(selected.type == "category") {
-    dispatch(FoldersActions.openFolder(selected))
+    dispatch(AppActions.openFolder(selected.id))
     let category = _.find(categories, { id: selected.id})
     ids = category.stream_ids.split(",").map( (id) => { return parseInt(id) })
   }
