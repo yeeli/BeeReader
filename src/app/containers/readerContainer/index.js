@@ -62,7 +62,7 @@ class ReaderContainer extends Component {
       .on('dragmove', self.handleResizeFeeds);
 
     //Auto Sync Entries Now
-    this.timer = setInterval(this.syncEntries, 60000)
+    this.timer = setInterval(this.syncEntries, 60000 * 30)
   }
 
 

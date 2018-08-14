@@ -133,7 +133,7 @@ class Subscriptions extends Component {
               </ListItemIcon>
               <ListItemText primary="All" className="filter-name"/>
               <ListItemSecondaryAction>
-                <span className="filter-count" >{ account.unread_count }</span>
+                <span className="filter-count" >{ account.entries_count }</span>
               </ListItemSecondaryAction>
             </MenuItem>
             <MenuItem selected={ selectedItem.type == "unread"} onClick={ this.props.onFilter({  type: 'unread' }) } className="filter-item">
