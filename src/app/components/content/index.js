@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import _ from 'lodash'
 import QRCode from 'qrcode.react'
+import moment from 'moment'
 
 class Content extends Component {
   entryRef = React.createRef()
@@ -96,9 +97,9 @@ class Content extends Component {
           <div className="entry-info">
             <span>{ data.stream_title }</span>
             <span className="dot">&nbsp;•&nbsp;</span>
-            <span>{ data.author }</span>
-            <span className="dot">&nbsp;•&nbsp;</span>
-            <span>{ date.toDateString()  }</span>
+            {data.author && <span>{ data.author }</span> }
+            {data.author && <span className="dot">&nbsp;•&nbsp;</span> }
+            <span>{  moment(date).format('YYYY-MM-D hh:mm') }</span>
           </div>
         </div>
         <div className="entry-bd">

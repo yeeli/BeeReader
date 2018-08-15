@@ -26,15 +26,6 @@ const App = (state = defaultState, action) => {
         ...state,
         currentAccount: action.account
       }
-    case AppActions.UPDATE_ACCOUNT:
-     return {
-       ...state,
-       currentAccount: {
-         ...state.currentAction,
-         entries_count: action.entriesCount,
-         unread_count: action.unreadCount
-       }
-     }
     case AppActions.SET_STREAM:
       return {
         ...state,
@@ -53,7 +44,6 @@ const App = (state = defaultState, action) => {
       } else {
         openFolders.push(action.id)
       }
-      console.log(openFolders)
       return {
         ...state,
         openFolders: openFolders

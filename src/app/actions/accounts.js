@@ -1,6 +1,9 @@
+import * as AppActions from '~/actions/app'
+
 export const REQUEST = "ACCOUNT_REQUEST"
 export const LOAD = "ACCOUNT_LOAD"
 export const ADD = "ACCOUNT_ADD"
+export const UPDATE_COUNT = "ACCOUNT_UPDATE_COUNT"
 
 export const load = (account) => ({
   type: LOAD,
@@ -13,16 +16,19 @@ export const add = (account) => ({
 })
 
 
-export const fetchAccounts = () => (dispatch, state) => {
+export const fetchAccounts = () => dispatch => {
   return dispatch({
     type: REQUEST, 
     sync: {url: "accountsPath"}
   }).then(res => {
-    dispatch(load(res.data.account))
+    if(res.meta.status == "success") {
+      dispatch(load(res.data.account))
+      return Promise.resolve(res)
+    }
   })
 }
 
-export const createAccount = (service) => (dispatch, state) => {
+export const createAccount = (service) => dispatch => {
   return dispatch({
     type: REQUEST, 
     sync: {url: "createAccountsPath", params: {service: service}}
@@ -31,5 +37,26 @@ export const createAccount = (service) => (dispatch, state) => {
       dispatch(add(res.data.account))
       Promise.resolve(res.data.account)
     }
+  })
+}
+
+export const updateCount = (type ="update", count, data) => (dispatch, getState) => {
+  let account = getState().App.currentAccount
+  if(type == "read") {
+    account.unread_count -= 1
+    let date = new Date()
+    if(data.published_at > new Date(date.toDateString()).getTime()){
+      account.today_count -= 1
+    }
+  } else {
+    account.entries_count +=  count
+    account.unread_count +=  count
+    account.today_count += count
+  }
+   dispatch(AppActions.setCurrentAccount(account))
+
+  return dispatch({
+    type: UPDATE_COUNT,
+    account: account
   })
 }

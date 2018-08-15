@@ -23,7 +23,7 @@ const Account = (state = defaultState, action) => {
         items: action.account
       }
     case AccountsActions.ADD:
-      let accounts = state.items
+      var accounts = state.items
       accounts.push(action.account)
       return {
         ...state,
@@ -31,7 +31,17 @@ const Account = (state = defaultState, action) => {
         isLoaded: true,
         items: accounts
       }
-
+    case AccountsActions.UPDATE_COUNT:
+      var accounts = state.items.map(account => { 
+        if(account.id === action.account.id){
+          account = action.account
+        }
+        return account
+      })
+      return {
+        ...state,
+        items:  accounts
+      }
     default:
       return state
   }

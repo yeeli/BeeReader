@@ -32,12 +32,10 @@ export const synced = () => ({
   type: SYNCED
 })
 
-export const setCurrentAccount = (service) => (dispatch, getState) => {
-  let accounts = getState().Accounts.items
-  let account = _.find(accounts, {service: service})
+export const setCurrentAccount = (account) => dispatch => {
   dispatch({
     type: SET_ACCOUNT,
-    account: account.id
+    account: account
   })
 }
 

@@ -39,7 +39,7 @@ export const addStream = (url, categories) => (dispatch, getState) => {
     sync: {
       url: 'createStreamsPath',
       params: {
-        account: account,
+        account: account.id,
         url: url,
         categories: categories
       }

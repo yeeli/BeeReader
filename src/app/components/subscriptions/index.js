@@ -119,7 +119,7 @@ class Subscriptions extends Component {
 
   render () {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { folders, categories, streams, height, selectedItem, syncing, account } = this.props
+    const { folders, categories, streams, height, selectedItem, syncing, app} = this.props
 
     const nheight = height - 100
     return(
@@ -133,7 +133,7 @@ class Subscriptions extends Component {
               </ListItemIcon>
               <ListItemText primary="All" className="filter-name"/>
               <ListItemSecondaryAction>
-                <span className="filter-count" >{ account.entries_count }</span>
+                <span className="filter-count" >{ app.currentAccount.entries_count }</span>
               </ListItemSecondaryAction>
             </MenuItem>
             <MenuItem selected={ selectedItem.type == "unread"} onClick={ this.props.onFilter({  type: 'unread' }) } className="filter-item">
@@ -142,7 +142,7 @@ class Subscriptions extends Component {
               </ListItemIcon>
               <ListItemText primary="Unread" className="filter-name" />
               <ListItemSecondaryAction>
-                <span className="filter-count">{ account.unread_count }</span>
+                <span className="filter-count">{ app.currentAccount.unread_count }</span>
               </ListItemSecondaryAction>
             </MenuItem>
             <MenuItem selected={ selectedItem.type == "today"} onClick={ this.props.onFilter({  type: 'today' }) } className="filter-item">
@@ -151,7 +151,7 @@ class Subscriptions extends Component {
               </ListItemIcon>
               <ListItemText primary="Today" className="filter-name" />
               <ListItemSecondaryAction>
-                <span className="filter-count">{ 0 }</span>
+                <span className="filter-count">{ app.currentAccount.today_count }</span>
               </ListItemSecondaryAction>
             </MenuItem>
             <MenuItem  onClick={ this.props.onClickNewStream }  className="filter-item">

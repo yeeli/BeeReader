@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import _ from 'lodash'
+import moment from 'moment'
 
 class Feeds extends Component {
   render() {
@@ -22,7 +23,7 @@ class Feeds extends Component {
                 <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { clickFeed(e, entry.id) }}>
                   <div className="feed-info">
                     <span className="feed-stream">{ entry.stream_title }</span>
-                    <span className="feed-date">{ date.toDateString() }</span>
+                    <span className="feed-date">{ moment(date).format('YYYY-MM-D hh:mm') }</span>
                   </div>
                   <div className="feed-detail">
                     <h3 className="feed-title">{entry.title}</h3> 

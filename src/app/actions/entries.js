@@ -1,6 +1,7 @@
 import * as AppActions from '~/actions/app'
 import * as StreamsActions from '~/actions/streams'
 import  * as FoldersActions from '~/actions/folders'
+import  * as AccountsActions from '~/actions/accounts'
 
 export const REQUEST = "ENTRIES_REQUEST"
 export const LOAD = "ENTRIES_LOAD"
@@ -47,7 +48,9 @@ export const syncEntries = (stream) => (dispatch, state) => {
     if(streams[streams.length - 1].id === stream){
       dispatch(AppActions.synced())
     }
-    dispatch(StreamsActions.update(stream, res.data.entries.length))
+    let count = res.data.entries.length
+    dispatch(StreamsActions.update(stream, count))
+    dispatch(AccountsActions.updateCount("update", count))
     dispatch(add(res.data.entries))
     dispatch(filter())
   })
@@ -68,6 +71,7 @@ export const readEntry = (id) => (dispatch, state) => {
     }
   }).then(res => {
     dispatch(StreamsActions.read(entry.stream_id))
+    dispatch(AccountsActions.updateCount("read", -1, entry))
     dispatch({ type: READ, id: id})
   })
 }
@@ -88,15 +92,15 @@ export const filter = () => (dispatch, getState) => {
   }
   switch(selected.type){
     case 'all':
-      entries = _.filter(entries, (entry) => { return entry.account_id == account })
+      entries = _.filter(entries, (entry) => { return entry.account_id == account.id })
       break
     case 'unread':
-      entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at) && entry.account_id == account })
+      entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at) && entry.account_id == account.id })
       break
     case 'today':
       entries = _.filter(entries, (entry) => { 
         let date = new Date()
-        return entry.published_at > new Date(date.toDateString()).getTime() && entry.account_id == account
+        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at) && entry.account_id == account.id
       })
       break
     default: 

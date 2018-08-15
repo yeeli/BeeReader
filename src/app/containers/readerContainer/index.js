@@ -185,7 +185,8 @@ class ReaderContainer extends Component {
 
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
-    const { App, Folders, Account, Entries, Data, Categories, Streams } = this.props
+    const { App, Folders, Entries, Data, Categories, Streams, Accounts } = this.props
+
     let dataContent = Data.item
 
     if(Data.isLoaded && !_.isNull(dataContent) && !_.isNull(App.selectedEntry)) {
@@ -205,7 +206,6 @@ class ReaderContainer extends Component {
               folders={Folders}
               categories={Categories}
               streams= {Streams}
-              account={App.currentAccount}
               app={App}
               selectedItem={ App.selectedStream }
               onFilter={ this.handleFilter } 
@@ -260,8 +260,8 @@ class ReaderContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const { App, Folders, Categories, Streams, Entries, Data } = state
-  return { App, Folders, Categories, Streams, Entries, Data }
+  const { App, Folders, Categories, Streams, Entries, Data, Accounts } = state
+  return { App, Folders, Categories, Streams, Entries, Data, Accounts }
 }
 
 export default connect(mapStateToProps)(ReaderContainer)

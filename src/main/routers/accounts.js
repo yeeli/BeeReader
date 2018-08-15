@@ -1,12 +1,24 @@
 const {ipcMain} = require('electron')
-const {Account} = require('../model')
+const {Account, Entry} = require('../model')
 const _ = require('lodash')
 
 ipcMain.on('/accounts', (event, arg, ktm) => {
   Account.all().then(res => {
-    event.sender.send(`/accountsResponse?ktm=${ktm}`, {
-      meta: { status: 'success' }, 
-      data: { account: res }
+    let asyncAccount = async () => {
+      newAccount = []
+      for(let account of res){
+        let date = new Date()
+        let count = await Entry.connection().whereRaw('account_id = ? AND published_at >= ? AND read_at is null', [account.id, new Date(date.toDateString()).getTime()]).count()
+        account['today_count'] = count[0]['count(*)']
+        newAccount.push(account)
+      }
+      return newAccount
+    }
+    asyncAccount().then(acc => {
+      event.sender.send(`/accountsResponse?ktm=${ktm}`, {
+        meta: { status: 'success' }, 
+        data: { account: res }
+      })
     })
   })
 })
