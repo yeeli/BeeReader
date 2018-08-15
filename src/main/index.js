@@ -48,16 +48,13 @@ const createWindow = async () =>{
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL("http://localhost:5000/dist/main.html")
+  } else {
+    mainWindow.loadURL(url.format({
+      pathname: path.join(paths.appBuild, 'main.html'),
+      protocol: 'file:',
+      slashes: true
+    }))
   }
-
-  // and load the index.html of the app.
-  /*
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'public/main.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
-  */
 
   //mainWindow.webContents.openDevTools();
   const ses = mainWindow.webContents.session
