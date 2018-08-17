@@ -33,10 +33,12 @@ export const synced = () => ({
 })
 
 export const setCurrentAccount = (account) => dispatch => {
-  dispatch({
-    type: SET_ACCOUNT,
-    account: account
-  })
+  if(account){
+    dispatch({
+      type: SET_ACCOUNT,
+      account: account
+    })
+  }
 }
 
 export const setSelectedStream = (selected) => (dispatch, getState) => {

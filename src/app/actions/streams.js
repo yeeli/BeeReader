@@ -33,7 +33,7 @@ export const add = (item) => ({
 })
 
 export const addStream = (url, categories) => (dispatch, getState) => {
-  account = getState().app.currentAccount
+  let account = getState().App.currentAccount
   return dispatch({
     type: ADD_REQUEST,
     sync: {

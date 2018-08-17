@@ -1,3 +1,8 @@
+.content-button
+  color: #fff
+  &:hover
+    background-color: transparent !important
+
 .block-entry
   width: 100%
   height: 100%
@@ -7,7 +12,13 @@
     height: 50px
     border-bottom: 1px solid rgba(199, 199, 199, 0.52)
     .content-actions
-      text-align: right
+      position: relative
+      clear: both
+      overflow: hidden
+      .left-actions
+        float: left
+      .right-actions
+        float: right
   .block-bd
     overflow-y: auto
     .entry-qrcode-modal

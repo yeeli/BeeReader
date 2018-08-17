@@ -19,6 +19,8 @@ import InboxIcon from '@material-ui/icons/Inbox'
 import AssessmentIcon from '@material-ui/icons/Assessment'
 import TodayIcon from '@material-ui/icons/Today'
 
+import {injectIntl, FormattedMessage} from 'react-intl'
+
 import { remote } from 'electron'
 const RemoteMenu = remote.Menu
 const RemoteMenuItem = remote.MenuItem
@@ -119,46 +121,55 @@ class Subscriptions extends Component {
 
   render () {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { folders, categories, streams, height, selectedItem, syncing, app} = this.props
+    const { folders, categories, streams, height, selectedItem, syncing, app, intl} = this.props
 
     const nheight = height - 100
     return(
       <div className="block-subscriptions">
-        <div className="block-hd" style={winStyle}></div>
+        <div className="block-hd" style={winStyle}>
+        </div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
           <MenuList className="listing-filters">
             <MenuItem selected={ selectedItem.type == "all"} onClick={ this.props.onFilter({  type: 'all' }) } className="filter-item">
               <ListItemIcon>
                 <AssessmentIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
-              <ListItemText primary="All" className="filter-name"/>
-              <ListItemSecondaryAction>
-                <span className="filter-count" >{ app.currentAccount.entries_count }</span>
-              </ListItemSecondaryAction>
+              <ListItemText primary={intl.formatMessage({id: 'all', defaultMessage: 'All'})} className="filter-name"/>
+              { app.currentAccount.entries_count > 0 && 
+                <ListItemSecondaryAction>
+                  <span className="filter-count" >{ app.currentAccount.entries_count }</span>
+                </ListItemSecondaryAction>
+              }
             </MenuItem>
             <MenuItem selected={ selectedItem.type == "unread"} onClick={ this.props.onFilter({  type: 'unread' }) } className="filter-item">
               <ListItemIcon>
                 <InboxIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
-              <ListItemText primary="Unread" className="filter-name" />
-              <ListItemSecondaryAction>
-                <span className="filter-count">{ app.currentAccount.unread_count }</span>
-              </ListItemSecondaryAction>
+              <ListItemText primary={intl.formatMessage({id: 'unread', defaultMessage: 'Unread'})} className="filter-name" />
+              { app.currentAccount.unread_count > 0 && 
+                <ListItemSecondaryAction>
+                  <span className="filter-count">{ app.currentAccount.unread_count }</span>
+                </ListItemSecondaryAction>
+              }
             </MenuItem>
             <MenuItem selected={ selectedItem.type == "today"} onClick={ this.props.onFilter({  type: 'today' }) } className="filter-item">
               <ListItemIcon>
                 <TodayIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
-              <ListItemText primary="Today" className="filter-name" />
-              <ListItemSecondaryAction>
-                <span className="filter-count">{ app.currentAccount.today_count }</span>
-              </ListItemSecondaryAction>
+              <ListItemText primary={intl.formatMessage({id: 'today', defaultMessage: 'Today'})} className="filter-name" />
+              { app.currentAccount.today_count > 0 && 
+                <ListItemSecondaryAction>
+                  <span className="filter-count">{ app.currentAccount.today_count }</span>
+                </ListItemSecondaryAction>
+              }
             </MenuItem>
             <MenuItem  onClick={ this.props.onClickNewStream }  className="filter-item">
               <ListItemIcon>
                 <AddIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }}/>
               </ListItemIcon>
-              <ListItemText primary="Add Subscription" className="filter-name" />
+              <ListItemText primary={intl.formatMessage({id: 'addSubscription', defaultMessage: 'add Subscription'})} className="filter-name" >
+
+              </ListItemText>
               <ListItemSecondaryAction />
             </MenuItem>
           </MenuList> 
@@ -187,4 +198,4 @@ Subscriptions.propTypes = {
 }
 
 import './index.sass'
-export default Subscriptions
+export default injectIntl(Subscriptions)

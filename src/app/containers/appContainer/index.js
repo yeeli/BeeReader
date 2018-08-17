@@ -9,6 +9,7 @@ import { Link, Redirect } from 'react-router-dom'
 const { ipcRenderer } = require('electron')
 
 import * as AccountsActions from '~/actions/accounts'
+import * as AppActions from '~/actions/app'
 
 
 class AppContainer extends Component {
@@ -16,7 +17,17 @@ class AppContainer extends Component {
   componentWillMount() {
     const {Accounts} = this.props
     if(Accounts.items.length == 0 ) {
-      this.props.dispatch(AccountsActions.createAccount('Rss'))
+      this.props.dispatch(AccountsActions.createAccount('Rss')).then(res => {
+        console.log(res)
+        if(res.meta.status == "success"){
+          this.props.dispatch(AccountsActions.fetchAccounts()).then( res => {
+            if(res.meta.status == "success"){
+              let account = _.find(res.data.account, {service: 'Rss'})
+              this.props.dispatch(AppActions.setCurrentAccount(account))
+            }
+          })
+        }
+      })
     }
   }
 
@@ -27,7 +38,7 @@ class AppContainer extends Component {
     return (
       <div id="app">
         <div className="account-loading">
-         <CircularProgress  size={50} />
+          <CircularProgress  size={50} />
         </div>
       </div>
     )

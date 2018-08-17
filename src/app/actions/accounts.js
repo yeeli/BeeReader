@@ -35,12 +35,12 @@ export const createAccount = (service) => dispatch => {
   }).then(res => {
     if(res.meta.status == "success") {
       dispatch(add(res.data.account))
-      Promise.resolve(res.data.account)
+      return Promise.resolve(res)
     }
   })
 }
 
-export const updateCount = (type ="update", count, data) => (dispatch, getState) => {
+export const updateCount = (type ="update", data) => (dispatch, getState) => {
   let account = getState().App.currentAccount
   if(type == "read") {
     account.unread_count -= 1
@@ -49,9 +49,9 @@ export const updateCount = (type ="update", count, data) => (dispatch, getState)
       account.today_count -= 1
     }
   } else {
-    account.entries_count +=  count
-    account.unread_count +=  count
-    account.today_count += count
+    account.entries_count +=  data.count
+    account.unread_count +=  data.count
+    account.today_count += data.todayCount
   }
    dispatch(AppActions.setCurrentAccount(account))
 

@@ -49,8 +49,12 @@ export const syncEntries = (stream) => (dispatch, state) => {
       dispatch(AppActions.synced())
     }
     let count = res.data.entries.length
+    let date = new Date()
+    let todayCount = _.filter(res.data.entries, (entry) => {
+       return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
+    }).length
     dispatch(StreamsActions.update(stream, count))
-    dispatch(AccountsActions.updateCount("update", count))
+    dispatch(AccountsActions.updateCount("update", {count: count, todayCount: todayCount}))
     dispatch(add(res.data.entries))
     dispatch(filter())
   })
@@ -71,7 +75,7 @@ export const readEntry = (id) => (dispatch, state) => {
     }
   }).then(res => {
     dispatch(StreamsActions.read(entry.stream_id))
-    dispatch(AccountsActions.updateCount("read", -1, entry))
+    dispatch(AccountsActions.updateCount("read", entry))
     dispatch({ type: READ, id: id})
   })
 }

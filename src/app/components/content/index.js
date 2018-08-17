@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser'
+import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import ClearIcon from '@material-ui/icons/Clear'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import _ from 'lodash'
 import QRCode from 'qrcode.react'
 import moment from 'moment'
@@ -110,13 +114,19 @@ class Content extends Component {
   }
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { data, height } = this.props
+    const { data, height, classes } = this.props
     const nheight = height - 50
+    console.log(classes)
     return(
-      <div className="block-entry" id="a">
+      <div className="block-entry">
         <div className="block-hd" style={winStyle}>
           <div className="content-actions">
-            <Button onClick={this.handleOpen}>share</Button>
+          <div className="left-actions">
+            <IconButton disableRipple className={'content-button'}><ClearIcon /></IconButton>
+          </div>
+          <div className="right-actions">
+            <IconButton disableRipple className={'content-button'} onClick={this.handleOpen}><MoreVertIcon/> </IconButton>
+          </div>
           </div>
         </div>
         <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>

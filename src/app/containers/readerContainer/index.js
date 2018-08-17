@@ -137,7 +137,7 @@ class ReaderContainer extends Component {
     this.setState({ openNewStream: false })
   }
 
-  handleSearchStream = value => event => {
+  handleSearchStream = (event, value) => {
     this.props.dispatch(AppActions.fetchRss(value)).then(res => {
       if(res.meta.status == "success") {
         this.setState({ subscribeRss: res.data.rss, openNewStream: false, openSubscribeStream: true })
@@ -152,7 +152,7 @@ class ReaderContainer extends Component {
   }
 
   handleSubscribeStream = (categories = []) => event => {
-    const { feed_url } = this.props.App.subscribeRss
+    const { feed_url } = this.state.subscribeRss
     this.props.dispatch(StreamsActions.addStream(feed_url, categories))
     this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
   }

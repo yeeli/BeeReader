@@ -7,14 +7,23 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import _ from 'lodash'
 import moment from 'moment'
 
+import {injectIntl, FormattedMessage} from 'react-intl'
+
 class Feeds extends Component {
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { entries, selectedItem,  clickFeed, height } = this.props
+    const entries_count = entries.length
     const nheight = height - 50
     return(
       <div className="block-feeds">
-        <div className="block-hd" style={winStyle}></div>
+        <div className="block-hd" style={winStyle}>
+          { entries_count > 0 &&
+            <div className="entries-title">
+              <FormattedMessage id="articlesCount" defaultMessage="{count} Articles" values={{ count: entries_count }} />
+            </div>
+          }
+        </div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
           <List className="listing-feeds">
             { entries.map( (entry) => {
@@ -50,4 +59,4 @@ Feeds.propTypes = {
 
 import './index.sass'
 
-export default Feeds
+export default injectIntl(Feeds)
