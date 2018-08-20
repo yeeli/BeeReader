@@ -23,8 +23,8 @@ export const fetchAccounts = () => dispatch => {
   }).then(res => {
     if(res.meta.status == "success") {
       dispatch(load(res.data.account))
-      return Promise.resolve(res)
     }
+    return Promise.resolve(res)
   })
 }
 
@@ -35,8 +35,8 @@ export const createAccount = (service) => dispatch => {
   }).then(res => {
     if(res.meta.status == "success") {
       dispatch(add(res.data.account))
-      return Promise.resolve(res)
     }
+    return Promise.resolve(res)
   })
 }
 
@@ -53,7 +53,7 @@ export const updateCount = (type ="update", data) => (dispatch, getState) => {
     account.unread_count +=  data.count
     account.today_count += data.todayCount
   }
-   dispatch(AppActions.setCurrentAccount(account))
+  dispatch(AppActions.setCurrentAccount(account))
 
   return dispatch({
     type: UPDATE_COUNT,

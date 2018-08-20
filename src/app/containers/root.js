@@ -20,7 +20,7 @@ const Root = ({ store, history }) =>{
   let currentLocale = locale.getLocale('zh-CN')
   return (
   <MuiThemeProvider theme={theme}>
-      <IntlProvider locale='zh-CN' messages={currentLocale.data}>
+      <IntlProvider locale='zh-CN' messages={currentLocale}>
       <Provider store={store}>
         <Routers history={history}/>
       </Provider>

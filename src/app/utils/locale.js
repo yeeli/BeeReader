@@ -6,13 +6,22 @@ const locales = []
 glob.sync(path.join('src/app/locales/', '*.js')).forEach( function( file ) {
   if(file.match(/\.js/)){
     var name = path.basename(file)
-    locales.push(require(`~/locales/${name}`).default)
+    locales.push(require(`~/locales/${name}`).default())
   }
 });
 
 const getLocale = (lang) => {
-  let data = _.find(locales, {locale: lang})
-  return {locale: lang, data: data }
+  let data
+  switch(lang){
+    case 'zh-CN':
+      data = require('~/locales/zh-CN')
+      break
+    default:
+      data = require('~/locales/zh-CN')
+      
+  }
+  console.log(data)
+  return data.default
 }
 
 export default { getLocale, locales }

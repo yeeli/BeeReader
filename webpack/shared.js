@@ -7,10 +7,6 @@ module.exports = {
     modules: ['node_modules', paths.nodeModules, paths.appSrc].concat(paths.nodePaths),
     extensions: ['.js', '.json', '.jsx'],
     alias: {
-      containers: 'containers',
-      components: 'components',
-      actions: 'actions',
-      reducers: 'reducers',
       'react-native': 'react-native-web',
       '~': paths.appSrc
     }
@@ -24,7 +20,7 @@ module.exports = {
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: ['babel-loader'],
       },
       {
         test: /\.sass$/,

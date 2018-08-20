@@ -21,13 +21,12 @@ const config = merge(sharedConfig, {
   stats: 'normal',
   entry: {
     'app': [
-      'babel-polyfill',
+      '@babel/polyfill',
       paths.appIndexJs
     ]
   },
   plugins: [
-    new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({

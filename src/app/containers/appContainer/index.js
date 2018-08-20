@@ -16,9 +16,8 @@ class AppContainer extends Component {
 
   componentWillMount() {
     const {Accounts} = this.props
-    if(Accounts.items.length == 0 ) {
+    if(Accounts.isLoaded && Accounts.items.length == 0 ) {
       this.props.dispatch(AccountsActions.createAccount('Rss')).then(res => {
-        console.log(res)
         if(res.meta.status == "success"){
           this.props.dispatch(AccountsActions.fetchAccounts()).then( res => {
             if(res.meta.status == "success"){

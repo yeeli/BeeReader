@@ -15,7 +15,7 @@ const config = merge(sharedConfig, {
   devtool: 'inline-source-map',
   entry: {
     'app': [
-      'babel-polyfill',
+      '@babel/polyfill',
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:5000',
       'webpack/hot/only-dev-server',
@@ -44,7 +44,7 @@ const config = merge(sharedConfig, {
       template: "./src/public/main.html"
     })
   ],
-  stats: { errorDetails: true },
+  stats: { errors: true, errorDetails: true },
   devServer: {
     host: 'localhost',
     port: '5000',
