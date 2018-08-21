@@ -39,10 +39,20 @@ class Content extends Component {
       children = processNodes(node.children, this.transform);
       return React.createElement('a', {onClick: (event) => { this.handleClickEvent(event, node.attribs.href)}, href: 'javascript:;', key: Math.random()}, children)
     }
+    else if(node.type === 'tag' && node.name === 'iframe') {
+      _.unset(node.attribs, 'class')
+      _.unset(node.attribs, 'classname')
+      _.unset(node.attribs, 'style')
+      _.unset(node.attribs, 'width')
+      _.unset(node.attribs, 'height')
+      _.unset(node.attribs, 'allowfullscreen')
+      return convertNodeToElement(node, index, this.transform)
+    }
     else if(node.type === 'tag' && _.hasIn(node.attribs, 'class')) {
       _.unset(node.attribs, 'class')
       _.unset(node.attribs, 'classname')
       _.unset(node.attribs, 'style')
+      _.unset(node.attribs, 'width')
       return convertNodeToElement(node, index, this.transform)
     }
   }
@@ -51,10 +61,13 @@ class Content extends Component {
     if(this.props.changeContent){
       this.entryRef.current.scrollTop = 0
     }  
+    if(this.props.data.isFetching && this.state.showData){
+      this.setState({showData: null})
+    }
   }
   componentDidUpdate() {
     let that = this
-    if(this.state.showData){
+    if(this.props.data.isLoaded && this.state.showData){
       let webview = document.querySelector('webview')
       webview.addEventListener('dom-ready', () => {
         that.setState({ webLoading: 100 })
@@ -80,13 +93,18 @@ class Content extends Component {
     this.setState({showData: url, webLoading: 0, showLoading: true})
   }
 
-  handleOpen = () => {
+  handleQrOpen = () => {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
+  handleQrClose = () => {
     this.setState({ open: false });
   };
+
+  handleClose = (event) => {
+    this.setState({ showData: null})
+    this.props.onClose(event)
+  }
 
   renderEntry(data) {
     let date = new Date(data.published_at)
@@ -112,44 +130,54 @@ class Content extends Component {
       </div>
     )
   }
+
+  renderContent() {
+    const { content, height, classes } = this.props
+    const nheight = height - 50
+    return (
+      <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
+        { this.state.showData && this.state.showLoading && <LinearProgress variant="determinate" value={this.state.webLoading} /> }
+        { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
+        { content && ( !this.state.showData && this.renderEntry(content))}
+        <div className="entry-qrcode-modal"
+          onClick={this.handleQrClose}
+          style={{display: `${ this.state.open ? 'block' : 'none' }`}}
+        >
+          <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
+            { content && <QRCode value={ content.url } size={250} /> }
+          </div>
+        </div>
+      </div>
+
+    )
+  }
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { data, height, classes } = this.props
-    const nheight = height - 50
-    console.log(classes)
+    const { data } = this.props
     return(
       <div className="block-entry">
         <div className="block-hd" style={winStyle}>
           <div className="content-actions">
-          <div className="left-actions">
-            <IconButton disableRipple className={'content-button'}><ClearIcon /></IconButton>
-          </div>
-          <div className="right-actions">
-            <IconButton disableRipple className={'content-button'} onClick={this.handleOpen}><MoreVertIcon/> </IconButton>
-          </div>
+            { data.isLoaded && (
+              <div>
+                <div className="left-actions">
+                  <IconButton disableRipple className={'content-button'} onClick={this.handleClose}><ClearIcon /></IconButton>
+                </div>
+                <div className="right-actions">
+                  <IconButton disableRipple className={'content-button'} onClick={this.handleQrOpen}><MoreVertIcon /></IconButton>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
-          { this.state.showData && this.state.showLoading && <LinearProgress variant="determinate" value={this.state.webLoading} /> }
-          { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
-          { data && ( !this.state.showData && this.renderEntry(data))}
-          <div className="entry-qrcode-modal"
-            onClick={this.handleClose}
-            style={{display: `${ this.state.open ? 'block' : 'none' }`}}
-          >
-            <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
-              { data && <QRCode value={ data.url } size={250} /> }
-            </div>
-          </div>
-
-        </div>
+        { data.isLoaded && this.renderContent() }
       </div>
     )
   }
 }
 
 Content.propTypes = {
-  data: PropTypes.object
+  content: PropTypes.object
 }
 
 

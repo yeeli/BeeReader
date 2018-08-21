@@ -32,6 +32,15 @@ const Entries = (state = defaultState, action) => {
         isLoaded: true,
         items: newEntries
       }
+    case EntriesActions.DELETE:
+      let entries = state.items
+      _.remove(entries, (item) => { return item.stream_id == action.id  })
+      return {
+        ...state,
+        isFetching: false,
+        isLoaded: true,
+        items: entries
+      }
     case EntriesActions.READ:
       var entries = state.items.map( item => {
         if(item.id == action.id) {

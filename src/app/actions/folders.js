@@ -1,6 +1,7 @@
 export const REQUEST = "FOLDERS_REQUEST"
 export const LOAD = "FOLDERS_LOAD"
 export const ADD = "FOLDERS_ADD"
+export const DELETE = "FOLDERS_DELETE"
 export const OPEN = "FOLDERS_OPEN"
 
 export const load = (items) => ({
@@ -24,9 +25,9 @@ export const fetchFolders = () => dispatch => {
   })
 }
 
-export const openFolder = (folder) => dispatch => {
+export const destroyFolder = (id) => dispatch => {
   return dispatch({
-    type: OPEN,
-    folder: { type: 'Category', id: folder.id} 
+    type: DELETE,
+    id: id
   })
 }

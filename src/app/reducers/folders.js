@@ -29,6 +29,15 @@ const Folders = (state = defaultState, action) => {
         isLoaded: true,
         items: folders
       }
+    case FoldersActions.DELETE:
+      var folders = state.items
+      _.remove(folders, (item) => { return item.source_type == "Stream" && item.source_id == action.id })
+      return {
+        ...state,
+        isFetching: false,
+        isLoading: true,
+        items: folders
+      }
     default:
       return state
   }

@@ -4,6 +4,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
+import IconButton from '@material-ui/core/IconButton'
+import DoneAllIcon from '@material-ui/icons/DoneAll'
 import _ from 'lodash'
 import moment from 'moment'
 
@@ -19,8 +21,13 @@ class Feeds extends Component {
       <div className="block-feeds">
         <div className="block-hd" style={winStyle}>
           { entries_count > 0 &&
+            <div>
+            <div className="left-actions">
+              <IconButton disableRipple className='content-button' onClick={this.props.onClose}><DoneAllIcon /></IconButton>
+            </div>
             <div className="entries-title">
               <FormattedMessage id="articlesCount" defaultMessage="{count} Articles" values={{ count: entries_count }} />
+            </div>
             </div>
           }
         </div>

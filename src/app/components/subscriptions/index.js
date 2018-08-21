@@ -37,7 +37,7 @@ class Subscriptions extends Component {
 
     menu.append(new RemoteMenuItem({label: 'Edit', click: () => {}}))
     menu.append(new RemoteMenuItem({type: 'separator'}))
-    menu.append(new RemoteMenuItem({label: `Unsubscribe from "${ stream.title }"`, click: () => {}}))
+    menu.append(new RemoteMenuItem({label: `Unsubscribe from "${ stream.title }"`, click: () => { this.props.onUnsubscribeStream(stream.id) }}))
     menu.popup(remote.getCurrentWindow())
   }
 

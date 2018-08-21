@@ -50,7 +50,7 @@ export const updateCount = (type ="update", data) => (dispatch, getState) => {
     }
   } else {
     account.entries_count +=  data.count
-    account.unread_count +=  data.count
+    account.unread_count +=  data.unreadCount
     account.today_count += data.todayCount
   }
   dispatch(AppActions.setCurrentAccount(account))

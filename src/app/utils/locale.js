@@ -2,6 +2,7 @@ import glob from 'glob'
 import path from 'path'
 import _ from 'lodash'
 
+  /*
 const locales = []
 glob.sync(path.join('src/app/locales/', '*.js')).forEach( function( file ) {
   if(file.match(/\.js/)){
@@ -9,6 +10,7 @@ glob.sync(path.join('src/app/locales/', '*.js')).forEach( function( file ) {
     locales.push(require(`~/locales/${name}`).default())
   }
 });
+*/
 
 const getLocale = (lang) => {
   let data
@@ -24,4 +26,4 @@ const getLocale = (lang) => {
   return data.default
 }
 
-export default { getLocale, locales }
+export default { getLocale }

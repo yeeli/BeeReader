@@ -157,7 +157,8 @@ class ReaderContainer extends Component {
     this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
   }
 
-  handleUnsubscribeStream = (id) => event => {
+  handleUnsubscribeStream = (id) => {
+   this.props.dispatch(StreamsActions.destroyStream(id)) 
   }
 
   handleNewFolder = name => event => {
@@ -177,6 +178,14 @@ class ReaderContainer extends Component {
     this.props.dispatch(EntriesActions.readEntry(id))
     this.props.dispatch(DataActions.fetchData(id))
     this.props.dispatch(AppActions.setSelectedEntry(id))
+  }
+
+  handleClickMakeAllRead = (event) => {
+    
+  }
+
+  handleCloseContent = (event) => {
+    this.props.dispatch(DataActions.clearData())
   }
 
   handleTipsClose = (event) => {
@@ -211,7 +220,8 @@ class ReaderContainer extends Component {
               onFilter={ this.handleFilter } 
               onClickSync={ this.handleClickSync }  
               onClickNewStream={ this.handleClickNewStream } 
-              syncing={App.syncing}
+              onUnsubscribeStream = { this.handleUnsubscribeStream }
+              syncing={ App.syncing }
             />
           </div>
           <div className="resizer vertical resize1"/>
@@ -221,11 +231,12 @@ class ReaderContainer extends Component {
               entries={ Entries.filterItems } 
               selectedItem={ App.selectedEntry }
               clickFeed={ this.handleClickFeed }
+              clickMakeAllRead={ this.handleClickMakeAllRead }
             />
           </div>
           <div className="resizer vertical resize2" />
           <div className="pane pane-content" ref="paneContent">
-            { Data.isLoaded && <Content data={dataContent} height={ browserHeight } /> }
+            { <Content data={Data} content={dataContent} height={ browserHeight } onClose={ this.handleCloseContent } /> }
           </div>
         </div>
         <AddStreamDialog 

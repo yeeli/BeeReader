@@ -6,6 +6,7 @@ import  * as AccountsActions from '~/actions/accounts'
 export const REQUEST = "ENTRIES_REQUEST"
 export const LOAD = "ENTRIES_LOAD"
 export const ADD = "ENTRIES_ADD"
+export const DELETE = "ENTRIES_DELETE"
 
 export const FILTER = "ENTRIES_FILTER"
 
@@ -22,6 +23,17 @@ export const add = (items) => ({
   items: items
 })
 
+export const destroy = (id) => ({
+  type: DELETE,
+  id: id
+})
+
+export const read = (id) => ({
+  type: READ,
+  id: id
+})
+
+
 export const fetchEntries = () => (dispatch, state) => {
   return dispatch({
     type: REQUEST, 
@@ -30,53 +42,6 @@ export const fetchEntries = () => (dispatch, state) => {
     }
   }).then(res => {
     dispatch(load(res.data.entries))
-  })
-}
-
-export const syncEntries = (stream) => (dispatch, state) => {
-  return dispatch({
-    type: REQUEST,
-    sync: {
-      url: 'syncEntriesPath',
-      params: {
-        stream: stream
-      }
-    }
-  }).then(res => {
-    let streams = state().Streams.items
-
-    if(streams[streams.length - 1].id === stream){
-      dispatch(AppActions.synced())
-    }
-    let count = res.data.entries.length
-    let date = new Date()
-    let todayCount = _.filter(res.data.entries, (entry) => {
-       return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
-    }).length
-    dispatch(StreamsActions.update(stream, count))
-    dispatch(AccountsActions.updateCount("update", {count: count, todayCount: todayCount}))
-    dispatch(add(res.data.entries))
-    dispatch(filter())
-  })
-}
-
-export const readEntry = (id) => (dispatch, state) => {
-  let entry = _.find(state().Entries.items, {id: id})
-  if(!_.isNil(entry.read_at)){
-    return false
-  }
-  return dispatch({
-    type: ENTRY_REQUEST,
-    sync: {
-      url: 'readEntriesPath',
-      params: {
-        id: id
-      }
-    }
-  }).then(res => {
-    dispatch(StreamsActions.read(entry.stream_id))
-    dispatch(AccountsActions.updateCount("read", entry))
-    dispatch({ type: READ, id: id})
   })
 }
 
@@ -113,10 +78,70 @@ export const filter = () => (dispatch, getState) => {
           return _.includes(ids, entry.stream_id) 
         })
       }
-      break
   }
   return dispatch({
     type: FILTER,
     items:  entries
   })
+}
+
+export const syncEntries = (stream) => (dispatch, state) => {
+  return dispatch({
+    type: REQUEST,
+    sync: {
+      url: 'syncEntriesPath',
+      params: {
+        stream: stream
+      }
+    }
+  }).then(res => {
+    let streams = state().Streams.items
+
+    if(streams[streams.length - 1].id === stream){
+      dispatch(AppActions.synced())
+    }
+    let count = res.data.entries.length
+    let date = new Date()
+    let todayCount = _.filter(res.data.entries, (entry) => {
+       return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
+    }).length
+    dispatch(StreamsActions.update(stream, count))
+    dispatch(AccountsActions.updateCount("update", {count: count, unreadCount: count, todayCount: todayCount}))
+    dispatch(add(res.data.entries))
+    dispatch(filter())
+  })
+}
+
+export const readEntry = (id) => (dispatch, getState) => {
+  let entries = getState().Entries.items
+  let entry = _.find(entries, {id: id})
+  if(!_.isNil(entry.read_at)){
+    return false
+  }
+  return dispatch({
+    type: ENTRY_REQUEST,
+    sync: {
+      url: 'readEntriesPath',
+      params: {
+        id: id
+      }
+    }
+  }).then(res => {
+    dispatch(StreamsActions.read(entry.stream_id))
+    dispatch(AccountsActions.updateCount("read", entry))
+    dispatch(read(id))
+  })
+}
+
+
+export const destroyEntries = (stream_id) => (dispatch, getState) => {
+  let entries = _.filter(getState().Entries.items, {stream_id: stream_id})
+  let count = entries.length
+  let unread_entries = _.filter(entries, (item) => { return _.isNil(item.read_at)})
+  let unreadCount = unread_entries.length
+  let date = new Date()
+  let today_entries = _.filter(unread_entries, (item) => { return item.published_at > new Date(date.toDateString()).getTime() })
+  let todayCount = unread_entries.length
+  dispatch(destroy(stream_id))
+  dispatch(AccountsActions.updateCount("update", {count: -count, unreadCount: -unreadCount, todayCount: -todayCount}))
 }

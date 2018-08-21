@@ -22,7 +22,7 @@ const Streams = (state = defaultState, action) => {
         items: action.items
       }
     case StreamsActions.ADD:
-      let streams = state.items
+      var streams = state.items
       streams.push(action.item)
       return {
         ...state,
@@ -30,16 +30,14 @@ const Streams = (state = defaultState, action) => {
         isLoaded: true,
         items: streams
       }
-    case StreamsActions.SYNCING:
-      var items = state.items.map( (item) =>{
-        if(action.id == item.id) {
-          item['sync'] = true
-        }
-        return item
-      })
+    case StreamsActions.DELETE:
+      var streams = state.items
+      _.remove(streams, (item) => { return item.id === action.id })
       return {
         ...state,
-        items: items
+        isFetching: false,
+        isLoaded: true,
+        items: streams
       }
     case StreamsActions.UPDATE:
       var items = state.items.map( (item) =>{
@@ -48,6 +46,17 @@ const Streams = (state = defaultState, action) => {
           var count = item.unread_count + action.count
           item['unread_count'] = count
           item['entries_count'] = count
+        }
+        return item
+      })
+      return {
+        ...state,
+        items: items
+      }
+    case StreamsActions.SYNCING:
+      var items = state.items.map( (item) =>{
+        if(action.id == item.id) {
+          item['sync'] = true
         }
         return item
       })
