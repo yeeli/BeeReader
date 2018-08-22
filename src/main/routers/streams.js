@@ -1,7 +1,7 @@
 const {ipcMain} = require('electron')
 const _ = require('lodash')
 const { Stream } = require('../model')
-const Rss = require('../../services/rss')
+const Rss = require('../services/rss')
 const Sync = require('../sync')
 
 /*

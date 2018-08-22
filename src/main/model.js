@@ -1,4 +1,4 @@
-const config = require('../config/database')
+const config = require('./config/database')
 const database = config[process.env.NODE_ENV]
 const knex = require('knex')(database)
 const pluralize = require('pluralize')

@@ -1,5 +1,5 @@
 const webpack = require('webpack'); 
-const paths = require('../src/config/paths');
+const paths = require('../src/main/config/paths');
 
 module.exports = {
   target: 'electron-renderer',

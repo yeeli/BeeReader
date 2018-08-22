@@ -10,8 +10,8 @@ export const DELETE = "ENTRIES_DELETE"
 
 export const FILTER = "ENTRIES_FILTER"
 
-export const ENTRY_REQUEST = "ENTRY_REQUEST"
-export const READ = "ENTRY_READ"
+export const READ_REQUEST = "ENTRIES_READ_REQUEST"
+export const READ = "ENTRIES_READ"
 
 export const load = (items) => ({
   type: LOAD,
@@ -119,7 +119,7 @@ export const readEntry = (id) => (dispatch, getState) => {
     return false
   }
   return dispatch({
-    type: ENTRY_REQUEST,
+    type: READ_REQUEST,
     sync: {
       url: 'readEntriesPath',
       params: {
@@ -144,4 +144,5 @@ export const destroyEntries = (stream_id) => (dispatch, getState) => {
   let todayCount = unread_entries.length
   dispatch(destroy(stream_id))
   dispatch(AccountsActions.updateCount("update", {count: -count, unreadCount: -unreadCount, todayCount: -todayCount}))
+  dispatch(filter())
 }

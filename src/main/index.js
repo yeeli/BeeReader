@@ -2,9 +2,9 @@ const electron = require('electron')
 const {app, BrowserWindow} = require('electron')
 const path = require('path');
 const url = require('url');
-const paths = require('../config/paths')
+const paths = require('./config/paths')
 
-require('../db/migrate')
+require('./db/migrate')
 require('./routers')
 
 let mainWindow

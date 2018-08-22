@@ -1,4 +1,4 @@
-const Model = require('../main/model')
+const Model = require('../model')
 
 Model.Account.where({service: 'Rss'}).then(res => {
   if(res.length < 1) {

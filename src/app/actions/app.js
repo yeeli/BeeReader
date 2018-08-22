@@ -1,7 +1,7 @@
 export const REQUEST_RSS = "REQUEST_RSS"
 
-export const SYNCING = "SYNCING"
-export const SYNCED = "SYNCED"
+export const SYNCING = "APP_SYNCING"
+export const SYNCED = "APP_SYNCED"
 
 export const SET_ACCOUNT = "APP_SET_ACCOUNT"
 export const UPDATE_ACCOUNT = "APP_UPDATE_ACCOUNT"
@@ -41,17 +41,17 @@ export const setCurrentAccount = (account) => dispatch => {
   }
 }
 
-export const setSelectedStream = (selected) => (dispatch, getState) => {
-  dispatch({type: SET_STREAM, selected: selected})
-}
+export const setSelectedStream = (selected) => ({
+  type: SET_STREAM, 
+  selected: selected
+})
 
-export const setSelectedEntry = (selected) => (dispatch, getState) => {
-  dispatch({type: SET_ENTRY, selected: selected})
-}
+export const setSelectedEntry = (selected) => ({
+  type: SET_ENTRY,
+  selected: selected
+})
 
-export const openFolder = (id) => dispatch => {
-  return dispatch({
-    type: OPEN_FOLDER,
-    id: id 
-  })
-}
+export const openFolder = (id) => ({
+  type: OPEN_FOLDER,
+  id: id 
+})

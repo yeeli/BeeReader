@@ -15,7 +15,6 @@ ipcMain.on('/accounts', (event, arg, ktm) => {
       return newAccount
     }
     asyncAccount().then(res => {
-      console.log("test2")
       event.sender.send(`/accountsResponse?ktm=${ktm}`, {
         meta: { status: 'success' }, 
         data: { account: res }

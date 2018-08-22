@@ -2,7 +2,7 @@ const Service = require('./service')
 const axios = require('axios')
 const path = require('path')
 const htmlToText = require('html-to-text')
-const { Account, Category, Stream, Entry, Data } = require('../main/model')
+const { Account, Category, Stream, Entry, Data } = require('../model')
 require('dotenv').config()
 
 

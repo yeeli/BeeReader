@@ -1,4 +1,4 @@
-const Rss = require('../services/rss')
+const Rss = require('./services/rss')
 const Model = require('./model')
 const _ = require('lodash')
 const url = require('url')
@@ -47,6 +47,7 @@ const createStream = async (account, uri, categories = []) => {
   }
   return Promise.resolve({ stream: stream, folders: newFolders  })
 }
+
 
 const createCategory = async (account, name) => {
   let categories = await Model.Category.where({account_id: account, oid: name})

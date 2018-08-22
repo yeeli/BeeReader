@@ -7,9 +7,9 @@ export const ADD_REQUEST = "STREAMS_ADD_REQUEST"
 export const LOAD = "STREAMS_LOAD"
 export const ADD = "STREAMS_ADD"
 export const DELETE = "STREAMS_DELETE"
-export const SYNCING = "STREAMS_SYNCING"
 export const UPDATE = "STREAMS_UPDATE"
 export const READ = "STREAMS_READ"
+export const SYNCING = "STREAMS_SYNCING"
 
 
 export const load = (items) => ({
