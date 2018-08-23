@@ -5,6 +5,7 @@ const routes = {
   'post /categories/create': { to: 'categories#create' },
   'get /streams': { to: 'streams#index'},
   'post /streams/create': { to: 'streams#create'},
+  'post /streams/destroy': { to: 'streams#destroy' },
   'get /streams/rss': { to: 'streams#rss' },
   'get /folders': { to: 'folders#index' },
   'get /datas/show': { to: 'datas#show' },

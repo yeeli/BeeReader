@@ -14,7 +14,7 @@ import * as AppActions from '~/actions/app'
 
 class AppContainer extends Component {
 
-  componentWillMount() {
+  componentDidUpdate() {
     const {Accounts} = this.props
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
       this.props.dispatch(AccountsActions.createAccount('Rss')).then(res => {

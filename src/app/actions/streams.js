@@ -1,9 +1,12 @@
 import  * as EntriesActions from '~/actions/entries'
 import  * as FoldersActions from '~/actions/folders'
 import  * as CategoriesActions from '~/actions/categories'
+import  * as AccountsActions from '~/actions/accounts'
+import  * as AppActions from '~/actions/app'
 
 export const REQUEST = "STREAMS_REQUEST"
 export const ADD_REQUEST = "STREAMS_ADD_REQUEST"
+export const DESTROY_REQUEST = "STREAMS_DESTROY_REQUEST"
 export const LOAD = "STREAMS_LOAD"
 export const ADD = "STREAMS_ADD"
 export const DELETE = "STREAMS_DELETE"
@@ -78,9 +81,24 @@ export const addStream = (url, categories) => (dispatch, getState) => {
 }
 
 export const destroyStream = (id) => (dispatch, getState) => {
-  dispatch(FoldersActions.destroyFolder(id))
-  dispatch(destroy(id))
-  dispatch(EntriesActions.destroyEntries(id))
+  return dispatch({
+    type: DESTROY_REQUEST,
+    sync: {
+      url: 'destroyStreamsPath',
+      params: {
+        id: id
+      }
+    }
+  }).then(res => {
+    if(res.meta.status === "success") {
+      dispatch(AppActions.clear())
+      dispatch(FoldersActions.destroyFolder(id))
+      dispatch(EntriesActions.destroyEntries(id))
+      let { entries_count, unread_count, today_count } = res.data
+      dispatch(AccountsActions.updateCount("update", {count: -entries_count, unreadCount: -unread_count, todayCount: -today_count}))
+      dispatch(destroy(id))
+    }
+  })
 }
 
 

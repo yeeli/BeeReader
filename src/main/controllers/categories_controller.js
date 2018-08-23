@@ -15,16 +15,9 @@ class CategoriesController {
   async index() {
     let { account } = this.request.params
     let categories = await Category.withStreams(account)
-    if(_.isEmpty(categories)) {
-      this.response.body = {
-        meta: { status: 'failed' }, 
-        data: { error_message: 'categories blank' }
-      }
-    } else {
-      this.response.body = {
-        meta: { status: 'success' }, 
-        data: { categories: categories }
-      }
+    this.response.body = {
+      meta: { status: 'success' }, 
+      data: { categories: categories }
     }
   }
 
@@ -40,15 +33,15 @@ class CategoriesController {
 
   async create() {
     let { account, title } = this.request.params
-    let categories = await Category.where({account_id: account,  title: title})
-    if(!_.isEmpty(categories)){
+    let categories = await Category.where({account_id: account, title: title})
+    if(categories.length){
       this.response.body = {
         meta: { status: 'failed' },
         data: { error_message: 'category exists' }
       }
       return false
     }
-    let category = await Sync.createCategory(account_id, title)
+    let category = await Sync.createCategory(account, title)
     category["stream_ids"] = ""
     this.response.body = {
       meta: { status: 'success' },

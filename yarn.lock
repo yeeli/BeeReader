@@ -2852,14 +2852,14 @@ electron-builder@^17.3.1:
     uuid-1345 "^0.99.6"
     yargs "^8.0.1"
 
-electron-debug@^1.2.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/electron-debug/-/electron-debug-1.5.0.tgz#d88c02146efb7fc5ae1b21eac56fbe4987eae50c"
+electron-debug@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/electron-debug/-/electron-debug-2.0.0.tgz#3059a6557acbfb091f138d83875f57bac80cea6d"
   dependencies:
     electron-is-dev "^0.3.0"
     electron-localshortcut "^3.0.0"
 
-electron-devtools-installer@^2.2.0:
+electron-devtools-installer@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/electron-devtools-installer/-/electron-devtools-installer-2.2.4.tgz#261a50337e37121d338b966f07922eb4939a8763"
   dependencies:

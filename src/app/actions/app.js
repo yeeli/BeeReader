@@ -1,4 +1,5 @@
 export const REQUEST_RSS = "REQUEST_RSS"
+export const CLEAR = "APP_CLEAR"
 
 export const SYNCING = "APP_SYNCING"
 export const SYNCED = "APP_SYNCED"
@@ -54,4 +55,8 @@ export const setSelectedEntry = (selected) => ({
 export const openFolder = (id) => ({
   type: OPEN_FOLDER,
   id: id 
+})
+
+export const clear = () => ({
+  type: CLEAR
 })

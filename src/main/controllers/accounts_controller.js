@@ -21,7 +21,7 @@ class AccountsController {
         meta: { status: 'failed' },
         data: { error_message: 'account exists'}
       }
-      return
+      return false
     }
 
     let account = await Account.create({

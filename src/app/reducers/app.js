@@ -11,6 +11,12 @@ const defaultState = {
 
 const App = (state = defaultState, action) => {
   switch(action.type) {
+    case AppActions.CLEAR:
+      return {
+        ...state,
+        selectedStream: { type: 'all'},
+        selectedEntry: null
+      }
     case AppActions.SYNCING:
       return {
         ...state,

@@ -135,14 +135,6 @@ export const readEntry = (id) => (dispatch, getState) => {
 
 
 export const destroyEntries = (stream_id) => (dispatch, getState) => {
-  let entries = _.filter(getState().Entries.items, {stream_id: stream_id})
-  let count = entries.length
-  let unread_entries = _.filter(entries, (item) => { return _.isNil(item.read_at)})
-  let unreadCount = unread_entries.length
-  let date = new Date()
-  let today_entries = _.filter(unread_entries, (item) => { return item.published_at > new Date(date.toDateString()).getTime() })
-  let todayCount = unread_entries.length
   dispatch(destroy(stream_id))
-  dispatch(AccountsActions.updateCount("update", {count: -count, unreadCount: -unreadCount, todayCount: -todayCount}))
   dispatch(filter())
 }
