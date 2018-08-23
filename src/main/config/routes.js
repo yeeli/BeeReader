@@ -6,6 +6,7 @@ const routes = {
   'get /streams': { to: 'streams#index'},
   'post /streams/create': { to: 'streams#create'},
   'post /streams/destroy': { to: 'streams#destroy' },
+  'post /streams/update': { to: 'streams#update' },
   'get /streams/rss': { to: 'streams#rss' },
   'get /folders': { to: 'folders#index' },
   'get /datas/show': { to: 'datas#show' },

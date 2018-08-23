@@ -100,6 +100,23 @@ class StreamsController {
     }
   }
 
+  async update() {
+    let { id, categories } = this.request.params
+    let streams = await Stream.where({id: id})
+    let stream = streams[0]
+    let sc = await Stream.withCategories(stream.id)
+    let category_ids = sc.map((category) => { return category.category_id})
+    categories = categories.map(category => {return parseInt(category)})
+    let add_ids = _.difference(categories, category_ids)
+    let delete_ids = _.difference(category_ids, categories)
+    for(let id of add_ids ) {
+      Stream.createCategoryStreams(id, stream.id)
+    }
+    if(!_.isEmpty(delete_ids)){
+      let a = Stream.deleteCategoryStreams(stream.id, delete_ids)
+    }
+  }
+
 
   async rss() {
     let { url } = this.request.params

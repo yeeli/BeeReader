@@ -67,8 +67,19 @@ class Stream extends Model {
     super()
   }
 
+  static withCategories(stream_id) {
+    return knex.schema.raw("select category_id from categories_streams where stream_id = ?", stream_id)
+  }
+
+  static async deleteCategoryStreams(stream_id, category_ids) {
+    return await knex("categories_streams").where({stream_id: stream_id}).whereIn('category_id', category_ids).del()
+  }
+
   static async createCategoryStreams(category_id, stream_id) {
-    return await knex("categories_streams").insert({ category_id: category_id,  stream_id: stream_id})
+    let result = await knex("categories_streams").where({category_id: category_id, stream_id: stream_id})
+    if(result.length == 0) {
+      return await knex("categories_streams").insert({ category_id: category_id,  stream_id: stream_id})
+    }
   }
 
 }
