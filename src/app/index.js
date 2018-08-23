@@ -25,7 +25,7 @@ document.addEventListener('drop', function (event) {
 const store = configureStore()
 store.dispatch(AccountsActions.fetchAccounts()).then( res => {
   if(res.meta.status == "success"){
-    let account = _.find(res.data.account, {service: 'Rss'})
+    let account = _.find(res.data.accounts, {service: 'Rss'})
     store.dispatch(AppActions.setCurrentAccount(account))
   }
 })

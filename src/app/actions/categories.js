@@ -8,7 +8,12 @@ export const load = (items) => ({
 })
 
 export const fetchCategories = () => (dispatch, state) => {
-  return dispatch({ type: REQUEST, sync: {url: 'categoriesPath', params: {account_id: 1}}}).then(res => {
+  return dispatch({ 
+    type: REQUEST, 
+    sync: {
+      url: 'categoriesPath', 
+      params: {account: 1}}
+  }).then(res => {
     dispatch(load(res.data.categories))
   })
 }
@@ -24,7 +29,7 @@ export const addCategory = (title) => (dispatch, state) =>  {
     sync: { 
       url: 'createCategoriesPath',
       params: {
-        account_id: 1,
+        account: 1,
         title: title
       }
     }

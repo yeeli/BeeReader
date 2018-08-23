@@ -11,6 +11,6 @@ urls.rssStreamsPath = '/streams/rss'
 urls.entriesPath = '/entries'
 urls.syncEntriesPath = '/entries/sync'
 urls.readEntriesPath = '/entries/read'
-urls.dataPath = '/data'
+urls.showDatasPath = '/datas/show'
 
 export default urls

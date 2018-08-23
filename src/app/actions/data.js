@@ -11,9 +11,9 @@ export const fetchData = (id) => (dispatch, state) => {
   return dispatch({ 
     type: REQUEST, 
     sync: {
-      url: 'dataPath',
+      url: 'showDatasPath',
       params: {
-        entry_id: id
+        entry: id
       }
     }
   }).then(res => {

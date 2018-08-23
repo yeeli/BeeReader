@@ -22,7 +22,6 @@ const getLocale = (lang) => {
       data = require('~/locales/zh-CN')
       
   }
-  console.log(data)
   return data.default
 }
 

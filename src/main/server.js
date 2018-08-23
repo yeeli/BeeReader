@@ -1,5 +1,6 @@
 const Koa = require('koa')
 const Router = require('koa-router')
+const koaBody = require('koa-body')
 const Routes = require('./config/routes')
 const app = new Koa()
 const router = new Router()
@@ -33,13 +34,15 @@ app.use(async (ctx, next) => {
   ctx.set('X-Response-Time', `${ms}ms`);
 });
 
+app.use(koaBody({multipart: true}))
+
 for(let route in Routes) {
   let [method, path] = route.split(" ")
   let [controller, action] = Routes[route]['to'].split("#")
   let controlObject = new controllers[controller]
   let callback = (ctx, next) => {
-    console.log(ctx.params)
-    controlObject.request = {params: ctx.params }
+    let params = _.isEmpty(ctx.request.query) ? ctx.request.body : ctx.request.query
+    controlObject.request = { params: params }
     controlObject.response = {}
     let func = eval(`controlObject.${action}()`)
     let body = ""
@@ -53,6 +56,8 @@ for(let route in Routes) {
   }
   eval(`router.${method}('${path}', callback)`)
 }
+
+
 
 // response
 app

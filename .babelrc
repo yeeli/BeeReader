@@ -7,7 +7,6 @@
   ],
   "plugins": [
     "react-hot-loader/babel",
-    "@babel/plugin-transform-modules-commonjs",
     "@babel/plugin-proposal-async-generator-functions",
     "@babel/plugin-transform-async-to-generator",
     "@babel/plugin-transform-runtime",

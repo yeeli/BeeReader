@@ -20,7 +20,7 @@ const Account = (state = defaultState, action) => {
         ...state,
         isFetching: false,
         isLoaded: true,
-        items: action.account
+        items: action.accounts
       }
     case AccountsActions.ADD:
       var accounts = state.items

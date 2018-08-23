@@ -5,9 +5,9 @@ export const LOAD = "ACCOUNT_LOAD"
 export const ADD = "ACCOUNT_ADD"
 export const UPDATE_COUNT = "ACCOUNT_UPDATE_COUNT"
 
-export const load = (account) => ({
+export const load = (accounts) => ({
   type: LOAD,
-  account: account 
+  accounts: accounts
 })
 
 export const add = (account) => ({
@@ -22,7 +22,7 @@ export const fetchAccounts = () => dispatch => {
     sync: {url: "accountsPath"}
   }).then(res => {
     if(res.meta.status == "success") {
-      dispatch(load(res.data.account))
+      dispatch(load(res.data.accounts))
     }
     return Promise.resolve(res)
   })

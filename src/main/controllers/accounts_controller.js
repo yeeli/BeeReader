@@ -14,8 +14,29 @@ class AccountsController {
     }
   }
 
-  async create(params) {
-    this.response.body = this.request.params 
+  async create() {
+    let accounts = await Account.where({service: this.request.params.service})
+    if(accounts.length > 0) {
+      this.response.body = {
+        meta: { status: 'failed' },
+        data: { error_message: 'account exists'}
+      }
+      return
+    }
+
+    let account = await Account.create({
+      oid: Date.now(),
+      title: 'local',
+      service: 'Rss',
+      username: 'rss',
+      sort: 0,
+      state: 'active'
+    })
+
+    this.response.body = {
+      meta: { status: 'success' }, 
+      data: { account: account }  
+    }
   }
 }
 
