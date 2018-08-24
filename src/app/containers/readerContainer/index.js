@@ -11,7 +11,6 @@ import interact from 'interactjs'
 import Subscriptions from '~/components/subscriptions'
 import Feeds from '~/components/feeds'
 import Content from '~/components/content'
-import WindowMenu from '~/components/windowMenu'
 import AddStreamDialog from '~/components/dialogs/addStream'
 import SubscribeStreamDialog from '~/components/dialogs/subscribeStream'
 
@@ -207,7 +206,6 @@ class ReaderContainer extends Component {
     return (
       <div id="reader">
         <CssBaseline />
-        <WindowMenu />
         <div className="reader-container split-pane">
           <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
             <Subscriptions  

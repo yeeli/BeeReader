@@ -1,3 +1,6 @@
+const { app } =  require('electron')
+const path = require('path');
+
 let dbConfig = {
   development: {
     client: 'sqlite3',
@@ -9,7 +12,7 @@ let dbConfig = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: 'BeeReader.db'
+      filename: path.join(app.getPath('userData'),'Data/br.db')
     },
     useNullAsDefault: true
   }

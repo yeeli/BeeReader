@@ -1,11 +1,23 @@
-const electron = require('electron')
-const {app, BrowserWindow} = require('electron')
+if(!process.env.NODE_ENV){
+  process.env.NODE_ENV = 'production'
+}
+console.log("1")
+
+const { app, BrowserWindow, Tray, Menu } =  require('electron')
 const path = require('path');
 const url = require('url');
 const paths = require('./config/paths')
+const fs = require('fs')
+
+
+let dataPath = path.join(app.getPath('userData'), 'Data')
+if(!fs.existsSync(dataPath)) {
+  fs.mkdirSync(dataPath)
+}
 
 require('./db/migrate')
 require('./router')
+
 
 let mainWindow
 
@@ -29,18 +41,23 @@ const installExtensions = async () => {
 }
 
 
+let tray = null
+
 const createWindow = async () =>{
+
 
   // Install Extensions
   installExtensions()
 
   // windows infomation
   let win = {
+    title: 'BeeReader',
     width: 1100, 
     height: 600, 
-    frame: false, 
+    //frame: false,
+    titleBarStyle: 'hidden',
     minWidth: 1100, 
-    minHeight: 600
+    minHeight: 600,
   }
 
   mainWindow = new BrowserWindow(win)
@@ -57,16 +74,25 @@ const createWindow = async () =>{
   }
 
   //mainWindow.webContents.openDevTools();
-  const ses = mainWindow.webContents.session
-  console.log(ses.getUserAgent())
+  //const ses = mainWindow.webContents.session
 
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+
+/*  tray = new Tray(path.join(paths.publicSrc, 'assets/baseline-notifications.png'))
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'Item1'},
+    {label: 'Item2'}
+  ])
+  tray.setContextMenu(contextMenu)
+*/
+
 };
 
 
-app.setName("BeeReader")
+app.setName('BeeReader')
 
 app.on('ready', createWindow);
 

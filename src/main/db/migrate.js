@@ -1,10 +1,10 @@
 const path = require('path')
 const migrationsPath = path.join(__dirname, "migrations")
-const config = require('../config/database')
-const database = config[process.env.NODE_ENV]
-const knex = require('knex')(database)
 
 const makeMigrate = () => {
+  const config = require('../config/database')
+  const database = config[process.env.NODE_ENV]
+  const knex = require('knex')(database)
   knex.migrate
   .latest({directory: migrationsPath})
   .then(function(){
@@ -16,5 +16,5 @@ const makeMigrate = () => {
   });
 }
 
-makeMigrate()
+module.exports = makeMigrate()
 
