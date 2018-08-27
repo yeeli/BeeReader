@@ -5,8 +5,6 @@ const fs = require('fs');
 const url = require('url');
 
 const appDirectory = path.join(__dirname, "../../../") //fs.realpathSync(process.cwd());
-console.log(appDirectory)
-
 
 function resolveApp(relativePath) {
   return path.resolve(appDirectory, relativePath);
