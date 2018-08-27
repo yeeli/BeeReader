@@ -4,7 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const url = require('url');
 
-const appDirectory = fs.realpathSync(process.cwd());
+const appDirectory = path.join(__dirname, "../../../") //fs.realpathSync(process.cwd());
+console.log(appDirectory)
+
 
 function resolveApp(relativePath) {
   return path.resolve(appDirectory, relativePath);
@@ -16,24 +18,6 @@ const nodePaths = (process.env.NODE_PATH || '')
   .filter(folder => !path.isAbsolute(folder))
   .map(resolveApp);
 
-/*
-const envPublicUrl = process.env.PUBLIC_URL;
-
-function getPublicUrl(appPackageJson) {
-  return envPublicUrl || require(appPackageJson).homepage;
-}
-
-function ensureSlash(path, needsSlash) {
-  const hasSlash = path.endsWith('/');
-  if (hasSlash && !needsSlash) {
-    return path.substr(path, path.length - 1);
-  } else if (!hasSlash && needsSlash) {
-    return `${path}/`;
-  } else {
-    return path;
-  }
-}
-*/
 
 function getServedPath(appPackageJson) {
   const publicUrl = getPublicUrl(appPackageJson);

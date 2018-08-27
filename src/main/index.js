@@ -1,7 +1,6 @@
 if(!process.env.NODE_ENV){
   process.env.NODE_ENV = 'production'
 }
-console.log("1")
 
 const { app, BrowserWindow, Tray, Menu } =  require('electron')
 const path = require('path');
@@ -61,7 +60,6 @@ const createWindow = async () =>{
   }
 
   mainWindow = new BrowserWindow(win)
-
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL("http://localhost:5000/dist/main.html")
