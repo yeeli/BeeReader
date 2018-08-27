@@ -21,11 +21,16 @@ class AddStream extends Component {
     this.setState({url: event.target.value})
   }
   handleSubmit = (event) => {
+    const {intl} = this.props
     if(this.state.url == '') {
-      this.setState({inputError: true, errorMsg: 'Url is Blank'})
+      this.setState({inputError: true, errorMsg: intl.formatMessage({id: 'urlBlank', defaultMessage: 'Url is Blank'})})
     } else {
       this.props.onSearch(event, this.state.url)
     }
+  }
+  handleClose = (event) => {
+    this.props.onClose(event)
+    this.setState({inputError: false})
   }
   render() {
     return (
@@ -53,10 +58,10 @@ class AddStream extends Component {
             </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.onClose} color="primary">
+          <Button onClick={ this.handleClose } color="primary">
             <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
-          <Button onClick={ this.handleSubmit  } color="primary" autoFocus>
+          <Button onClick={ this.handleSubmit } color="primary" autoFocus>
             <FormattedMessage id="search" defaultMessage="Search" />
 
           </Button>

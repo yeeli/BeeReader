@@ -9,7 +9,7 @@ import { configureStore, history } from './store/configureStore'
 import  * as AccountsActions from '~/actions/accounts'
 import  * as AppActions from '~/actions/app'
 
-import '~/utils/menu'
+//import '~/utils/menu'
 
 
 // Disable Electron App Drop File

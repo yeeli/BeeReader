@@ -15,6 +15,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid'
+import {injectIntl, FormattedMessage} from 'react-intl'
 
 function Transition(props) {
   return <Slide direction="down" {...props} />;
@@ -49,7 +50,7 @@ class SubscribeStream extends Component {
   }
 
   render() {
-    const { categories, rss } = this.props
+    const { categories, rss, intl } = this.props
     return (
       <Dialog
         open={this.props.open}
@@ -60,10 +61,10 @@ class SubscribeStream extends Component {
         fullWidth={true}
         className="dialog-subscribe-stream"
       >
-        <DialogTitle id="alert-dialog-title">Add Subscription</DialogTitle>
+        <DialogTitle id="alert-dialog-title"><FormattedMessage id="addSubscription" defaultMessage="Add Subscription"/></DialogTitle>
         <DialogContent>
           <div className="block">
-            <div className="block-hd"><h4>Rss description</h4></div>
+            <div className="block-hd"><h4><FormattedMessage id="rssDesc" defaultMessage="Rss description"/></h4></div>
             <div className="block-bd">
               <div className="stream-info">
                 <h3>{rss.title} - {rss.description}</h3>            
@@ -72,7 +73,7 @@ class SubscribeStream extends Component {
             </div>
           </div>
           <div className="block">
-            <div className="block-hd"><h4>Folders / Tags</h4></div>
+            <div className="block-hd"><h4><FormattedMessage id="folderTitle" defaultMessage="Folders" /></h4></div>
             <div className="block-bd">
               <List className="listing-categories">
                 {this.props.categories.map(category => (
@@ -94,7 +95,7 @@ class SubscribeStream extends Component {
               <Grid container spacing={24}>
                 <Grid item xs={10}>
                   <Input
-                    placeholder="New folder..."
+                    placeholder={ intl.formatMessage({id: "newFolder", defaultMessage: "New folder..."}) }
                     inputProps={{
                       'aria-label': 'Description',
                     }}
@@ -112,10 +113,10 @@ class SubscribeStream extends Component {
         </DialogContent>
         <DialogActions>
           <Button onClick={this.props.onClose} color="primary">
-            Cancel
+            <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
           <Button onClick={ this.props.onSubscribe(this.state.checked) } color="primary" autoFocus>
-            Subscribe
+            <FormattedMessage id="subscribe" defaultMessage="Subscribe" />
           </Button>
         </DialogActions>
       </Dialog>
@@ -126,4 +127,4 @@ class SubscribeStream extends Component {
 
 import './index.sass'
 
-export default SubscribeStream
+export default injectIntl(SubscribeStream)
