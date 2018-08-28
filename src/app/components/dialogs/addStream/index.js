@@ -40,8 +40,9 @@ class AddStream extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth={true}
+        className="dialog"
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="alert-dialog-title" className="dialog-title" >
             <FormattedMessage id="addSubscription" defaultMessage="Add Subscription" />
         </DialogTitle>
         <DialogContent>

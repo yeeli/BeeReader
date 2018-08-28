@@ -2,7 +2,7 @@ const { Folder } = require('../model')
 
 class FoldersController {
   async index() {
-    let folders = await Folder.where(this.request.params)
+    let folders = await Folder.where({state: 'active'})
     this.response.body = {
       meta: { status: 'success' }, 
       data: { folders: folders }

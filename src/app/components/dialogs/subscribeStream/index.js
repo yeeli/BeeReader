@@ -6,6 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import Slide from '@material-ui/core/Slide'
 import Input from '@material-ui/core/Input'
 
@@ -15,6 +16,8 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid'
+
+import AddIcon from '@material-ui/icons/AddCircle'
 import {injectIntl, FormattedMessage} from 'react-intl'
 
 function Transition(props) {
@@ -59,9 +62,9 @@ class SubscribeStream extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth={true}
-        className="dialog-subscribe-stream"
+        className="dialog-subscribe-stream dialog"
       >
-        <DialogTitle id="alert-dialog-title"><FormattedMessage id="addSubscription" defaultMessage="Add Subscription"/></DialogTitle>
+        <DialogTitle  id="alert-dialog-title" className="dialog-title"><FormattedMessage id="addSubscription" defaultMessage="Add Subscription"/></DialogTitle>
         <DialogContent>
           <div className="block">
             <div className="block-hd"><h4><FormattedMessage id="rssDesc" defaultMessage="Rss description"/></h4></div>
@@ -78,7 +81,7 @@ class SubscribeStream extends Component {
               <List className="listing-categories">
                 {this.props.categories.map(category => (
                   <ListItem key={category.id}>
-                    <ListItemText primary={category.title} />
+                    <ListItemText primary={category.title} className="category-name" />
                     <ListItemSecondaryAction>
                       <Switch
                         onChange={this.handleToggle(category.id)}
@@ -88,26 +91,24 @@ class SubscribeStream extends Component {
                   </ListItem>
                 ))}
               </List>
-            </div>
-          </div>
-          <div className="block block-new-category">
-            <div className="block-bd">
-              <Grid container spacing={24}>
-                <Grid item xs={10}>
-                  <Input
-                    placeholder={ intl.formatMessage({id: "newFolder", defaultMessage: "New folder..."}) }
-                    inputProps={{
-                      'aria-label': 'Description',
-                    }}
-                    value={ this.state.folderName }
-                    style={{width: '100%'}}
-                    onChange={ this.handleChangeFolderName }
-                  />
+              <div className="new-category">
+                <Grid container spacing={24}>
+                  <Grid item xs={11} style={{paddingTop: '0', paddingBottom: '0'}}>
+                    <Input
+                      placeholder={ intl.formatMessage({id: "newFolder", defaultMessage: "New folder..."}) }
+                      inputProps={{
+                        'aria-label': 'Description',
+                      }}
+                      value={ this.state.folderName }
+                      style={{width: '100%', fontSize: '14px'}}
+                      onChange={ this.handleChangeFolderName }
+                    />
+                  </Grid>
+                  <Grid item xs={1} style={{textAlign: "left", padding: '0'}}>
+                    <IconButton disableRipple className={'content-button'} style={{width: '20px', height: '24px', marginTop: '3px', marginLeft: '5px'}}  onClick={ this.props.onNewFolder(this.state.folderName) } ><AddIcon /></IconButton>
+                  </Grid>
                 </Grid>
-                <Grid item xs={2} style={{textAlign: "right"}}>
-                  <Button variant="contained" color="primary" onClick={ this.props.onNewFolder(this.state.folderName) } >Save</Button>
-                </Grid>
-              </Grid>
+              </div>
             </div>
           </div>
         </DialogContent>

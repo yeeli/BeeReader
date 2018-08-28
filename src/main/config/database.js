@@ -1,5 +1,10 @@
-const { app } =  require('electron')
 const path = require('path');
+
+let userData = ""
+if (process.env.NODE_ENV !== 'development') {
+  const { app } =  require('electron')
+  userData = app.getPath('userData')
+}
 
 let dbConfig = {
   development: {
@@ -12,7 +17,7 @@ let dbConfig = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: path.join(app.getPath('userData'),'Data/br.db')
+      filename: path.join(userData,'Data/br.db')
     },
     useNullAsDefault: true
   }

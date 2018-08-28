@@ -31,11 +31,11 @@ class Subscriptions extends Component {
     super(props)
   }
 
-  rightMenu = (e, stream) => {
-    e.preventDefault()
+  rightMenu = (stream) => event => {
+    event.preventDefault()
     const menu = new RemoteMenu()
 
-    menu.append(new RemoteMenuItem({label: 'Edit', click: () => {}}))
+    menu.append(new RemoteMenuItem({label: 'Edit', click: (e) => { this.props.onEditStream(stream) }}))
     menu.append(new RemoteMenuItem({type: 'separator'}))
     menu.append(new RemoteMenuItem({label: `Unsubscribe from "${ stream.title }"`, click: () => { this.props.onUnsubscribeStream(stream.id) }}))
     menu.popup(remote.getCurrentWindow())
@@ -44,7 +44,7 @@ class Subscriptions extends Component {
   setStream = (stream, selectedItem) => {
     let selected = stream.id == selectedItem.id && selectedItem.type == "stream"
     return (
-      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={ this.props.onFilter({ type: 'stream', id: stream.id}) } onContextMenu={ (e) => this.rightMenu(e, stream) }>
+      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={ this.props.onFilter({ type: 'stream', id: stream.id}) } onContextMenu={ this.rightMenu(stream) }>
         <ListItemIcon>
           { stream.sync ? <ToysIcon style={{ color: '#fff', fontSize: '15px', marginRight: 0}}  className="icon-spin"/> : <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/> }
         </ListItemIcon>
@@ -62,7 +62,8 @@ class Subscriptions extends Component {
 
   setCategory = (category, selectedItem, opened) => {
     let selected = category.id == selectedItem.id && selectedItem.type == "category"
-    let streamIds = category.stream_ids.split(",")
+    let idsStr = category.stream_ids || ""
+    let streamIds = idsStr.split(",")
     let streams = _.filter(this.props.streams.items, (stream) => { 
       return _.includes(streamIds, stream.id.toString())
     })

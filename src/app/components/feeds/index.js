@@ -11,7 +11,25 @@ import moment from 'moment'
 
 import {injectIntl, FormattedMessage} from 'react-intl'
 
+import { remote } from 'electron'
+const RemoteMenu = remote.Menu
+const RemoteMenuItem = remote.MenuItem
+
 class Feeds extends Component {
+
+  rightMenu = (entry) => event => {
+    event.preventDefault()
+    const menu = new RemoteMenu()
+
+    if(_.isNil(entry.read_at)) {
+      menu.append(new RemoteMenuItem({label: 'Make as Read', click: () => {}}))
+    } else {
+      menu.append(new RemoteMenuItem({label: 'Make as Unread', click: () => {}}))
+    }
+    menu.append(new RemoteMenuItem({type: 'separator'}))
+    menu.popup(remote.getCurrentWindow())
+  }
+
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { entries, selectedItem,  clickFeed, height } = this.props
@@ -36,7 +54,7 @@ class Feeds extends Component {
             { entries.map( (entry) => {
               let date = new Date(entry.published_at)
               return (
-                <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { clickFeed(e, entry.id) }}>
+                <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { clickFeed(e, entry.id) }} onContextMenu={ this.rightMenu(entry) }>
                   <div className="feed-info">
                     <span className="feed-stream">{ entry.stream_title }</span>
                     <span className="feed-date">{ moment(date).format('YYYY-MM-D hh:mm') }</span>

@@ -12,7 +12,8 @@ const routes = {
   'get /datas/show': { to: 'datas#show' },
   'get /entries': { to: 'entries#index' },
   'get /entries/sync': { to: 'entries#sync' },
-  'post /entries/read': { to: 'entries#read' }
+  'post /entries/read': { to: 'entries#read' },
+  'get /rss/show': { to: 'rss#show'}
 }
 
 module.exports = routes

@@ -57,7 +57,8 @@ export const filter = () => (dispatch, getState) => {
   if(selected.type == "category") {
     dispatch(AppActions.openFolder(selected.id))
     let category = _.find(categories, { id: selected.id})
-    ids = category.stream_ids.split(",").map( (id) => { return parseInt(id) })
+    let idsStr = category.stream_ids || ""
+    ids = idsStr.split(",").map( (id) => { return parseInt(id) })
   }
   switch(selected.type){
     case 'all':

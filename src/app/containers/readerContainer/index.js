@@ -156,8 +156,13 @@ class ReaderContainer extends Component {
     this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
   }
 
+
   handleUnsubscribeStream = (id) => {
    this.props.dispatch(StreamsActions.destroyStream(id)) 
+  }
+
+  handleEditStream = (stream) => {
+    this.setState({ openSubscribeStream: true })
   }
 
   handleNewFolder = name => event => {
@@ -218,7 +223,8 @@ class ReaderContainer extends Component {
               onFilter={ this.handleFilter } 
               onClickSync={ this.handleClickSync }  
               onClickNewStream={ this.handleClickNewStream } 
-              onUnsubscribeStream = { this.handleUnsubscribeStream }
+              onUnsubscribeStream={ this.handleUnsubscribeStream }
+              onEditStream={ this.handleEditStream }
               syncing={ App.syncing }
             />
           </div>

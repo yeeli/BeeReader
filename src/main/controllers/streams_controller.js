@@ -1,5 +1,4 @@
 const { Stream, Entry, Folder, Account, Data } = require('../model')
-const Rss = require('../services/rss')
 const Sync = require('../sync')
 const _ = require('lodash')
 
@@ -101,37 +100,67 @@ class StreamsController {
   }
 
   async update() {
-    let { id, categories } = this.request.params
-    let streams = await Stream.where({id: id})
-    let stream = streams[0]
-    let sc = await Stream.withCategories(stream.id)
-    let category_ids = sc.map((category) => { return category.category_id})
-    categories = categories.map(category => {return parseInt(category)})
-    let add_ids = _.difference(categories, category_ids)
-    let delete_ids = _.difference(category_ids, categories)
-    for(let id of add_ids ) {
-      Stream.createCategoryStreams(id, stream.id)
-    }
-    if(!_.isEmpty(delete_ids)){
-      let a = Stream.deleteCategoryStreams(stream.id, delete_ids)
+    let { id, title } = this.request.params
+    let categories = this.request.params.categories || []
+    let res = await Stream.where({id: id}).update({title: title})
+    let folders = []
+    if(res == 1){
+      let streams = await Stream.where({id: id})
+      let stream = streams[0]
+      let sc = await Stream.withCategories(stream.id)
+      let category_ids = sc.map((category) => { return category.category_id})
+      categories = categories.map(category => {return parseInt(category)})
+      // Update Folder list
+      if(!_.isEmpty(categories)){
+        await Folder.where({source_type: 'Stream', source_id: id}).update({state: 'inactive'})
+      } else {
+        let cfolders = await Folder.where({source_type: 'Stream', source_id: id})
+        if(cfolders.length > 0) {
+          await Folder.where({source_type: 'Stream', source_id: id}).update({state: 'active'})
+        } else {
+          folder = await Folder.create({source_type: 'Stream', source_id: id, account_id: stream.account_id, state: 'active'})
+          folders.push(folder)
+        }
+      }
+      let add_ids = _.difference(categories, category_ids)
+      let delete_ids = _.difference(category_ids, categories)
+      for(let cid of add_ids ) {
+        Stream.createCategoryStreams(cid, stream.id)
+        let category_folders = await Folder.where({source_type: 'Category', source_id: cid})
+        if(category_folders.length < 1 ) {
+          let folder = await Folder.create({ source_type: 'Category', source_id: cid, account_id: stream.account_id, state: 'active'})
+          folders.push(folder)
+        }
+      }
+      if(!_.isEmpty(delete_ids)){
+        let a = Stream.deleteCategoryStreams(stream.id, delete_ids)
+      }
+
+      this.response.body = {
+        meta: { status: 'success' },
+        data: { 
+          stream: stream,
+          new_folders: folders,
+          categories: categories
+        }
+      }
+    } else {
+      this.response.body = {
+        meta: { status: 'failed' }
+      }
     }
   }
 
+  async makeAllRead() {
+   const { stream } = this.request.params
+   const entries = await Entry.where({read_at: null})
+    switch(stream) {
+      case "all":
+        break
+      default: 
+        break
+    }
 
-  async rss() {
-    let { url } = this.request.params
-    let rss = new Rss(url)
-    return rss.getFeed().then(res => {
-      this.response.body = {
-        meta: { status: 'success'},
-        data: { rss: res }
-      }
-    }).catch(e => {
-      this.response.body = {
-        meta: { status: 'failed'},
-        data: { error_message: e }
-      }
-    })
   }
 }
 
