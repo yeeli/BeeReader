@@ -121,7 +121,7 @@ class Content extends Component {
             <span className="dot">&nbsp;•&nbsp;</span>
             {data.author && <span>{ data.author }</span> }
             {data.author && <span className="dot">&nbsp;•&nbsp;</span> }
-            <span>{  moment(date).format('YYYY-MM-D hh:mm') }</span>
+            <span>{  moment(date).format('YYYY-MM-D HH:mm') }</span>
           </div>
         </div>
         <div className="entry-bd">

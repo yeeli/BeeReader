@@ -162,9 +162,21 @@ class StreamsController {
       case "today":
         let date = new Date()
         let time = new Date(date.toDateString()).getTime()
+        entries = await Entry.where(function(){
+          this.where({account_id: account, read_at: null}).orWhere('published_at', '>=', time)
+        })
+        let stream_entries = _.groupBy(entries, 'stream_id')
+        let streams = _.keys(stream_entries)
         await Entry.where(function(){
           this.where({account_id: account, read_at: null}).orWhere('published_at', '>=', time)
         }).update({read_at: Date.now()})
+        for(let s of streams) {
+          let cEntries = await Entry.where(function(){
+            this.where({account_id: account, read_at: null, stream_id: s}).orWhere('published_at', '>=', time)
+          }).count()
+          let entriesCount = cEntries[0]["count(*)"]
+          Stream.where({id: s}).update({unread_count: entriesCount })
+        }
         break
       default: 
         await Entry.where(function(){
@@ -176,7 +188,7 @@ class StreamsController {
     
     let unread = await Entry.where({account_id: account, read_at: null}).count()
     let unread_count = unread[0]["count(*)"]
-    await Account.where({id: account}).decrement('unread_count', unread_count)
+    await Account.where({id: account}).update({unread_count: unread_count})
 
     this.response.body = {
       meta: { status: 'success'},
