@@ -7,7 +7,7 @@ const routes = {
   'post /streams/create': { to: 'streams#create'},
   'post /streams/destroy': { to: 'streams#destroy' },
   'post /streams/update': { to: 'streams#update' },
-  'get /streams/rss': { to: 'streams#rss' },
+  'post /streams/make_all_read': { to: 'streams#makeAllRead'},
   'get /folders': { to: 'folders#index' },
   'get /datas/show': { to: 'datas#show' },
   'get /entries': { to: 'entries#index' },

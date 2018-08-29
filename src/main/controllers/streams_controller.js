@@ -152,13 +152,37 @@ class StreamsController {
   }
 
   async makeAllRead() {
-   const { stream } = this.request.params
-   const entries = await Entry.where({read_at: null})
+    const { stream, account } = this.request.params
+    let entries = []
     switch(stream) {
-      case "all":
+      case "all", "unread":
+        await Entry.where({account_id: account, read_at: null}).update({read_at: Date.now()})
+        await Stream.where({account_id: account}).update({unread_count: 0})
+        break
+      case "today":
+        let date = new Date()
+        let time = new Date(date.toDateString()).getTime()
+        await Entry.where(function(){
+          this.where({account_id: account, read_at: null}).orWhere('published_at', '>=', time)
+        }).update({read_at: Date.now()})
         break
       default: 
+        await Entry.where(function(){
+          this.where({account_id: account, read_at: null, stream_id: stream}).orWhere('published_at', '>=', time)
+        }).update({read_at: Date.now()})
+        await Stream.where({id: stream}).update({unread_count: 0})
         break
+    }
+    
+    let unread = await Entry.where({account_id: account, read_at: null}).count()
+    let unread_count = unread[0]["count(*)"]
+    await Account.where({id: account}).decrement('unread_count', unread_count)
+
+    this.response.body = {
+      meta: { status: 'success'},
+      data: {
+        unread_count: unread_count
+      }
     }
 
   }
