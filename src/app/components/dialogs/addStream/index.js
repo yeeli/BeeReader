@@ -59,10 +59,10 @@ class AddStream extends Component {
             </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={ this.handleClose } color="primary">
+          <Button variant="outlined" onClick={ this.handleClose } color="default">
             <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
-          <Button onClick={ this.handleSubmit } color="primary" autoFocus>
+          <Button variant="outlined" onClick={ this.handleSubmit } color="primary" autoFocus>
             <FormattedMessage id="search" defaultMessage="Search" />
 
           </Button>

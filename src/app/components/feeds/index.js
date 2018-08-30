@@ -32,7 +32,7 @@ class Feeds extends Component {
 
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
-    const { entries, selectedItem,  clickFeed, height } = this.props
+    const { entries, selectedItem,  onClickFeed, height, onMakeAllRead } = this.props
     const entries_count = entries.length
     const nheight = height - 50
     return(
@@ -41,7 +41,7 @@ class Feeds extends Component {
           { entries_count > 0 &&
             <div>
             <div className="left-actions">
-              <IconButton disableRipple className='content-button' onClick={this.props.onClose}><DoneAllIcon /></IconButton>
+              <IconButton disableRipple className='content-button' onClick={ onMakeAllRead }><DoneAllIcon /></IconButton>
             </div>
             <div className="entries-title">
               <FormattedMessage id="articlesCount" defaultMessage="{count} Articles" values={{ count: entries_count }} />
@@ -54,7 +54,7 @@ class Feeds extends Component {
             { entries.map( (entry) => {
               let date = new Date(entry.published_at)
               return (
-                <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { clickFeed(e, entry.id) }} onContextMenu={ this.rightMenu(entry) }>
+                <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { onClickFeed(e, entry.id) }} onContextMenu={ this.rightMenu(entry) }>
                   <div className="feed-info">
                     <span className="feed-stream">{ entry.stream_title }</span>
                     <span className="feed-date">{ moment(date).format('YYYY-MM-D HH:mm') }</span>
@@ -78,7 +78,7 @@ class Feeds extends Component {
 Feeds.propTypes = {
   height: PropTypes.number,
   entries: PropTypes.array,
-  clickFeed: PropTypes.func
+  onClickFeed: PropTypes.func
 }
 
 

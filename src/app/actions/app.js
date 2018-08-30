@@ -17,7 +17,7 @@ export const fetchRss = (url) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_RSS,
     sync: { 
-      url: 'rssStreamsPath',
+      url: 'showRssPath',
       params: { url: url }
     }
   }).then( res => {

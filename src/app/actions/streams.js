@@ -102,3 +102,7 @@ export const destroyStream = (id) => (dispatch, getState) => {
 }
 
 
+export const makeAllRead = () => (dispatch, getState) => {
+  const { selectedStream } = getState().App
+  console.log(selectedStream)
+}

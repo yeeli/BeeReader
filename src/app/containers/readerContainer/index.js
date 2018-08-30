@@ -185,7 +185,7 @@ class ReaderContainer extends Component {
   }
 
   handleClickMakeAllRead = (event) => {
-    
+    this.props.dispatch(StreamsActions.makeAllRead()) 
   }
 
   handleCloseContent = (event) => {
@@ -234,8 +234,8 @@ class ReaderContainer extends Component {
               height={ browserHeight } 
               entries={ Entries.filterItems } 
               selectedItem={ App.selectedEntry }
-              clickFeed={ this.handleClickFeed }
-              clickMakeAllRead={ this.handleClickMakeAllRead }
+              onClickFeed={ this.handleClickFeed }
+              onMakeAllRead={ this.handleClickMakeAllRead }
             />
           </div>
           <div className="resizer vertical resize2" />

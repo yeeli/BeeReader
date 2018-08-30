@@ -91,32 +91,32 @@ class SubscribeStream extends Component {
                   </ListItem>
                 ))}
               </List>
-              <div className="new-category">
-                <Grid container spacing={24}>
-                  <Grid item xs={11} style={{paddingTop: '0', paddingBottom: '0'}}>
-                    <Input
-                      placeholder={ intl.formatMessage({id: "newFolder", defaultMessage: "New folder..."}) }
-                      inputProps={{
-                        'aria-label': 'Description',
-                      }}
-                      value={ this.state.folderName }
-                      style={{width: '100%', fontSize: '14px'}}
-                      onChange={ this.handleChangeFolderName }
-                    />
-                  </Grid>
-                  <Grid item xs={1} style={{textAlign: "left", padding: '0'}}>
-                    <IconButton disableRipple className={'content-button'} style={{width: '20px', height: '24px', marginTop: '3px', marginLeft: '5px'}}  onClick={ this.props.onNewFolder(this.state.folderName) } ><AddIcon /></IconButton>
-                  </Grid>
-                </Grid>
-              </div>
             </div>
+          </div>
+          <div className="new-category">
+            <Grid container spacing={24}>
+              <Grid item xs={11} style={{paddingTop: '0', paddingBottom: '0'}}>
+                <Input
+                  placeholder={ intl.formatMessage({id: "newFolder", defaultMessage: "New folder..."}) }
+                  inputProps={{
+                    'aria-label': 'Description',
+                  }}
+                  value={ this.state.folderName }
+                  style={{width: '100%', fontSize: '14px'}}
+                  onChange={ this.handleChangeFolderName }
+                />
+              </Grid>
+              <Grid item xs={1} style={{textAlign: "left", padding: '0'}}>
+                <IconButton disableRipple className={'content-button'} style={{width: '20px', height: '24px', marginTop: '3px', marginLeft: '5px'}}  onClick={ this.props.onNewFolder(this.state.folderName) } ><AddIcon /></IconButton>
+              </Grid>
+            </Grid>
           </div>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.onClose} color="primary">
+          <Button variant="outlined" onClick={this.props.onClose} color="default">
             <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
-          <Button onClick={ this.props.onSubscribe(this.state.checked) } color="primary" autoFocus>
+          <Button variant="outlined" onClick={ this.props.onSubscribe(this.state.checked) } color="primary" autoFocus>
             <FormattedMessage id="subscribe" defaultMessage="Subscribe" />
           </Button>
         </DialogActions>

@@ -1,4 +1,4 @@
-const { Stream, Entry, Folder, Account, Data } = require('../model')
+const { Category, Stream, Entry, Folder, Account, Data } = require('../model')
 const Sync = require('../sync')
 const _ = require('lodash')
 
@@ -102,7 +102,10 @@ class StreamsController {
   async update() {
     let { id, title } = this.request.params
     let categories = this.request.params.categories || []
-    let res = await Stream.where({id: id}).update({title: title})
+    let res = 1 
+    if(!_.isNil(title)){
+      res = await Stream.where({id: id}).update({title: title})
+    }
     let folders = []
     if(res == 1){
       let streams = await Stream.where({id: id})
@@ -152,9 +155,9 @@ class StreamsController {
   }
 
   async makeAllRead() {
-    const { stream, account } = this.request.params
+    const { type, id, account } = this.request.params
     let entries = []
-    switch(stream) {
+    switch(type) {
       case "all", "unread":
         await Entry.where({account_id: account, read_at: null}).update({read_at: Date.now()})
         await Stream.where({account_id: account}).update({unread_count: 0})
@@ -163,26 +166,31 @@ class StreamsController {
         let date = new Date()
         let time = new Date(date.toDateString()).getTime()
         entries = await Entry.where(function(){
-          this.where({account_id: account, read_at: null}).orWhere('published_at', '>=', time)
+          this.where('account_id', account).andWhere('read_at', null).andWhere('published_at', '>=', time)
         })
         let stream_entries = _.groupBy(entries, 'stream_id')
         let streams = _.keys(stream_entries)
         await Entry.where(function(){
-          this.where({account_id: account, read_at: null}).orWhere('published_at', '>=', time)
+          this.where('account_id',account).andWhere('read_at', null).andWhere('published_at', '>=', time)
         }).update({read_at: Date.now()})
         for(let s of streams) {
           let cEntries = await Entry.where(function(){
-            this.where({account_id: account, read_at: null, stream_id: s}).orWhere('published_at', '>=', time)
+            this.where('read_at', null).andWhere('stream_id', s).andWhere('published_at', '>=', time)
           }).count()
           let entriesCount = cEntries[0]["count(*)"]
-          Stream.where({id: s}).update({unread_count: entriesCount })
+          await Stream.where({id: s}).update({unread_count: entriesCount })
         }
         break
-      default: 
+      case 'stream':
         await Entry.where(function(){
-          this.where({account_id: account, read_at: null, stream_id: stream}).orWhere('published_at', '>=', time)
+          this.where('read_at', null).andWhere('stream_id', id).andWhere('published_at', '>=', time)
         }).update({read_at: Date.now()})
-        await Stream.where({id: stream}).update({unread_count: 0})
+        await Stream.where({id: id}).update({unread_count: 0})
+        break
+      case 'category':
+        let categories = await Category.withStreams(account, id)
+        let category = categories[0]
+      default:
         break
     }
     
