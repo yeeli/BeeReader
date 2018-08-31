@@ -173,7 +173,7 @@ class ReaderContainer extends Component {
     let ids = []
     this.props.dispatch(DataActions.clearData())
     this.props.dispatch(AppActions.setSelectedStream(selected))
-    this.props.dispatch(EntriesActions.filter())
+    this.props.dispatch(EntriesActions.filterEntries())
   }
 
   // Feed Events

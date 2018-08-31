@@ -3,6 +3,12 @@ const paths = require('../src/main/config/paths');
 
 module.exports = {
   target: 'electron-renderer',
+  entry: {
+    'app': [
+      '@babel/polyfill',
+      paths.appIndexJs
+    ]
+  },
   resolve: {
     modules: ['node_modules', paths.nodeModules, paths.appSrc].concat(paths.nodePaths),
     extensions: ['.js', '.json', '.jsx'],

@@ -15,13 +15,11 @@ const config = merge(sharedConfig, {
   devtool: 'inline-source-map',
   entry: {
     'app': [
-      '@babel/polyfill',
       'react-hot-loader/patch',
       'webpack-dev-server/client?http://localhost:5000',
       'webpack/hot/only-dev-server',
       require.resolve('./webpackHotDevClient'),
       require.resolve('react-error-overlay'),
-      paths.appIndexJs
     ]
   },
   output: {

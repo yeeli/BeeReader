@@ -19,12 +19,6 @@ const config = merge(sharedConfig, {
   },
   devtool: 'source-map',
   stats: 'normal',
-  entry: {
-    'app': [
-      '@babel/polyfill',
-      paths.appIndexJs
-    ]
-  },
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
     new webpack.NamedModulesPlugin(),

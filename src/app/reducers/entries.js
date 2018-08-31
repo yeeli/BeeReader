@@ -43,15 +43,29 @@ const Entries = (state = defaultState, action) => {
       }
     case EntriesActions.READ:
       var entries = state.items.map( item => {
-        if(item.id == action.id) {
+        if(action.ids.indexOf(item.id) !== -1 ) {
           item['read_at'] = Date.now()
         }
         return item
       })
       var filterEntries = state.filterItems.map( item => {
-        if(item.id == action.id) {
+        if(action.ids.indexOf(item.id) !== -1 ) {
           item['read_at'] = Date.now()
         }
+        return item
+      })
+      return {
+        ...state,
+        items: entries,
+        filterItems: filterEntries
+      }
+    case EntriesActions.READ_ALL:
+      var entries = state.items.map( item => {
+        item['read_at'] = Date.now()
+        return item
+      })
+      var filterEntries = state.filterItems.map( item => {
+        item['read_at'] = Date.now()
         return item
       })
       return {

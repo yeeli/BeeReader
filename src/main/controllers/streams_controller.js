@@ -156,11 +156,12 @@ class StreamsController {
 
   async makeAllRead() {
     const { type, id, account } = this.request.params
+    let streams = []
     let entries = []
     switch(type) {
       case "all", "unread":
-        await Entry.where({account_id: account, read_at: null}).update({read_at: Date.now()})
-        await Stream.where({account_id: account}).update({unread_count: 0})
+        //await Entry.where({account_id: account, read_at: null}).update({read_at: Date.now()})
+        //await Stream.where({account_id: account}).update({unread_count: 0})
         break
       case "today":
         let date = new Date()
@@ -169,39 +170,53 @@ class StreamsController {
           this.where('account_id', account).andWhere('read_at', null).andWhere('published_at', '>=', time)
         })
         let stream_entries = _.groupBy(entries, 'stream_id')
-        let streams = _.keys(stream_entries)
-        await Entry.where(function(){
-          this.where('account_id',account).andWhere('read_at', null).andWhere('published_at', '>=', time)
-        }).update({read_at: Date.now()})
+        streams = _.keys(stream_entries)
         for(let s of streams) {
           let cEntries = await Entry.where(function(){
             this.where('read_at', null).andWhere('stream_id', s).andWhere('published_at', '>=', time)
           }).count()
           let entriesCount = cEntries[0]["count(*)"]
-          await Stream.where({id: s}).update({unread_count: entriesCount })
+          //await Stream.where({id: s}).update({unread_count: entriesCount })
         }
+        //await Entry.where(function(){
+        //  this.where('account_id',account).andWhere('read_at', null).andWhere('published_at', '>=', time)
+        //}).update({read_at: Date.now()})
         break
       case 'stream':
-        await Entry.where(function(){
-          this.where('read_at', null).andWhere('stream_id', id).andWhere('published_at', '>=', time)
-        }).update({read_at: Date.now()})
-        await Stream.where({id: id}).update({unread_count: 0})
+        streams = [id]
+        //await Entry.where(function(){
+        //  this.where('read_at', null).andWhere('stream_id', id)
+        //}).update({read_at: Date.now()})
+        //await Stream.where({id: id}).update({unread_count: 0})
         break
       case 'category':
         let categories = await Category.withStreams(account, id)
         let category = categories[0]
+        streams = category.stream_ids.split(",")
+        for(let s of streams) {
+          var cEntries = await Entry.where(function(){
+            this.where('read_at', null).andWhere('stream_id', s)
+          }).count()
+          var entriesCount = cEntries[0]["count(*)"]
+          //await Stream.where({id: s}).update({unread_count: entriesCount })
+        }
+        //await Entry.where(function(){
+        //  this.where('account_id',account).andWhere('read_at', null).whereIn('stream_id', streams)
+        //}).update({read_at: Date.now()})
+        break
       default:
         break
     }
     
     let unread = await Entry.where({account_id: account, read_at: null}).count()
     let unread_count = unread[0]["count(*)"]
-    await Account.where({id: account}).update({unread_count: unread_count})
+    //await Account.where({id: account}).update({unread_count: unread_count})
 
     this.response.body = {
       meta: { status: 'success'},
       data: {
-        unread_count: unread_count
+        unread_count: unread_count,
+        streams: streams
       }
     }
 

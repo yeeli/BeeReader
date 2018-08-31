@@ -12,6 +12,7 @@ export const FILTER = "ENTRIES_FILTER"
 
 export const READ_REQUEST = "ENTRIES_READ_REQUEST"
 export const READ = "ENTRIES_READ"
+export const READ_ALL = "ENTRIES_READ_ALL"
 
 export const load = (items) => ({
   type: LOAD,
@@ -28,22 +29,14 @@ export const destroy = (id) => ({
   id: id
 })
 
-export const read = (id) => ({
+export const read = (ids = []) => ({
   type: READ,
-  id: id
+  ids: ids
 })
 
-
-export const fetchEntries = () => (dispatch, state) => {
-  return dispatch({
-    type: REQUEST, 
-    sync: { 
-      url: 'entriesPath'
-    }
-  }).then(res => {
-    dispatch(load(res.data.entries))
-  })
-}
+export const readAll = () => ({
+  type: READ_ALL,
+})
 
 export const filter = () => (dispatch, getState) => {
   let account = getState().App.currentAccount
@@ -80,6 +73,22 @@ export const filter = () => (dispatch, getState) => {
         })
       }
   }
+  return entries
+}
+
+export const fetchEntries = () => (dispatch, getState) => {
+  return dispatch({
+    type: REQUEST, 
+    sync: { 
+      url: 'entriesPath'
+    }
+  }).then(res => {
+    dispatch(load(res.data.entries))
+  })
+}
+
+export const filterEntries = () => (dispatch, getState) => {
+  let entries = dispatch(filter())
   return dispatch({
     type: FILTER,
     items:  entries
@@ -109,8 +118,13 @@ export const syncEntries = (stream) => (dispatch, state) => {
     dispatch(StreamsActions.update(stream, count))
     dispatch(AccountsActions.updateCount("update", {count: count, unreadCount: count, todayCount: todayCount}))
     dispatch(add(res.data.entries))
-    dispatch(filter())
+    dispatch(filterEntries())
   })
+}
+
+export const destroyEntries = (stream_id) => (dispatch, getState) => {
+  dispatch(destroy(stream_id))
+  dispatch(filterEntries())
 }
 
 export const readEntry = (id) => (dispatch, getState) => {
@@ -130,12 +144,8 @@ export const readEntry = (id) => (dispatch, getState) => {
   }).then(res => {
     dispatch(StreamsActions.read(entry.stream_id))
     dispatch(AccountsActions.updateCount("read", entry))
-    dispatch(read(id))
+    dispatch(read([id]))
   })
 }
 
 
-export const destroyEntries = (stream_id) => (dispatch, getState) => {
-  dispatch(destroy(stream_id))
-  dispatch(filter())
-}

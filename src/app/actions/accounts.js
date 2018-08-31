@@ -15,7 +15,6 @@ export const add = (account) => ({
   account: account 
 })
 
-
 export const fetchAccounts = () => dispatch => {
   return dispatch({
     type: REQUEST, 
@@ -40,15 +39,20 @@ export const createAccount = (service) => dispatch => {
   })
 }
 
-export const updateCount = (type ="update", data) => (dispatch, getState) => {
+export const updateCount = (type = "update", data) => (dispatch, getState) => {
   let account = getState().App.currentAccount
-  if(type == "read") {
+  if(type === "read") {
     account.unread_count -= 1
     let date = new Date()
     if(data.published_at > new Date(date.toDateString()).getTime()){
       account.today_count -= 1
     }
-  } else {
+  }
+  if(type === "readAll" ) {
+    account.unread_count = 0
+    account.today_count = 0
+  }
+  if(type === "update"){
     account.entries_count +=  data.count
     account.unread_count +=  data.unreadCount
     account.today_count += data.todayCount
