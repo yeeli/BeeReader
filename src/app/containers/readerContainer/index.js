@@ -27,6 +27,9 @@ import { Link } from 'react-router-dom'
 
 class ReaderContainer extends Component {
   timer = null
+  paneSubscriptionsRef = React.createRef()
+  paneFeedsRef = React.createRef()
+  paneContentRef = React.createRef()
 
   state = {
     browserHeight: window.outerHeight,
@@ -95,7 +98,6 @@ class ReaderContainer extends Component {
       subscriptionsWidth: subscriptionsWidth,
     })
   }
-
 
   handleResizeSubscriptions = (event) => {
     var target = this.refs.paneSubscriptions;
@@ -212,7 +214,7 @@ class ReaderContainer extends Component {
       <div id="reader">
         <CssBaseline />
         <div className="reader-container split-pane">
-          <div className="pane pane-subscriptions" ref="paneSubscriptions" style={{flex: `0 0 ${subscriptionsWidth}px`}}>
+          <div className="pane pane-subscriptions" ref={ this.paneSubscriptionsRef } style={{flex: `0 0 ${subscriptionsWidth}px`}}>
             <Subscriptions  
               height={browserHeight} 
               folders={Folders}
@@ -229,7 +231,7 @@ class ReaderContainer extends Component {
             />
           </div>
           <div className="resizer vertical resize1"/>
-          <div className="pane pane-feeds" ref="paneFeeds" style={{flex: `0 0 ${feedsWidth}px`}}>
+          <div className="pane pane-feeds" ref={this.paneFeedsRef} style={{flex: `0 0 ${feedsWidth}px`}}>
             <Feeds 
               height={ browserHeight } 
               entries={ Entries.filterItems } 
@@ -239,7 +241,7 @@ class ReaderContainer extends Component {
             />
           </div>
           <div className="resizer vertical resize2" />
-          <div className="pane pane-content" ref="paneContent">
+          <div className="pane pane-content" ref={this.paneContentRef}>
             { <Content data={Data} content={dataContent} height={ browserHeight } onClose={ this.handleCloseContent } /> }
           </div>
         </div>

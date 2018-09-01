@@ -5,6 +5,7 @@ import api from '~/config/api'
 const sync = opts => store => next => action => {
   const { sync, ...others } = action
   if (!sync) {
+    console.log("sync",action)
     return next(action)
   }
   const { method, url, params } = sync

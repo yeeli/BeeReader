@@ -17,7 +17,7 @@ export const add = (account) => ({
 
 export const fetchAccounts = () => dispatch => {
   return dispatch({
-    type: REQUEST, 
+    type: REQUEST,
     sync: {url: "accountsPath"}
   }).then(res => {
     if(res.meta.status == "success") {
@@ -29,7 +29,7 @@ export const fetchAccounts = () => dispatch => {
 
 export const createAccount = (service) => dispatch => {
   return dispatch({
-    type: REQUEST, 
+    type: REQUEST,
     sync: {url: "createAccountsPath", params: {service: service}}
   }).then(res => {
     if(res.meta.status == "success") {

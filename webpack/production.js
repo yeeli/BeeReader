@@ -6,12 +6,13 @@ const paths = require('../src/main/config/paths');
 const { env } = require('process')
 const sharedConfig = require('./shared')
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const merge = require('webpack-merge')
 
 const config = merge(sharedConfig, {
+  mode: 'production',
   output: { 
     filename: 'bundle.js',
     path: paths.appBuild,
@@ -21,9 +22,7 @@ const config = merge(sharedConfig, {
   stats: 'normal',
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
     new HtmlWebpackPlugin({

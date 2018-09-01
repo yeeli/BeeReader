@@ -6,13 +6,14 @@ const paths = require('../src/main/config/paths');
 const { env } = require('process')
 const sharedConfig = require('./shared')
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const merge = require('webpack-merge')
 
 const config = merge(sharedConfig, {
-  devtool: 'inline-source-map',
+  mode: 'development',
+  devtool: 'cheap-module-source-map',
   entry: {
     'app': [
       'react-hot-loader/patch',
@@ -31,9 +32,7 @@ const config = merge(sharedConfig, {
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
     new HtmlWebpackPlugin({
@@ -46,12 +45,14 @@ const config = merge(sharedConfig, {
   devServer: {
     host: 'localhost',
     port: '5000',
-    //compress: true,
+    compress: true,
     hot: true,
     //historyApiFallback: true,
     watchOptions: {
       ignored: /node_modules/,
     },
+    inline: true,
+    stats: { errorDetails: true },
     headers: { 'Access-Control-Allow-Origin': '*' },
   }
 
