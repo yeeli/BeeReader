@@ -119,7 +119,7 @@ export const syncEntries = (stream) => (dispatch, getState) => {
        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
     }).length
     let cCount = currentAccount.entries_count + count
-    let cUnreadCount = currentAccount.unread_count + todayCount
+    let cUnreadCount = currentAccount.unread_count + count
     let cTodayCount = currentAccount.today_count + todayCount
     dispatch(StreamsActions.update(stream, count))
     dispatch(AccountsActions.updateCount("update", {count: cCount, unreadCount: cUnreadCount, todayCount: cTodayCount}))
