@@ -57,20 +57,20 @@ export const filter = (account, type, entries, streams) => {
     default: 
       if(!_.isEmpty(streams)) {
         entriesList = _.filter(entries, (entry) => { 
-          return _.includes(streams, entry.stream_id) 
+          return _.includes(streams, _.toString(entry.stream_id)) 
         })
       }
   }
   return entriesList
 }
 
-export const fetchEntries = () => (dispatch, getState) => {
+export const fetchEntries = (account) => (dispatch, getState) => {
   const { currentAccount } = getState().App
   return dispatch({
     type: REQUEST, 
     sync: { 
       url: 'entriesPath',
-      params: { account: currentAccount.id }
+      params: { account: account.id }
     }
   }).then(res => {
     dispatch(load(res.data.entries))
@@ -84,13 +84,13 @@ export const filterEntries = () => (dispatch, getState) => {
   let ids = []
   let selected = getState().App.selectedStream
   if(selected.type == 'stream') {
-      ids = [selected.id]
+      ids = [_.toString(selected.id)]
     }
   if(selected.type == "category") {
     dispatch(AppActions.openFolder(selected.id))
     let category = _.find(categories, { id: selected.id})
     let idsStr = category.stream_ids || ""
-    ids = idsStr.split(",").map( (id) => { return parseInt(id) })
+    ids = idsStr.split(",")
   }
   let entriesList = filter(currentAccount.id, selected.type, entries, ids)
   return dispatch({
@@ -111,7 +111,6 @@ export const syncEntries = (stream) => (dispatch, getState) => {
       }
     }
   }).then(res => {
-
     if(streams[streams.length - 1].id === stream){
       dispatch(AppActions.synced())
     }
@@ -121,10 +120,10 @@ export const syncEntries = (stream) => (dispatch, getState) => {
        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
     })
     let todayCount = todayEntries.length
-    console.log(todayCount)
     let cCount = currentAccount.entries_count + count
     let cUnreadCount = currentAccount.unread_count + count
     let cTodayCount = currentAccount.today_count + todayCount
+    console.log(cTodayCount)
     dispatch(StreamsActions.update(stream, count))
     dispatch(AccountsActions.updateCount("update", {count: cCount, unreadCount: cUnreadCount, todayCount: cTodayCount}))
     dispatch(add(res.data.entries))

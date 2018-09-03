@@ -7,13 +7,12 @@ export const load = (items) => ({
   items: items
 })
 
-export const fetchCategories = () => (dispatch, getState) => {
-  const { currentAccount } = getState().App
+export const fetchCategories = (account) => (dispatch, getState) => {
   return dispatch({ 
     type: REQUEST, 
     sync: {
       url: 'categoriesPath', 
-      params: { account: currentAccount.id }
+      params: { account: account.id }
     }
   }).then(res => {
     dispatch(load(res.data.categories))

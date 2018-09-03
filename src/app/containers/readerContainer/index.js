@@ -50,20 +50,7 @@ class ReaderContainer extends Component {
   }
 
   componentDidMount() {
-    const { dispatch } = this.props 
-    dispatch(AccountsActions.fetchAccounts()).then( res => {
-      if(res.meta.status == "success"){
-        if(!_.isEmpty(res.data.accounts)){
-          let account = _.find(res.data.accounts, {service: 'Rss'})
-          dispatch(AppActions.setCurrentAccount(account))
-          dispatch(FoldersActions.fetchFolders(account))
-          dispatch(CategoriesActions.fetchCategories(account))
-          dispatch(StreamsActions.fetchStreams(account))
-          dispatch(EntriesActions.fetchEntries(account))
-        }
-      }
-    })
-
+    const { dispatch, Accounts, App} = this.props 
     window.addEventListener("resize", this.handleWindowResize)
 
     interact('.resize1').draggable({ onmove: window.dragMoveListener })
@@ -75,7 +62,6 @@ class ReaderContainer extends Component {
     //Auto Sync Entries Now
     this.timer = setInterval(this.syncEntries, 60000 * 30)
   }
-
 
   syncEntries = () => {
     const {items} = this.props.Streams

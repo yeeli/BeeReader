@@ -14,13 +14,12 @@ export const add = (items) => ({
   items: items
 })
 
-export const fetchFolders = () => (dispatch, getState) => {
-  const { currentAccount } = getState().App
+export const fetchFolders = (account) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST, 
     sync: { 
       url: 'foldersPath',
-      params: { account: currentAccount.id }
+      params: { account: account.id }
     }
   }).then(res => {
     dispatch(load(res.data.folders))

@@ -13,9 +13,6 @@ import * as AppActions from '~/actions/app'
 
 
 class AppContainer extends Component {
-  componentDidMount() {
-    this.props.dispatch(AccountsActions.fetchAccounts())
-  }
   componentDidUpdate() {
     const {Accounts} = this.props
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
@@ -25,7 +22,7 @@ class AppContainer extends Component {
 
   render () {
     const {Accounts, App} = this.props
-    if( Accounts.isLoaded && Accounts.items.length > 0){
+    if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }
     return (

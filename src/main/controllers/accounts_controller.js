@@ -6,7 +6,7 @@ class AccountsController {
     for (let account of accounts) {
       let date = new Date()
       let count = await Entry.connection().whereRaw('account_id = ? AND published_at >= ? AND read_at is null', [account.id, new Date(date.toDateString()).getTime()]).count()
-      account['today_count'] = count[0]['count(*)']
+      account['today_count'] = count[0]['count(*)'] || 0
     }
     this.response.body = {
       meta: { status: 'success' },
@@ -32,6 +32,7 @@ class AccountsController {
       sort: 0,
       state: 'active'
     })
+    account['today_count'] = 0
 
     this.response.body = {
       meta: { status: 'success' }, 

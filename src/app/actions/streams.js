@@ -48,13 +48,12 @@ export const readStreams = (streams) => ({
   streams: streams
 })
 
-export const fetchStreams = () => (dispatch, getState) => {
-  const { currentAccount } = getState().App
+export const fetchStreams = (account) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST, 
     sync: { 
       url: 'streamsPath',
-      params: { account: currentAccount.id }
+      params: { account: account.id }
     }
   }).then(res => {
     dispatch(load(res.data.streams))
@@ -78,7 +77,7 @@ export const addStream = (url, categories) => (dispatch, getState) => {
     if(res.meta.status == "success") {
       let stream = res.data.stream
       dispatch(add(stream))
-      dispatch(CategoriesActions.fetchCategories())
+      dispatch(CategoriesActions.fetchCategories(currentAccount))
       dispatch(FoldersActions.add(res.data.folders))
       dispatch(EntriesActions.syncEntries(stream.id))
     }
