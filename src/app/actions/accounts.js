@@ -48,14 +48,16 @@ export const updateCount = (type = "update", data) => (dispatch, getState) => {
       account.today_count -= 1
     }
   }
-  if(type === "readAll" ) {
-    account.unread_count = 0
-    account.today_count = 0
-  }
   if(type === "update"){
-    account.entries_count +=  data.count
-    account.unread_count +=  data.unreadCount
-    account.today_count += data.todayCount
+    if(!_.isNil(data.count)){
+      account.entries_count =  data.count
+    }
+    if(!_.isNil(data.unreadCount)) {
+      account.unread_count =  data.unreadCount
+    }
+    if(!_.isNil(data.todayCount)) {
+      account.today_count = data.todayCount
+    }
   }
   dispatch(AppActions.setCurrentAccount(account))
 

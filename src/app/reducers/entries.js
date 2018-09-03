@@ -60,14 +60,29 @@ const Entries = (state = defaultState, action) => {
         filterItems: filterEntries
       }
     case EntriesActions.READ_ALL:
-      var entries = state.items.map( item => {
-        item['read_at'] = Date.now()
-        return item
-      })
-      var filterEntries = state.filterItems.map( item => {
-        item['read_at'] = Date.now()
-        return item
-      })
+      if(action.streams === "all") {
+        var entries = state.items.map( item => {
+          item['read_at'] = Date.now()
+          return item
+        })
+        var filterEntries = state.filterItems.map( item => {
+          item['read_at'] = Date.now()
+          return item
+        })
+      } else {
+        var entries = state.items.map( item => {
+          if(action.streams.indexOf(item.id)) {
+            item['read_at'] = Date.now()
+          }
+          return item
+        })
+        var filterEntries = state.filterItems.map( item => {
+          if(action.streams.indexOf(item.id)) {
+            item['read_at'] = Date.now()
+          }
+          return item
+        })
+      }
       return {
         ...state,
         items: entries,

@@ -76,11 +76,21 @@ const Streams = (state = defaultState, action) => {
         ...state,
         items: items
       }
-    case StreamsActions.READ_ALL:
-      var items = state.items.map( (item) =>{
-        item['unread_count'] = 0
-        return item
-      })
+    case StreamsActions.READ_STREAMS:
+      if(action.streams == 'all') {
+        var items = state.items.map( (item) =>{
+          item['unread_count'] = 0
+          return item
+        })
+      } else {
+        var items = state.items.map( (item) => {
+          var count = action.streams[item.id]
+          if(!_.isNil(count)) {
+            item['unread_count'] = item.unread_count - count
+          }
+          return item
+        })
+      }
       return {
         ...state,
         items: items

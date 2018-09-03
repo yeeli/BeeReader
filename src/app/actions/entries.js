@@ -34,46 +34,34 @@ export const read = (ids = []) => ({
   ids: ids
 })
 
-export const readAll = () => ({
+export const readAll = (streams) => ({
   type: READ_ALL,
+  streams: streams
 })
 
-export const filter = () => (dispatch, getState) => {
-  let account = getState().App.currentAccount
-  let entries = getState().Entries.items
-  let categories = getState().Categories.items
-  let ids = []
-  let selected = getState().App.selectedStream
-  if(selected.type == 'stream') {
-      ids = [selected.id]
-    }
-  if(selected.type == "category") {
-    dispatch(AppActions.openFolder(selected.id))
-    let category = _.find(categories, { id: selected.id})
-    let idsStr = category.stream_ids || ""
-    ids = idsStr.split(",").map( (id) => { return parseInt(id) })
-  }
-  switch(selected.type){
+export const filter = (account, type, entries, streams) => {
+  let entriesList = []
+  switch(type){
     case 'all':
-      entries = _.filter(entries, (entry) => { return entry.account_id == account.id })
+      entriesList = _.filter(entries, (entry) => { return entry.account_id == account })
       break
     case 'unread':
-      entries = _.filter(entries, (entry) => { return _.isNil(entry.read_at) && entry.account_id == account.id })
+      entriesList = _.filter(entries, (entry) => { return _.isNil(entry.read_at) && entry.account_id == account })
       break
     case 'today':
-      entries = _.filter(entries, (entry) => { 
+      entriesList = _.filter(entries, (entry) => { 
         let date = new Date()
-        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at) && entry.account_id == account.id
+        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at) && entry.account_id == account
       })
       break
     default: 
-      if(!_.isEmpty(ids)) {
-        entries = _.filter(entries, (entry) => { 
-          return _.includes(ids, entry.stream_id) 
+      if(!_.isEmpty(streams)) {
+        entriesList = _.filter(entries, (entry) => { 
+          return _.includes(streams, entry.stream_id) 
         })
       }
   }
-  return entries
+  return entriesList
 }
 
 export const fetchEntries = () => (dispatch, getState) => {
@@ -88,10 +76,24 @@ export const fetchEntries = () => (dispatch, getState) => {
 }
 
 export const filterEntries = () => (dispatch, getState) => {
-  let entries = dispatch(filter())
+  let { currentAccount } = getState().App
+  let entries = getState().Entries.items
+  let categories = getState().Categories.items
+  let ids = []
+  let selected = getState().App.selectedStream
+  if(selected.type == 'stream') {
+      ids = [selected.id]
+    }
+  if(selected.type == "category") {
+    dispatch(AppActions.openFolder(selected.id))
+    let category = _.find(categories, { id: selected.id})
+    let idsStr = category.stream_ids || ""
+    ids = idsStr.split(",").map( (id) => { return parseInt(id) })
+  }
+  let entriesList = filter(currentAccount.id, selected.type, entries, ids)
   return dispatch({
     type: FILTER,
-    items:  entries
+    items:  entriesList
   })
 }
 
