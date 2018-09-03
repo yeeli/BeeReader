@@ -61,13 +61,13 @@ export const fetchStreams = () => dispatch => {
 
 
 export const addStream = (url, categories) => (dispatch, getState) => {
-  let account = getState().App.currentAccount
+  let { currentAccount } = getState().App
   return dispatch({
     type: ACTION_REQUEST,
     sync: {
       url: 'createStreamsPath',
       params: {
-        account: account.id,
+        account: currentAccount.id,
         url: url,
         categories: categories
       }
@@ -84,7 +84,7 @@ export const addStream = (url, categories) => (dispatch, getState) => {
 }
 
 export const destroyStream = (id) => (dispatch, getState) => {
-  let account = getState().App.currentAccount
+  let { currentAccount } = getState().App
   return dispatch({
     type: ACTION_REQUEST,
     sync: {
@@ -100,9 +100,9 @@ export const destroyStream = (id) => (dispatch, getState) => {
       dispatch(EntriesActions.destroyEntries(id))
       let { entries_count, unread_count, today_count } = res.data
       dispatch(AccountsActions.updateCount("update", {
-        count: account.entries_count - entries_count, 
-        unreadCount: account.unread_count - unread_count, 
-        todayCount: account.today_count - today_count
+        count: currentAccount.entries_count - entries_count, 
+        unreadCount: currentAccount.unread_count - unread_count, 
+        todayCount: currentAccount.today_count - today_count
       }))
       dispatch(destroy(id))
     }

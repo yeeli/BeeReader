@@ -97,7 +97,9 @@ export const filterEntries = () => (dispatch, getState) => {
   })
 }
 
-export const syncEntries = (stream) => (dispatch, state) => {
+export const syncEntries = (stream) => (dispatch, getState) => {
+  let { currentAccount } = getState().App
+  let streams = getState().Streams.items
   return dispatch({
     type: REQUEST,
     sync: {
@@ -107,18 +109,20 @@ export const syncEntries = (stream) => (dispatch, state) => {
       }
     }
   }).then(res => {
-    let streams = state().Streams.items
 
     if(streams[streams.length - 1].id === stream){
       dispatch(AppActions.synced())
     }
-    let count = res.data.entries.length
+    let count =  res.data.entries.length
     let date = new Date()
     let todayCount = _.filter(res.data.entries, (entry) => {
        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
     }).length
+    let cCount = currentAccount.entries_count + count
+    let cUnreadCount = currentAccount.unread_count + todayCount
+    let cTodayCount = currentAccount.today_count + todayCount
     dispatch(StreamsActions.update(stream, count))
-    dispatch(AccountsActions.updateCount("update", {count: count, unreadCount: count, todayCount: todayCount}))
+    dispatch(AccountsActions.updateCount("update", {count: cCount, unreadCount: cUnreadCount, todayCount: cTodayCount}))
     dispatch(add(res.data.entries))
     dispatch(filterEntries())
   })

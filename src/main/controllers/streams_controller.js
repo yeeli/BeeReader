@@ -156,6 +156,7 @@ class StreamsController {
 
   async makeAllRead() {
     const { type, id, account } = this.request.params
+    let allEntries = await Entry.where({account_id: account, read_at: null})
     let entries = []
     let todayCount = 0
     let unreadCount = 0
@@ -164,16 +165,11 @@ class StreamsController {
     let time = new Date(date.toDateString()).getTime()
     switch(type) {
       case "all", "unread":
-        entries = await Entry.where({account_id: account, read_at: null})
-        unreadCount = entries.length
         await Entry.where({account_id: account, read_at: null}).update({read_at: Date.now()})
         await Stream.where({account_id: account}).update({unread_count: 0})
         break
       case "today":
-        entries = await Entry.where(function(){
-          this.where('account_id', account).andWhere('read_at', null).andWhere('published_at', '>=', time)
-        })
-        unreadCount = entries.length
+        entries = _.filter(allEntries, (entry) => { return entry.published_at > time })
         let stream_entries = _.groupBy(entries, 'stream_id')
         streams = _.keys(stream_entries)
         for(let s of streams) {
@@ -189,10 +185,7 @@ class StreamsController {
         }).update({read_at: Date.now()})
         break
       case 'stream':
-        entries = await Entry.where(function(){
-          this.where('read_at', null).andWhere('stream_id', id)
-        })
-        unreadCount = entries.length
+        entries = _.filter(allEntries, (entry) => { return entry.stream_id = id })
         unreadStreams[id] = entries.length
         await Entry.where(function(){
           this.where('read_at', null).andWhere('stream_id', id)
@@ -203,10 +196,7 @@ class StreamsController {
         let categories = await Category.withStreams(account, id)
         let category = categories[0]
         var streams = category.stream_ids.split(",")
-        entries = await Entry.where(function(){ 
-          this.whereIn('stream_id', streams).where('read_at', null) 
-        })
-        unreadCount = entries.length
+        entries = _.filter(allEntries, (entry) => { return streams.indexOf(entry.stream_id) })
         for(let s of streams) {
           var cEntries = await Entry.where(function(){
             this.where('read_at', null).andWhere('stream_id', s)
@@ -225,6 +215,7 @@ class StreamsController {
     
     let todayEntries = _.filter(entries, (entry) => { return entry.published_at >= time })
     todayCount = todayEntries.length
+    unreadCount = allEntries.length
     await Account.where({id: account}).update({unread_count: unreadCount})
 
     this.response.body = {
