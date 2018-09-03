@@ -81,7 +81,7 @@ class StreamsController {
     let unreadCount = unreadEntries.length
     let date = new Date()
     let todayEntries = _.filter(unreadEntries, (item) => { return item.published_at > new Date(date.toDateString()).getTime() })
-    let todayCount = unreadEntries.length
+    let todayCount = todayEntries.length
     let entryIds = entries.map((entry) => { return entry.id })
     await Stream.where({ id: id }).del()
     await Folder.where({ source_type: 'Stream', source_id: id}).del()
@@ -165,6 +165,7 @@ class StreamsController {
     let time = new Date(date.toDateString()).getTime()
     switch(type) {
       case "all", "unread":
+        entries = allEntries
         await Entry.where({account_id: account, read_at: null}).update({read_at: Date.now()})
         await Stream.where({account_id: account}).update({unread_count: 0})
         break
@@ -185,7 +186,7 @@ class StreamsController {
         }).update({read_at: Date.now()})
         break
       case 'stream':
-        entries = _.filter(allEntries, (entry) => { return entry.stream_id = id })
+        entries = _.filter(allEntries, (entry) => { return entry.stream_id == id })
         unreadStreams[id] = entries.length
         await Entry.where(function(){
           this.where('read_at', null).andWhere('stream_id', id)
@@ -215,8 +216,9 @@ class StreamsController {
     
     let todayEntries = _.filter(entries, (entry) => { return entry.published_at >= time })
     todayCount = todayEntries.length
-    unreadCount = allEntries.length
-    await Account.where({id: account}).update({unread_count: unreadCount})
+    unreadCount = entries.length
+    let allUnreadCount = allEntries.length
+    await Account.where({id: account}).update({unread_count: allUnreadCount})
 
     this.response.body = {
       meta: { status: 'success'},
