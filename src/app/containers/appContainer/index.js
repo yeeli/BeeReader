@@ -13,25 +13,19 @@ import * as AppActions from '~/actions/app'
 
 
 class AppContainer extends Component {
-
+  componentDidMount() {
+    this.props.dispatch(AccountsActions.fetchAccounts())
+  }
   componentDidUpdate() {
     const {Accounts} = this.props
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
-      this.props.dispatch(AccountsActions.createAccount('Rss')).then(res => {
-        if(res.meta.status == "success"){
-          this.props.dispatch(AccountsActions.fetchAccounts()).then( res => {
-            if(res.meta.status == "success"){
-              let account = _.find(res.data.account, {service: 'Rss'})
-              this.props.dispatch(AppActions.setCurrentAccount(account))
-            }
-          })
-        }
-      })
+      this.props.dispatch(AccountsActions.createAccount('Rss'))
     }
   }
 
   render () {
-    if(this.props.Accounts.items.length > 0 ) {
+    const {Accounts, App} = this.props
+    if( Accounts.isLoaded && Accounts.items.length > 0){
       return <Redirect to='/reader' />
     }
     return (
@@ -47,8 +41,8 @@ class AppContainer extends Component {
 import './index.sass'
 
 const mapStateToProps = state => {
-  const { Accounts } = state
-  return { Accounts }
+  const { Accounts, App } = state
+  return { Accounts, App }
 }
 
 

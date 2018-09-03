@@ -197,7 +197,7 @@ class StreamsController {
         let categories = await Category.withStreams(account, id)
         let category = categories[0]
         var streams = category.stream_ids.split(",")
-        entries = _.filter(allEntries, (entry) => { return streams.indexOf(entry.stream_id) })
+        entries = _.filter(allEntries, (entry) => { return _.include(streams, entry.stream_id) })
         for(let s of streams) {
           var cEntries = await Entry.where(function(){
             this.where('read_at', null).andWhere('stream_id', s)

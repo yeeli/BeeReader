@@ -33,9 +33,10 @@ export const createAccount = (service) => dispatch => {
     sync: {url: "createAccountsPath", params: {service: service}}
   }).then(res => {
     if(res.meta.status == "success") {
-      dispatch(add(res.data.account))
+      let account = res.data.account
+      dispatch(AppActions.setCurrentAccount(account))
+      dispatch(add(account))
     }
-    return Promise.resolve(res)
   })
 }
 

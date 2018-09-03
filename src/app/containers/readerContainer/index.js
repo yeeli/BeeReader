@@ -30,6 +30,7 @@ class ReaderContainer extends Component {
   paneSubscriptionsRef = React.createRef()
   paneFeedsRef = React.createRef()
   paneContentRef = React.createRef()
+  rssUrlRef = React.createRef()
 
   state = {
     browserHeight: window.outerHeight,
@@ -46,14 +47,22 @@ class ReaderContainer extends Component {
 
   constructor(props) {
     super(props)
-    this.rssUrlRef = React.createRef()
   }
 
   componentDidMount() {
-    this.props.dispatch(FoldersActions.fetchFolders())
-    this.props.dispatch(CategoriesActions.fetchCategories())
-    this.props.dispatch(StreamsActions.fetchStreams())
-    this.props.dispatch(EntriesActions.fetchEntries())
+    const { dispatch } = this.props 
+    dispatch(AccountsActions.fetchAccounts()).then( res => {
+      if(res.meta.status == "success"){
+        if(!_.isEmpty(res.data.accounts)){
+          let account = _.find(res.data.accounts, {service: 'Rss'})
+          dispatch(AppActions.setCurrentAccount(account))
+          dispatch(FoldersActions.fetchFolders(account))
+          dispatch(CategoriesActions.fetchCategories(account))
+          dispatch(StreamsActions.fetchStreams(account))
+          dispatch(EntriesActions.fetchEntries(account))
+        }
+      }
+    })
 
     window.addEventListener("resize", this.handleWindowResize)
 

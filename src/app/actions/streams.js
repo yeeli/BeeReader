@@ -48,11 +48,13 @@ export const readStreams = (streams) => ({
   streams: streams
 })
 
-export const fetchStreams = () => dispatch => {
+export const fetchStreams = () => (dispatch, getState) => {
+  const { currentAccount } = getState().App
   return dispatch({
     type: REQUEST, 
     sync: { 
-      url: 'streamsPath' 
+      url: 'streamsPath',
+      params: { account: currentAccount.id }
     }
   }).then(res => {
     dispatch(load(res.data.streams))

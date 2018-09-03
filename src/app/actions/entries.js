@@ -65,10 +65,12 @@ export const filter = (account, type, entries, streams) => {
 }
 
 export const fetchEntries = () => (dispatch, getState) => {
+  const { currentAccount } = getState().App
   return dispatch({
     type: REQUEST, 
     sync: { 
-      url: 'entriesPath'
+      url: 'entriesPath',
+      params: { account: currentAccount.id }
     }
   }).then(res => {
     dispatch(load(res.data.entries))
@@ -119,6 +121,7 @@ export const syncEntries = (stream) => (dispatch, getState) => {
        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
     })
     let todayCount = todayEntries.length
+    console.log(todayCount)
     let cCount = currentAccount.entries_count + count
     let cUnreadCount = currentAccount.unread_count + count
     let cTodayCount = currentAccount.today_count + todayCount

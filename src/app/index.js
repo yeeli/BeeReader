@@ -23,14 +23,7 @@ document.addEventListener('drop', function (event) {
   return false;
 }, false);
 
-
 const store = configureStore()
-store.dispatch(AccountsActions.fetchAccounts()).then( res => {
-  if(res.meta.status == "success"){
-    let account = _.find(res.data.accounts, {service: 'Rss'})
-    store.dispatch(AppActions.setCurrentAccount(account))
-  }
-})
 
 const render = Component => {
   ReactDOM.render(

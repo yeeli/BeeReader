@@ -102,11 +102,18 @@ const syncWithRss = async (streams) => {
         state: 'active'
       }
       let entry = await Model.Entry.create(entryInfo)
+      let content = item.content
+      if(content.match(/CDATA/)){
+        contentStr = content.match(/\<\!\[CDATA\[(.*)\]\]\>$/)
+        if(contentStr){
+          content = contentStr[1]
+        }
+      }
       if (entry) {
         let dataInfo = {
           entry_id: entry.id,
           title: entry.title,
-          content: item.content,
+          content: content,
           author: item.author,
           url: link,
         }
