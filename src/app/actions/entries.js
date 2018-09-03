@@ -123,7 +123,6 @@ export const syncEntries = (stream) => (dispatch, getState) => {
     let cCount = currentAccount.entries_count + count
     let cUnreadCount = currentAccount.unread_count + count
     let cTodayCount = currentAccount.today_count + todayCount
-    console.log(cTodayCount)
     dispatch(StreamsActions.update(stream, count))
     dispatch(AccountsActions.updateCount("update", {count: cCount, unreadCount: cUnreadCount, todayCount: cTodayCount}))
     dispatch(add(res.data.entries))
