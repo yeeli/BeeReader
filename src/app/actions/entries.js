@@ -115,9 +115,10 @@ export const syncEntries = (stream) => (dispatch, getState) => {
     }
     let count =  res.data.entries.length
     let date = new Date()
-    let todayCount = _.filter(res.data.entries, (entry) => {
+    let todayEntries = _.filter(res.data.entries, (entry) => {
        return entry.published_at > new Date(date.toDateString()).getTime() && _.isNil(entry.read_at)
-    }).length
+    })
+    let todayCount = todayEntries.length
     let cCount = currentAccount.entries_count + count
     let cUnreadCount = currentAccount.unread_count + count
     let cTodayCount = currentAccount.today_count + todayCount
