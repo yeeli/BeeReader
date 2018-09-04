@@ -111,6 +111,7 @@ export const syncEntries = (stream) => (dispatch, getState) => {
       }
     }
   }).then(res => {
+    if(res.meta.status  === "success") {
     if(streams[streams.length - 1].id === stream){
       dispatch(AppActions.synced())
     }
@@ -127,6 +128,7 @@ export const syncEntries = (stream) => (dispatch, getState) => {
     dispatch(AccountsActions.updateCount("update", {count: cCount, unreadCount: cUnreadCount, todayCount: cTodayCount}))
     dispatch(add(res.data.entries))
     dispatch(filterEntries())
+    }
   })
 }
 
