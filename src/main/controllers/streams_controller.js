@@ -179,7 +179,7 @@ class StreamsController {
           }).count()
           let entriesCount = cEntries[0]["count(*)"]
           unreadStreams[s] = entriesCount
-          await Stream.where({id: s}).update({unread_count: entriesCount })
+          await Stream.where({id: s}).decrement('unread_count', entriesCount)
         }
         await Entry.where(function(){
           this.where('account_id',account).andWhere('read_at', null).andWhere('published_at', '>=', time)
@@ -191,7 +191,7 @@ class StreamsController {
         await Entry.where(function(){
           this.where('read_at', null).andWhere('stream_id', id)
         }).update({read_at: Date.now()})
-        await Stream.where({id: id}).update({unread_count: 0})
+        await Stream.where({id: id}).update({ unread_count: 0 })
         break
       case 'category':
         let categories = await Category.withStreams(account, id)
@@ -204,7 +204,7 @@ class StreamsController {
           }).count()
           var entriesCount = cEntries[0]["count(*)"]
           unreadStreams[s] = entriesCount
-          await Stream.where({id: s}).update({unread_count: entriesCount })
+          await Stream.where({id: s}).update({ unread_count: 0 })
         }
         await Entry.where(function(){
           this.where('account_id',account).andWhere('read_at', null).whereIn('stream_id', streams)

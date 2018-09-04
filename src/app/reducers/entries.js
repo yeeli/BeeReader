@@ -71,13 +71,13 @@ const Entries = (state = defaultState, action) => {
         })
       } else {
         var entries = state.items.map( item => {
-          if(action.streams.indexOf(item.id)) {
+          if(_.includes(action.streams, _.toString(item.stream_id))) {
             item['read_at'] = Date.now()
           }
           return item
         })
         var filterEntries = state.filterItems.map( item => {
-          if(action.streams.indexOf(item.id)) {
+          if(_.includes(action.streams, _.toString(item.stream_id))) {
             item['read_at'] = Date.now()
           }
           return item

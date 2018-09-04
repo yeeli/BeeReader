@@ -42,7 +42,7 @@ class AddStream extends Component {
         fullWidth={true}
         className="dialog"
       >
-        <DialogTitle id="alert-dialog-title" className="dialog-title" >
+        <DialogTitle id="alert-dialog-title" className="dialog-title" style={{margin: 0}}>
             <FormattedMessage id="addSubscription" defaultMessage="Add Subscription" />
         </DialogTitle>
         <DialogContent>
@@ -58,11 +58,11 @@ class AddStream extends Component {
             { this.state.inputError && <FormHelperText id="name-helper-text">{this.state.errorMsg}</FormHelperText> }
             </FormControl>
         </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" onClick={ this.handleClose } color="default">
+        <DialogActions style={{margin: 0, padding: '0 24px 20px'}}>
+          <Button onClick={ this.handleClose } color="default">
             <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
-          <Button variant="outlined" onClick={ this.handleSubmit } color="primary" autoFocus>
+          <Button variant="contained" onClick={ this.handleSubmit } color="primary" autoFocus>
             <FormattedMessage id="search" defaultMessage="Search" />
 
           </Button>
