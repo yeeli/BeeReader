@@ -26,6 +26,7 @@ const Entries = (state = defaultState, action) => {
       }
     case EntriesActions.ADD:
       let newEntries = _.union(action.items, state.items)
+      newEntries = _.orderBy(newEntries, 'published_at', 'desc')
       return {
         ...state,
         isFetching: false,

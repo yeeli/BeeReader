@@ -2,6 +2,7 @@ export default {
   locale: 'zh-CN',
   parentLocale: "zh",
   addSubscription: '添加新订阅',
+  editSubscription: '编辑订阅内容',
   all: '全部',
   today: '今日',
   unread: '未读',
@@ -9,8 +10,10 @@ export default {
   search: '搜索',
   cancel: '取消',
   subscribe: '订阅',
+  update: '更新',
   urlBlank: 'URL未填写',
   newFolder: '新目录',
   rssDesc: 'RSS 介绍',
-  folderTitle: '目录'
+  folderTitle: '目录',
+  title: '标题'
 }

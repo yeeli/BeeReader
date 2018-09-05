@@ -16,6 +16,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid'
+import FormControl from '@material-ui/core/FormControl'
 
 import AddIcon from '@material-ui/icons/AddCircle'
 import {injectIntl, FormattedMessage} from 'react-intl'
@@ -24,7 +25,7 @@ function Transition(props) {
   return <Slide direction="down" {...props} />;
 }
 
-class SubscribeStream extends Component {
+class EditStream extends Component {
   state = {
     checked: [],
     folderName: ''
@@ -62,19 +63,26 @@ class SubscribeStream extends Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         fullWidth={true}
-        className="dialog-subscribe-stream dialog"
+        className="dialog-edit-stream dialog"
       >
         <DialogTitle  id="alert-dialog-title" className="dialog-title" style={{margin: 0, borderBottom: '1px solid #e5e5e5'}}>
-          <FormattedMessage id="addSubscription" defaultMessage="Add Subscription"/>
-      </DialogTitle>
+          <FormattedMessage id="editSubscription" defaultMessage="Edit Subscription"/>
+        </DialogTitle>
         <DialogContent className="dialog-ss-bd">
           <div className="block">
             <div className="block-hd"><h4><FormattedMessage id="rssDesc" defaultMessage="Rss description"/></h4></div>
             <div className="block-bd">
-              <div className="stream-info">
-                <h3>{rss.title} - {rss.feed_url}</h3>            
-                <p>{rss.description}</p>
-              </div>
+              <FormControl fullWidth className="form-control" >
+                  <Input
+                    placeholder={ intl.formatMessage({id: "title", defaultMessage: "Title"}) }
+                    inputProps={{
+                      'aria-label': 'Description',
+                    }}
+                    value={ this.state.folderName }
+                    style={{width: '100%', fontSize: '14px'}}
+                    onChange={ this.handleChangeFolderName }
+                  />
+              </FormControl>
             </div>
           </div>
           <div className="block">
@@ -96,6 +104,7 @@ class SubscribeStream extends Component {
             </div>
           </div>
           <div className="new-category">
+            <FormControl fullWidth className="form-control" >
             <Grid container >
               <Grid item xs={11} style={{paddingTop: '0', paddingBottom: '0'}}>
                 <Input
@@ -112,14 +121,15 @@ class SubscribeStream extends Component {
                 <IconButton disableRipple className={'content-button'} style={{width: '20px', height: '24px', marginTop: '3px', marginLeft: '20px'}}  onClick={ this.props.onNewFolder(this.state.folderName) } ><AddIcon /></IconButton>
               </Grid>
             </Grid>
+            </FormControl>
           </div>
         </DialogContent>
         <DialogActions style={{margin: 0, padding: '20px 24px 20px', borderTop: '1px solid #e5e5e5'}}>
           <Button onClick={this.props.onClose} color="default">
             <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
-          <Button variant="contained" onClick={ this.props.onSubscribe(this.state.checked) } color="primary" autoFocus>
-            <FormattedMessage id="subscribe" defaultMessage="Subscribe" />
+          <Button variant="contained" onClick={ this.props.onUpdate(this.state.checked) } color="primary" autoFocus>
+            <FormattedMessage id="update" defaultMessage="Update" />
           </Button>
         </DialogActions>
       </Dialog>
@@ -130,4 +140,4 @@ class SubscribeStream extends Component {
 
 import './index.sass'
 
-export default injectIntl(SubscribeStream)
+export default injectIntl(EditStream)

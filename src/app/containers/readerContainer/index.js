@@ -13,6 +13,7 @@ import Feeds from '~/components/feeds'
 import Content from '~/components/content'
 import AddStreamDialog from '~/components/dialogs/addStream'
 import SubscribeStreamDialog from '~/components/dialogs/subscribeStream'
+import EditStreamDialog from '~/components/dialogs/editStream'
 
 // Actions
 import  * as AppActions from '~/actions/app'
@@ -40,6 +41,7 @@ class ReaderContainer extends Component {
     contentWidth: 500,
     openNewStream: false,
     openSubscribeStream: false,
+    openEditStream: false,
     tipsOpen: false,
     tipsMsg: '',
     subscribeRss: {}
@@ -159,8 +161,18 @@ class ReaderContainer extends Component {
   }
 
   handleEditStream = (stream) => {
-    this.setState({ openSubscribeStream: true })
+    this.setState({ openEditStream: true })
   }
+
+  handleCloseEditStream = () => {
+    this.setState({ openEditStream: false })
+  }
+
+  handleUpdateStream = (categories = []) => event => {
+    //this.props.dispatch(StreamsActions.addStream(feed_url, categories))
+    //this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
+  }
+
 
   handleNewFolder = name => event => {
     this.props.dispatch(CategoriesActions.addCategory(name))
@@ -252,6 +264,13 @@ class ReaderContainer extends Component {
           onNewFolder = { this.handleNewFolder }
           categories = {Categories.items} 
           rss={this.state.subscribeRss}
+        />
+        <EditStreamDialog 
+          open={ this.state.openEditStream } 
+          onClose={ this.handleCloseEditStream } 
+          onUpdate = { this.handleUpdateStream }
+          onNewFolder = { this.handleNewFolder }
+          categories = {Categories.items} 
         />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal:  'center' }}
