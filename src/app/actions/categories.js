@@ -1,11 +1,24 @@
 export const REQUEST = "CATEGORIES_REQUEST"
 export const LOAD = "CATEGORIES_LOAD"
 export const ADD = "CATEGORIES_ADD"
-export const ADD_STREAM = "CATEGORIES_ADD_STREAM"
+export const CHANGE = "CATEGORIES_CHANGE"
 
 export const load = (items) => ({
   type: LOAD,
   items: items
+})
+
+
+export const add = (item) => ({
+  type: ADD,
+  item: item
+})
+
+export const change = (add_ids, delete_ids, stream) => ({
+  type: CHANGE,
+  add_ids, add_ids,
+  delete_ids, delete_ids,
+  stream: stream
 })
 
 export const fetchCategories = (account) => (dispatch, getState) => {
@@ -20,10 +33,6 @@ export const fetchCategories = (account) => (dispatch, getState) => {
   })
 }
 
-export const add = (item) => ({
-  type: ADD,
-  item: item
-})
 
 export const addCategory = (title) => (dispatch, state) =>  {
   return dispatch({
@@ -39,3 +48,5 @@ export const addCategory = (title) => (dispatch, state) =>  {
     dispatch(add(res.data.category))
   })
 }
+
+

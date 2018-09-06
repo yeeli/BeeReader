@@ -16,7 +16,7 @@ const Categories = (state = defaultState, action) => {
         isLoaded: false
       }
     case CategoriesActions.LOAD:
-      let categoriesList = action.items.map( (item) => {
+        var categoriesList = action.items.map( (item) => {
         let idsStr = _.toString(item.stream_ids)
         if(_.isEmpty(idsStr)){
           item['stream_ids'] = []
@@ -38,6 +38,20 @@ const Categories = (state = defaultState, action) => {
         isFetching: false,
         isLoaded: true,
         item: state.item
+      }
+    case CategoriesActions.CHANGE:
+      var categoriesList = state.items.map((item) => {
+        if(_.includes(action.add_ids, item.id)){
+          item.stream_ids.push(_.toString(action.stream))
+        }
+        if(_.includes(action.delete_ids, item.id)){
+          _.remove(item.stream_ids, (c) => { return c == _.toString(action.stream) })
+        }
+        return item
+      })
+      return {
+        ...state,
+        items: categoriesList
       }
     default:
       return state

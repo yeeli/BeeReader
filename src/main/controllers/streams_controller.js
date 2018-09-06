@@ -103,7 +103,7 @@ class StreamsController {
     let { id, title } = this.request.params
     let categories = this.request.params.categories || []
     let res = 1 
-    if(!_.isNil(title)){
+    if(!_.isNil(title) && !_.isEmpty(title)){
       res = await Stream.where({id: id}).update({title: title})
     }
     let folders = []
@@ -116,12 +116,15 @@ class StreamsController {
       // Update Folder list
       if(!_.isEmpty(categories)){
         await Folder.where({source_type: 'Stream', source_id: id}).update({state: 'inactive'})
+        var cfolders = await Folder.where({source_type: 'Stream', source_id: id})
+        folders = cfolders
       } else {
-        let cfolders = await Folder.where({source_type: 'Stream', source_id: id})
+        var cfolders = await Folder.where({source_type: 'Stream', source_id: id})
         if(cfolders.length > 0) {
           await Folder.where({source_type: 'Stream', source_id: id}).update({state: 'active'})
+          folders = cfolders
         } else {
-          folder = await Folder.create({source_type: 'Stream', source_id: id, account_id: stream.account_id, state: 'active'})
+          var folder = await Folder.create({source_type: 'Stream', source_id: id, account_id: stream.account_id, state: 'active'})
           folders.push(folder)
         }
       }
@@ -131,7 +134,7 @@ class StreamsController {
         Stream.createCategoryStreams(cid, stream.id)
         let category_folders = await Folder.where({source_type: 'Category', source_id: cid})
         if(category_folders.length < 1 ) {
-          let folder = await Folder.create({ source_type: 'Category', source_id: cid, account_id: stream.account_id, state: 'active'})
+          var folder = await Folder.create({ source_type: 'Category', source_id: cid, account_id: stream.account_id, state: 'active'})
           folders.push(folder)
         }
       }
@@ -143,8 +146,9 @@ class StreamsController {
         meta: { status: 'success' },
         data: { 
           stream: stream,
-          new_folders: folders,
-          categories: categories
+          folders: folders,
+          add_ids: add_ids,
+          delete_ids: delete_ids
         }
       }
     } else {

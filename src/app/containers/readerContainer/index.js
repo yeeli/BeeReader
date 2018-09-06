@@ -177,7 +177,7 @@ class ReaderContainer extends Component {
 
   handleUpdateStream = (id, title, categories = []) => event => {
     this.props.dispatch(StreamsActions.updateStream(id, title, categories))
-    //this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
+    this.setState({ openEditStream: false, tipsOpen: true , tipsMsg: 'Update Success' })
   }
 
 

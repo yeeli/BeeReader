@@ -123,9 +123,11 @@ export const updateStream = (id, title, categories) => (dispatch, getState) => {
     }
   }).then(res => {
     if(res.meta.status === "success") {
+      const { add_ids, delete_ids } = res.data
       if(!_.isEmpty(res.data.new_folders)){
         dispatch(FoldersActions.add(res.data.new_folders))
       }
+      dispatch(CategoriesActions.change(add_ids, delete_ids, id))
     }
   })
 }

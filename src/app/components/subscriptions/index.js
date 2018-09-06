@@ -41,10 +41,15 @@ class Subscriptions extends Component {
     menu.popup(remote.getCurrentWindow())
   }
 
-  setStream = (stream, selectedItem) => {
-    let selected = stream.id == selectedItem.id && selectedItem.type == "stream"
+  setStream = (stream, selectedItem, category) => {
+    let selected = false
+    if(_.isNil(category)) {
+      selected = stream.id == selectedItem.id && selectedItem.type == "stream"
+    } else {
+      selected = stream.id == selectedItem.id && selectedItem.type == "stream" && selectedItem.category == category
+    }
     return (
-      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={ this.props.onFilter({ type: 'stream', id: stream.id}) } onContextMenu={ this.rightMenu(stream) }>
+      <MenuItem selected={selected} className="subscription-item" key={stream.id} onClick={ this.props.onFilter({ type: 'stream', id: stream.id, category: category}) } onContextMenu={ this.rightMenu(stream) }>
         <ListItemIcon>
           { stream.sync ? <ToysIcon style={{ color: '#fff', fontSize: '15px', marginRight: 0}}  className="icon-spin"/> : <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/> }
         </ListItemIcon>
@@ -83,7 +88,7 @@ class Subscriptions extends Component {
         </MenuItem>
           <Collapse in={ cateOpened } timeout="auto" unmountOnExit >
             <MenuList disablePadding className="category-subscriptions">
-              { streams.map((stream) => { return this.setStream(stream, selectedItem) }) }
+              { streams.map((stream) => { return this.setStream(stream, selectedItem, category.id) }) }
             </MenuList>
           </Collapse>
       </div>
@@ -109,12 +114,14 @@ class Subscriptions extends Component {
       }
       if(folder.source_type === "Category") {
         let category = _.find(categories, {id: folder.source_id})
+        if(category.stream_ids.length > 0) {
         let isOpen = _.includes(app.openFolders, category.id)
         return (
           <div key={folder.id}>
             { this.setCategory(category, selectedItem, isOpen)  }
         </div>
         )
+        }
       }
     })
   }
