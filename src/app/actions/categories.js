@@ -1,6 +1,7 @@
 export const REQUEST = "CATEGORIES_REQUEST"
 export const LOAD = "CATEGORIES_LOAD"
 export const ADD = "CATEGORIES_ADD"
+export const ADD_STREAM = "CATEGORIES_ADD_STREAM"
 
 export const load = (items) => ({
   type: LOAD,

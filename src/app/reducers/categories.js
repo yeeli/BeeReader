@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import * as CategoriesActions from '~/actions/categories'
 
 const defaultState = {
@@ -15,11 +16,20 @@ const Categories = (state = defaultState, action) => {
         isLoaded: false
       }
     case CategoriesActions.LOAD:
+      let categoriesList = action.items.map( (item) => {
+        let idsStr = _.toString(item.stream_ids)
+        if(_.isEmpty(idsStr)){
+          item['stream_ids'] = []
+        } else {
+          item['stream_ids'] = idsStr.split(",") 
+        }
+        return item
+      })
       return {
         ...state,
         isFetching: false,
         isLoaded: true,
-        items: action.items
+        items: categoriesList
       }
     case CategoriesActions.ADD:
       state.items.push(action.item)

@@ -44,7 +44,8 @@ class ReaderContainer extends Component {
     openEditStream: false,
     tipsOpen: false,
     tipsMsg: '',
-    subscribeRss: {}
+    subscribeRss: {},
+    editStream: {item: {}, checked: []}
   }
 
   constructor(props) {
@@ -161,15 +162,21 @@ class ReaderContainer extends Component {
   }
 
   handleEditStream = (stream) => {
-    this.setState({ openEditStream: true })
+    let checked = []
+    for(let category of this.props.Categories.items) {
+      if(_.includes(category.stream_ids, _.toString(stream.id))){
+        checked.push(category.id)
+      }
+    }
+    this.setState({ openEditStream: true, editStream: { item: stream, checked: checked } })
   }
 
   handleCloseEditStream = () => {
-    this.setState({ openEditStream: false })
+    this.setState({ openEditStream: false  })
   }
 
-  handleUpdateStream = (categories = []) => event => {
-    //this.props.dispatch(StreamsActions.addStream(feed_url, categories))
+  handleUpdateStream = (id, title, categories = []) => event => {
+    this.props.dispatch(StreamsActions.updateStream(id, title, categories))
     //this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
   }
 
@@ -271,6 +278,8 @@ class ReaderContainer extends Component {
           onUpdate = { this.handleUpdateStream }
           onNewFolder = { this.handleNewFolder }
           categories = {Categories.items} 
+          stream = { this.state.editStream.item }
+          checked = { this.state.editStream.checked }
         />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal:  'center' }}

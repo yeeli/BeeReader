@@ -89,8 +89,7 @@ export const filterEntries = () => (dispatch, getState) => {
   if(selected.type == "category") {
     dispatch(AppActions.openFolder(selected.id))
     let category = _.find(categories, { id: selected.id})
-    let idsStr = category.stream_ids || ""
-    ids = idsStr.split(",")
+    ids = category.stream_ids
   }
   let entriesList = filter(currentAccount.id, selected.type, entries, ids)
   return dispatch({

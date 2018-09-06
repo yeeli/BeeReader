@@ -27,8 +27,13 @@ function Transition(props) {
 
 class EditStream extends Component {
   state = {
+    title: '',
     checked: [],
-    folderName: ''
+    folderName: '',
+    isOpen: false
+  }
+  constructor(props) {
+    super(props);
   }
 
   handleToggle = value => () => {
@@ -53,8 +58,26 @@ class EditStream extends Component {
     })
   }
 
+  handleChangeTitle = (event) => {
+    this.setState({
+      title: event.target.value
+    })
+  }
+
+  static getDerivedStateFromProps(prevProps, prevState) {
+    if(prevProps.open && !prevState.isOpen) {
+      return { title: prevProps.stream.title, checked: prevProps.checked, folderName: '', isOpen: true }
+    } 
+    else if( prevProps.open == false ) {
+      return { isOpen: false }
+    }
+    else {
+      return prevState
+    }
+  }
+  
   render() {
-    const { categories, rss, intl } = this.props
+    const { categories, stream, intl } = this.props
     return (
       <Dialog
         open={this.props.open}
@@ -78,9 +101,9 @@ class EditStream extends Component {
                     inputProps={{
                       'aria-label': 'Description',
                     }}
-                    value={ this.state.folderName }
+                    value={ this.state.title }
                     style={{width: '100%', fontSize: '14px'}}
-                    onChange={ this.handleChangeFolderName }
+                    onChange={ this.handleChangeTitle }
                   />
               </FormControl>
             </div>
@@ -128,7 +151,7 @@ class EditStream extends Component {
           <Button onClick={this.props.onClose} color="default">
             <FormattedMessage id="cancel" defaultMessage="Cancel" />
           </Button>
-          <Button variant="contained" onClick={ this.props.onUpdate(this.state.checked) } color="primary" autoFocus>
+          <Button variant="contained" onClick={ this.props.onUpdate(stream.id, this.state.title, this.state.checked) } color="primary" autoFocus>
             <FormattedMessage id="update" defaultMessage="Update" />
           </Button>
         </DialogActions>

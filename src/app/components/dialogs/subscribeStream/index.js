@@ -16,6 +16,9 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid'
+import FormControl from '@material-ui/core/FormControl'
+
+
 
 import AddIcon from '@material-ui/icons/AddCircle'
 import {injectIntl, FormattedMessage} from 'react-intl'
@@ -50,6 +53,14 @@ class SubscribeStream extends Component {
     this.setState({
       folderName: event.target.value
     })
+  }
+
+  static getDerivedStateFromProps(prevProps, prevState) {
+    if( prevProps.open == false ) {
+      return { checked: [], folderName: '' }
+    } else {
+      return prevState
+    }
   }
 
   render() {
@@ -96,6 +107,7 @@ class SubscribeStream extends Component {
             </div>
           </div>
           <div className="new-category">
+            <FormControl fullWidth className="form-control" >
             <Grid container >
               <Grid item xs={11} style={{paddingTop: '0', paddingBottom: '0'}}>
                 <Input
@@ -112,6 +124,7 @@ class SubscribeStream extends Component {
                 <IconButton disableRipple className={'content-button'} style={{width: '20px', height: '24px', marginTop: '3px', marginLeft: '20px'}}  onClick={ this.props.onNewFolder(this.state.folderName) } ><AddIcon /></IconButton>
               </Grid>
             </Grid>
+            </FormControl>
           </div>
         </DialogContent>
         <DialogActions style={{margin: 0, padding: '20px 24px 20px', borderTop: '1px solid #e5e5e5'}}>

@@ -62,8 +62,7 @@ class Subscriptions extends Component {
 
   setCategory = (category, selectedItem, opened) => {
     let selected = category.id == selectedItem.id && selectedItem.type == "category"
-    let idsStr = category.stream_ids || ""
-    let streamIds = idsStr.split(",")
+    let streamIds = category.stream_ids
     let streams = _.filter(this.props.streams.items, (stream) => { 
       return _.includes(streamIds, stream.id.toString())
     })

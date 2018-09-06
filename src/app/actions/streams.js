@@ -118,7 +118,13 @@ export const updateStream = (id, title, categories) => (dispatch, getState) => {
       params: {
         id: id,
         title: title,
-        categories
+        categories: categories
+      }
+    }
+  }).then(res => {
+    if(res.meta.status === "success") {
+      if(!_.isEmpty(res.data.new_folders)){
+        dispatch(FoldersActions.add(res.data.new_folders))
       }
     }
   })
