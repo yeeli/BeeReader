@@ -104,6 +104,9 @@ class Subscriptions extends Component {
 
     return items.map( folder => {
       let selected = folder.source_id == selectedItem
+      if(folder.state == "inactive" ){
+        return false
+      }
       if(folder.source_type === "Stream") {
         let stream = _.find(streams, {id: folder.source_id})
         return ( 

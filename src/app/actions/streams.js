@@ -78,7 +78,7 @@ export const addStream = (url, categories) => (dispatch, getState) => {
       let stream = res.data.stream
       dispatch(add(stream))
       dispatch(CategoriesActions.fetchCategories(currentAccount))
-      dispatch(FoldersActions.add(res.data.folders))
+      dispatch(FoldersActions.change(res.data.folders))
       dispatch(EntriesActions.syncEntries(stream.id))
     }
   })
@@ -124,9 +124,7 @@ export const updateStream = (id, title, categories) => (dispatch, getState) => {
   }).then(res => {
     if(res.meta.status === "success") {
       const { add_ids, delete_ids } = res.data
-      if(!_.isEmpty(res.data.new_folders)){
-        dispatch(FoldersActions.add(res.data.new_folders))
-      }
+      dispatch(FoldersActions.change(res.data.folders))
       dispatch(CategoriesActions.change(add_ids, delete_ids, id))
     }
   })

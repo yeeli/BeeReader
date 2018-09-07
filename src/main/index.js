@@ -2,7 +2,7 @@ if(!process.env.NODE_ENV){
   process.env.NODE_ENV = 'production'
 }
 
-const { app, BrowserWindow, Tray, Menu } =  require('electron')
+const { app, BrowserWindow, Tray, Menu, session } =  require('electron')
 const path = require('path');
 const url = require('url');
 const paths = require('./config/paths')
@@ -16,6 +16,8 @@ if(!fs.existsSync(dataPath)) {
 
 require('./db/migrate')
 require('./router')
+const filter = require('./filter')
+
 
 
 let mainWindow
@@ -60,16 +62,19 @@ const createWindow = async () =>{
   }
 
   mainWindow = new BrowserWindow(win)
+  let loadUrl
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL("http://localhost:5000/dist/main.html")
+    loadUrl = "http://localhost:5000/dist/main.html"
   } else {
-    mainWindow.loadURL(url.format({
+    loadUrl = url.format({
       pathname: path.join(paths.appBuild, 'main.html'),
       protocol: 'file:',
       slashes: true
-    }))
+    })
   }
+
+  mainWindow.loadURL(loadUrl)
 
   //mainWindow.webContents.openDevTools();
   //const ses = mainWindow.webContents.session
@@ -77,6 +82,7 @@ const createWindow = async () =>{
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+  filter()
 
 
 /*  tray = new Tray(path.join(paths.publicSrc, 'assets/baseline-notifications.png'))

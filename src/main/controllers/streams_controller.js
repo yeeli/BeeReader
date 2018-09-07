@@ -122,6 +122,7 @@ class StreamsController {
         var cfolders = await Folder.where({source_type: 'Stream', source_id: id})
         if(cfolders.length > 0) {
           await Folder.where({source_type: 'Stream', source_id: id}).update({state: 'active'})
+          var cfolders = await Folder.where({source_type: 'Stream', source_id: id})
           folders = cfolders
         } else {
           var folder = await Folder.create({source_type: 'Stream', source_id: id, account_id: stream.account_id, state: 'active'})
@@ -136,6 +137,8 @@ class StreamsController {
         if(category_folders.length < 1 ) {
           var folder = await Folder.create({ source_type: 'Category', source_id: cid, account_id: stream.account_id, state: 'active'})
           folders.push(folder)
+        } else {
+          folders.push(category_folders[0])
         }
       }
       if(!_.isEmpty(delete_ids)){

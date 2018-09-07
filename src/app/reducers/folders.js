@@ -29,6 +29,20 @@ const Folders = (state = defaultState, action) => {
         isLoaded: true,
         items: folders
       }
+    case FoldersActions.CHANGE:
+      var folders = state.items
+      _.each(action.items, (item) => {
+        var index = _.findIndex(folders, {id: item.id})
+        if(index != -1) {
+          folders[index] = item
+        } else {
+          folders.push(item)
+        }
+      })
+      return {
+        ...state,
+        items: folders
+      }
     case FoldersActions.DELETE:
       var folders = state.items
       _.remove(folders, (item) => { return item.source_type == "Stream" && item.source_id == action.id })
