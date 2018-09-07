@@ -1,0 +1,23 @@
+{
+  "en": {
+    "TechCrunch": "https://techcrunch.com/feed/",
+    "InfoWorld": "https://www.infoworld.com/index.rss",
+    "Engadget": "https://www.engadget.com/rss.xml",
+    "Hacker News": "https://news.ycombinator.com/rss",
+    "Product Hunt": "https://www.producthunt.com/feed",
+    "ReadWriteWeb": "https://readwrite.com/feed",
+    "Mashable!": "https://mashable.com/rss"
+  },
+  "cn": {
+    "36氪": "https://www.36kr.com/feed",
+    "爱范儿": "https://www.ifanr.com/feed",
+    "品玩": "https://www.pingwest.com/feed",
+    "腾讯科技": "http://n.rss.qq.com/rss/tech_rss.php",
+    "虎嗅": "https://www.huxiu.com/rss/0.xml",
+    "好奇心日报": "https://www.qdaily.com/feed",
+    "极客公园": "https://www.geekpark.net/rss",
+    "动点科技": "https://cn.technode.com/rss",
+    "钛媒体": "http://www.tmtpost.com/feed",
+    "锋科技": "https://tech.feng.com/rss.xml"
+  }
+}

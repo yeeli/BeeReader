@@ -11,6 +11,9 @@ const { ipcRenderer } = require('electron')
 import * as AccountsActions from '~/actions/accounts'
 import * as AppActions from '~/actions/app'
 
+const rssJson = require('~/config/rss.json')
+console.log(rssJson)
+
 
 class AppContainer extends Component {
   componentDidUpdate() {
