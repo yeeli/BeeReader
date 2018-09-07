@@ -4,6 +4,7 @@ import { ConnectedRouter } from 'react-router-redux'
 
 import AppContainer from '~/containers/appContainer'
 import ReaderContainer from '~/containers/readerContainer'
+import GeneralContainer from '~/containers/preferences/generalContainer'
 
 
 const Routers = ({history}) =>(
@@ -11,6 +12,7 @@ const Routers = ({history}) =>(
     <Switch>
       <Route exact path="/" component={AppContainer}/>
       <Route path="/reader" component={ReaderContainer}/>
+      <Route path="/preferences/general" component={GeneralContainer}/>
     </Switch>
   </ConnectedRouter>
 )

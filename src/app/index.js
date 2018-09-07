@@ -14,8 +14,7 @@ import  * as CategoriesActions from '~/actions/categories'
 import  * as StreamsActions from '~/actions/streams'
 import  * as EntriesActions from '~/actions/entries'
 import  * as DataActions from '~/actions/data'
-//import '~/utils/menu'
-
+import SetMenu from '~/utils/menu'
 
 // Disable Electron App Drop File
 document.addEventListener('dragover', function (event) {
@@ -41,6 +40,8 @@ store.dispatch(AccountsActions.fetchAccounts()).then(res => {
     }
   }
 })
+
+SetMenu(store, history)
 
 const render = Component => {
   ReactDOM.render(

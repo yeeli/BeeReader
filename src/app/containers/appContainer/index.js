@@ -15,9 +15,9 @@ import * as AppActions from '~/actions/app'
 class AppContainer extends Component {
   componentDidUpdate() {
     const {Accounts} = this.props
-    if(Accounts.isLoaded && Accounts.items.length == 0 ) {
-      this.props.dispatch(AccountsActions.createAccount('Rss'))
-    }
+    //if(Accounts.isLoaded && Accounts.items.length == 0 ) {
+    //  this.props.dispatch(AccountsActions.createAccount('Rss'))
+    //}
   }
 
   render () {
