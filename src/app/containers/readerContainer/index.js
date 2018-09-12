@@ -56,11 +56,11 @@ class ReaderContainer extends Component {
     const { dispatch, Accounts, App} = this.props 
     window.addEventListener("resize", this.handleWindowResize)
 
-    interact('.resize1').draggable({ onmove: window.dragMoveListener })
-      .on('dragmove', self.handleResizeSubscriptions);
+    //interact('.resize1').draggable({ onmove: window.dragMoveListener })
+    //  .on('dragmove', self.handleResizeSubscriptions);
 
-    interact('.resize2').draggable({ onmove: window.dragMoveListener})
-      .on('dragmove', self.handleResizeFeeds);
+    //interact('.resize2').draggable({ onmove: window.dragMoveListener})
+    //  .on('dragmove', self.handleResizeFeeds);
 
     //Auto Sync Entries Now
     this.timer = setInterval(this.syncEntries, 60000 * 30)

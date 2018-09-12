@@ -37,6 +37,7 @@ export const createAccount = (service) => dispatch => {
       dispatch(AppActions.setCurrentAccount(account))
       dispatch(add(account))
     }
+    return Promise.resolve(res)
   })
 }
 
