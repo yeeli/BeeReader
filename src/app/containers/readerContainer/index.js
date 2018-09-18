@@ -61,6 +61,7 @@ class ReaderContainer extends Component {
 
     //interact('.resize2').draggable({ onmove: window.dragMoveListener})
     //  .on('dragmove', self.handleResizeFeeds);
+    
 
     //Auto Sync Entries Now
     this.timer = setInterval(this.syncEntries, 60000 * 30)
@@ -98,7 +99,7 @@ class ReaderContainer extends Component {
   }
 
   handleResizeSubscriptions = (event) => {
-    var target = this.refs.paneSubscriptions;
+    var target = this.paneSubscriptionsRef;
     var split = event.target
     var x = (parseFloat(split.getAttribute('data-x')) || 0);
 
@@ -111,7 +112,7 @@ class ReaderContainer extends Component {
   }
 
   handleResizeFeeds = (event) => {
-    var target = this.refs.paneFeeds
+    var target = this.paneFeedsRef
     var split = event.target 
     var x = (parseFloat(split.getAttribute('data-x')) || 0)
     // update the element's style 
@@ -141,7 +142,7 @@ class ReaderContainer extends Component {
       if(res.meta.status == "success") {
         this.setState({ subscribeRss: res.data.rss, openNewStream: false, openSubscribeStream: true })
       } else {
-
+        //TODO add search rss error
       }
     })
   }
@@ -152,8 +153,12 @@ class ReaderContainer extends Component {
 
   handleSubscribeStream = (categories = []) => event => {
     const { feed_url } = this.state.subscribeRss
-    this.props.dispatch(StreamsActions.addStream(feed_url, categories))
-    this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
+    this.props.dispatch(StreamsActions.addStream(feed_url, categories)).then(res => {
+      if(res.meta.status =="success") {
+        this.props.dispatch(EntriesActions.syncEntries(stream.id))
+        this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
+      }
+    })
   }
 
 

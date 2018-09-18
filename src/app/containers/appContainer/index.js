@@ -24,7 +24,7 @@ import rssJson from '~/config/rss.json'
 class AppContainer extends Component {
   state = {
     selectedSites: [],
-    subscribing: false,
+    creating: false
   }
 
   handleClickSite = (url) => (event) => {
@@ -40,29 +40,29 @@ class AppContainer extends Component {
 
   handleClickSubscribe = (event) => {
     const {Accounts} = this.props
-    this.setState({ subscribing: true })
+    this.setState({ creating: true })
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
       this.props.dispatch(AccountsActions.createAccount('Rss')).then(res => {
-        for(let item of this.state.selectedSites) {
+        for(let [index,item] of this.state.selectedSites.entries()) {
           this.props.dispatch(StreamsActions.addStream(item))
         }
-        this.setState({ subscribed: true })
+        this.setState({ creating: false })
       })
     }
   }
 
   handleClickSkip = (event) => {
     const {Accounts} = this.props
-    this.setState({ subscribing: true })
+    this.setState({ creating: true })
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
       this.props.dispatch(AccountsActions.createAccount('Rss'))
-      this.setState({ subscribed: true })
+      this.setState({ creating: false })
     }
   }
 
   render () {
     const {Accounts, App} = this.props
-    if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount) ){
+    if( !this.state.creating && Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }
     return (
@@ -102,13 +102,13 @@ class AppContainer extends Component {
           <Button
               variant="contained"
               color="default"
-              disabled={ this.state.subscribing }
+              disabled={ this.state.creating }
               onClick={ this.handleClickSkip }
             >Skip</Button>
             <Button
               variant="contained"
               color="primary"
-              disabled={ this.state.subscribing }
+              disabled={ this.state.creating }
               onClick={ this.handleClickSubscribe }
             >Subscribe</Button>
           </div>

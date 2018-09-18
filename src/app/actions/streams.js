@@ -79,8 +79,8 @@ export const addStream = (url, categories) => (dispatch, getState) => {
       dispatch(add(stream))
       dispatch(CategoriesActions.fetchCategories(currentAccount))
       dispatch(FoldersActions.change(res.data.folders))
-      dispatch(EntriesActions.syncEntries(stream.id))
     }
+    Promise.resolve(res)
   })
 }
 
