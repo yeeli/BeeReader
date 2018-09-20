@@ -17,6 +17,10 @@ import { faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons'
 import * as AccountsActions from '~/actions/accounts'
 import * as AppActions from '~/actions/app'
 import * as StreamsActions from '~/actions/streams'
+import * as CategoriesActions from '~/actions/categories'
+import * as FoldersActions from '~/actions/folders'
+
+import {injectIntl, FormattedMessage} from 'react-intl'
 
 import rssJson from '~/config/rss.json'
 
@@ -46,7 +50,7 @@ class AppContainer extends Component {
         for(let [index,item] of this.state.selectedSites.entries()) {
           this.props.dispatch(StreamsActions.addStream(item))
         }
-        this.setState({ creating: false })
+        this.props.history.push("/reader")
       })
     }
   }
@@ -56,13 +60,12 @@ class AppContainer extends Component {
     this.setState({ creating: true })
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
       this.props.dispatch(AccountsActions.createAccount('Rss'))
-      this.setState({ creating: false })
     }
   }
 
   render () {
     const {Accounts, App} = this.props
-    if( !this.state.creating && Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
+    if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }
     return (
@@ -72,7 +75,7 @@ class AppContainer extends Component {
           <div className="block-sites">
             <div className="block-hd">
               <Typography variant="subheading" gutterBottom>
-                Site Recommends
+              <FormattedMessage id="siteRecommends" defaultMessage="Site Recommends"/>
               </Typography> 
             </div>
             <Grid container  spacing={16} className="listing-sites">
@@ -104,13 +107,18 @@ class AppContainer extends Component {
               color="default"
               disabled={ this.state.creating }
               onClick={ this.handleClickSkip }
-            >Skip</Button>
+            >
+
+              <FormattedMessage id="skip" defaultMessage="Skip"/>
+            </Button>
             <Button
               variant="contained"
               color="primary"
               disabled={ this.state.creating }
               onClick={ this.handleClickSubscribe }
-            >Subscribe</Button>
+            >
+              <FormattedMessage id="subscribe" defaultMessage="Subscribe"/>
+            </Button>
           </div>
         </div>
       </div>
@@ -126,4 +134,4 @@ const mapStateToProps = state => {
 }
 
 
-export default connect(mapStateToProps)(AppContainer)
+export default connect(mapStateToProps)(injectIntl(AppContainer))

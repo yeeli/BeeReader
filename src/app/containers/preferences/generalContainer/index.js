@@ -25,52 +25,55 @@ class GeneralContainer extends Component {
     return (
       <div id="preferences">
         <CssBaseline />
-        <AppBar position="static" color="default" style={{"WebkitAppRegion": "drag", 'paddingTop': '15px', backgroundColor: '#fff'}}>
-          <Toolbar>
-            <IconButton component={Link} color="inherit" aria-label="Menu" to="/reader">
-              <BackIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" style={{marginLeft: '20px'}}>
-              Preferences
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <div className="general-container">
-          <div><span>General</span></div>
-          <Paper className="block-general">
-            <Grid container>
-              <Grid item xs container alignItems="center">
-                Selected Language
-              </Grid>
+        <div className="preferences-hd" style={{"WebkitAppRegion": "drag"}}></div>
+        <div className="preferences-bd">
+          <div className="general-container">
+            <div className="preferences-title">
+              <Toolbar style={{"padding": "0"}}>
+                <IconButton component={Link} color="inherit" aria-label="Menu" to="/reader">
+                  <BackIcon />
+                </IconButton>
+                <Typography variant="title" color="inherit" style={{marginLeft: '20px'}}>
+                  Preferences
+                </Typography>
+              </Toolbar>
+            </div>
+            <div><span>General</span></div>
+            <Paper className="block-general">
+              <Grid container>
+                <Grid item xs container alignItems="center">
+                  Selected Language
+                </Grid>
                 <Grid item xs={4}>
                   <FormControl fullWidth >
-                    <Select>
+                    <Select value="zh_cn">
                       <MenuItem value='en'>English</MenuItem>
                       <MenuItem value='zh_cn'>中文</MenuItem>
                     </Select>
                   </FormControl>
+                </Grid>
               </Grid>
-            </Grid>
-            <Divider style={{margin: '15px 0'}} />
-            <Grid container >
-              <Grid item xs container alignItems="center">
-                Refresh Subscriptions
+              <Divider style={{margin: '15px 0'}} />
+              <Grid container >
+                <Grid item xs container alignItems="center">
+                  Refresh Subscriptions
+                </Grid>
+                <Grid item xs={4}>
+                  <FormControl fullWidth >
+                    <Select value={0}>
+                      <MenuItem value={0}>Never None</MenuItem>
+                      <MenuItem value={10}>Start</MenuItem>
+                      <MenuItem value={20}>Every Minutesy</MenuItem>
+                      <MenuItem value={30}>5 Minutes</MenuItem>
+                      <MenuItem value={30}>15 Minutes</MenuItem>
+                      <MenuItem value={30}>30 Minutes</MenuItem>
+                      <MenuItem value={30}>Every Hours</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
-              <Grid item xs={4}>
-                <FormControl fullWidth >
-                  <Select>
-                    <MenuItem value="">Never None</MenuItem>
-                    <MenuItem value={10}>Start</MenuItem>
-                    <MenuItem value={20}>Every Minutesy</MenuItem>
-                    <MenuItem value={30}>5 Minutes</MenuItem>
-                    <MenuItem value={30}>15 Minutes</MenuItem>
-                    <MenuItem value={30}>30 Minutes</MenuItem>
-                    <MenuItem value={30}>Every Hours</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Paper>
+            </Paper>
+          </div>
         </div>
       </div>
     )

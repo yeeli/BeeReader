@@ -15,5 +15,7 @@ export default {
   newFolder: '新目录',
   rssDesc: 'RSS 介绍',
   folderTitle: '目录',
-  title: '标题'
+  title: '标题',
+  siteRecommends: '推荐网站',
+  skip: '跳过'
 }

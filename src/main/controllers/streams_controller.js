@@ -99,6 +99,16 @@ class StreamsController {
     }
   }
 
+  /* 
+   * /streams/update
+   * 
+   * @desc update stream info
+   *
+   * @params id [Integer] Stream id
+   * @params title [String] Stream old title
+   *
+   */
+
   async update() {
     let { id, title } = this.request.params
     let categories = this.request.params.categories || []
@@ -160,6 +170,18 @@ class StreamsController {
       }
     }
   }
+
+
+  /* 
+   * /streams/makeAllRead
+   * 
+   * @desc Set all Entries read
+   *
+   * @params type [String] read type{'all', 'unrad', today, stream, category}
+   * @params id [Integer] Type ID
+   * @params account [Integer] Account ID
+   *
+   */
 
   async makeAllRead() {
     const { type, id, account } = this.request.params
