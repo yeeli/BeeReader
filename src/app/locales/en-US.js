@@ -1,0 +1,21 @@
+export default {
+  locale: 'en-US',
+  parentLocale: "en",
+  addSubscription: 'Add Subscription',
+  editSubscription: 'Edit Subscription',
+  all: 'All',
+  today: 'Today',
+  unread: 'Unread',
+  articlesCount: '{count} Articles',
+  search: 'Search',
+  cancel: 'Cancel',
+  subscribe: 'Subscribe',
+  update: 'Update',
+  urlBlank: 'URL is blank',
+  newFolder: 'New Folder',
+  rssDesc: 'RSS Description',
+  folderTitle: 'Folder Title',
+  title: 'Title',
+  siteRecommends: 'Site Recommends',
+  skip: 'Skip'
+}

@@ -3,6 +3,11 @@ const Model = require('./model')
 const _ = require('lodash')
 const url = require('url')
 
+const createMulti = async (account, uris) => {
+  for(let [index, item] of uris) {
+
+  }
+}
 
 const createStream = async (account, uri, categories = []) => {
   let streams = await Model.Stream.where({account_id: account, oid: uri})
@@ -47,6 +52,8 @@ const createStream = async (account, uri, categories = []) => {
   }
   return Promise.resolve({ stream: stream, folders: newFolders  })
 }
+
+
 
 
 const createCategory = async (account, name) => {

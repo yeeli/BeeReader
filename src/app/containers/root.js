@@ -10,6 +10,8 @@ import '~/shared/layout.sass'
 
 import locale from '~/utils/locale'
 
+
+
 const theme = createMuiTheme({
   palette: {
     primary: blue
@@ -17,7 +19,7 @@ const theme = createMuiTheme({
 })
 
 const Root = ({ store, history }) =>{
-  let currentLocale = locale.getLocale('zh-CN')
+  let currentLocale = locale.getLocale(store.getState().App.locale)
   return (
   <MuiThemeProvider theme={theme}>
       <IntlProvider locale='zh-CN' messages={currentLocale}>

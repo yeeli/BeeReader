@@ -13,6 +13,8 @@ export const SET_ENTRY = "APP_SET_ENTRY"
 export const OPEN_FOLDER = "APP_OPEN_FOLDER"
 export const CLOSE_FOLDER = "APP_CLOSE_FOLDER"
 
+export const SET_LOCALE = "APP_SET_LOCALE"
+
 export const fetchRss = (url) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_RSS,
@@ -55,4 +57,9 @@ export const openFolder = (id) => ({
 
 export const clear = () => ({
   type: CLEAR
+})
+
+export const setLocale = (lang) => ({
+  type: SET_LOCALE,
+  locale: lang
 })

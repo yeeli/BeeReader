@@ -1,12 +1,17 @@
 import * as AppActions from '~/actions/app'
 import _ from 'lodash'
 
+import { remote } from 'electron'
+const { app } = remote
+
+
 const defaultState = {
   selectedStream: { type: 'all' },
   selectedEntry: null,
   syncing: false,
   currentAccount: {},
-  openFolders: []
+  openFolders: [],
+  locale: app.getLocale()
 }
 
 const App = (state = defaultState, action) => {
@@ -54,6 +59,12 @@ const App = (state = defaultState, action) => {
         ...state,
         openFolders: openFolders
       }
+    case AppActions.SET_LOCALE:
+      return {
+        ...state,
+        locale: action.locale
+      }
+
     default:
       return state
   }

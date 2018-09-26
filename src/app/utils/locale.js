@@ -18,8 +18,11 @@ const getLocale = (lang) => {
     case 'zh-CN':
       data = require('~/locales/zh-CN')
       break
+    case 'en-US':
+      data = require('~/locales/en-US')
+      break
     default:
-      data = require('~/locales/zh-CN')
+      data = require(`~/locales/${lang}`)
       
   }
   return data.default
