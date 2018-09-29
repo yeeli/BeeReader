@@ -55,6 +55,21 @@ class StreamsController {
     })
   }
 
+  /*
+   * /streams/import
+   *
+   * @desc import multi Stream with account
+   *
+   * @params account [Integer] Account id
+   *
+   */
+
+  async import() {
+    let { account, data } = this.request.params
+
+  }
+   
+
   /* 
    * /streams/destroy
    * 

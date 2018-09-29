@@ -1,5 +1,6 @@
 import * as AppActions from '~/actions/app'
 import _ from 'lodash'
+const storage = window.localStorage
 
 import { remote } from 'electron'
 const { app } = remote
@@ -11,7 +12,8 @@ const defaultState = {
   syncing: false,
   currentAccount: {},
   openFolders: [],
-  locale: app.getLocale()
+  locale: app.getLocale(),
+  refresh: "none"
 }
 
 const App = (state = defaultState, action) => {
@@ -60,11 +62,16 @@ const App = (state = defaultState, action) => {
         openFolders: openFolders
       }
     case AppActions.SET_LOCALE:
+      storage["locale"] = action.locale
       return {
         ...state,
         locale: action.locale
       }
-
+    case AppActions.OPEN_IMPORT:
+      return {
+        ...state,
+        openImportOPML: true
+      }
     default:
       return state
   }

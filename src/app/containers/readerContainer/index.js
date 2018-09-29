@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import CssBaseline from '@material-ui/core/CssBaseline'
+
+// Material Ui
 import Snackbar from '@material-ui/core/Snackbar'
 
 import SplitPane from 'react-split-pane'
 import interact from 'interactjs'
+
+import BasicLayout from '~/layouts/basicLayout'
 
 // Components
 import Subscriptions from '~/components/subscriptions'
@@ -61,7 +64,7 @@ class ReaderContainer extends Component {
 
     //interact('.resize2').draggable({ onmove: window.dragMoveListener})
     //  .on('dragmove', self.handleResizeFeeds);
-    
+
 
     //Auto Sync Entries Now
     this.timer = setInterval(this.syncEntries, 60000 * 30)
@@ -72,6 +75,9 @@ class ReaderContainer extends Component {
     this.props.dispatch(AppActions.syncing())
     for(let stream of items) {
       this.props.dispatch(EntriesActions.syncEntries(stream.id))
+    }
+    if(items.length < 1) {
+      this.props.dispatch(AppActions.synced())
     }
   }
 
@@ -122,7 +128,7 @@ class ReaderContainer extends Component {
       this.setState({ feedsWidth: width })
     }
   }
-  
+
 
   // Subscription Events
   handleClickSync = (event) =>  {
@@ -163,7 +169,7 @@ class ReaderContainer extends Component {
 
 
   handleUnsubscribeStream = (id) => {
-   this.props.dispatch(StreamsActions.destroyStream(id)) 
+    this.props.dispatch(StreamsActions.destroyStream(id)) 
   }
 
   handleEditStream = (stream) => {
@@ -230,74 +236,75 @@ class ReaderContainer extends Component {
     }
 
     return (
-      <div id="reader">
-        <CssBaseline />
-        <div className="reader-container split-pane">
-          <div className="pane pane-subscriptions" ref={ this.paneSubscriptionsRef } style={{flex: `0 0 ${subscriptionsWidth}px`}}>
-            <Subscriptions  
-              height={browserHeight} 
-              folders={Folders}
-              categories={Categories}
-              streams= {Streams}
-              app={App}
-              selectedItem={ App.selectedStream }
-              onFilter={ this.handleFilter } 
-              onClickSync={ this.handleClickSync }  
-              onClickNewStream={ this.handleClickNewStream } 
-              onUnsubscribeStream={ this.handleUnsubscribeStream }
-              onEditStream={ this.handleEditStream }
-              syncing={ App.syncing }
-            />
+      <BasicLayout>
+        <div id="reader">
+          <div className="reader-container split-pane">
+            <div className="pane pane-subscriptions" ref={ this.paneSubscriptionsRef } style={{flex: `0 0 ${subscriptionsWidth}px`}}>
+              <Subscriptions  
+                height={browserHeight} 
+                folders={Folders}
+                categories={Categories}
+                streams= {Streams}
+                app={App}
+                selectedItem={ App.selectedStream }
+                onFilter={ this.handleFilter } 
+                onClickSync={ this.handleClickSync }  
+                onClickNewStream={ this.handleClickNewStream } 
+                onUnsubscribeStream={ this.handleUnsubscribeStream }
+                onEditStream={ this.handleEditStream }
+                syncing={ App.syncing }
+              />
+            </div>
+            <div className="resizer vertical resize1"/>
+            <div className="pane pane-feeds" ref={this.paneFeedsRef} style={{flex: `0 0 ${feedsWidth}px`}}>
+              <Feeds 
+                height={ browserHeight } 
+                entries={ Entries.filterItems } 
+                selectedItem={ App.selectedEntry }
+                onClickFeed={ this.handleClickFeed }
+                onMakeAllRead={ this.handleClickMakeAllRead }
+              />
+            </div>
+            <div className="resizer vertical resize2" />
+            <div className="pane pane-content" ref={this.paneContentRef}>
+              { <Content data={Data} content={dataContent} height={ browserHeight } onClose={ this.handleCloseContent } /> }
+            </div>
           </div>
-          <div className="resizer vertical resize1"/>
-          <div className="pane pane-feeds" ref={this.paneFeedsRef} style={{flex: `0 0 ${feedsWidth}px`}}>
-            <Feeds 
-              height={ browserHeight } 
-              entries={ Entries.filterItems } 
-              selectedItem={ App.selectedEntry }
-              onClickFeed={ this.handleClickFeed }
-              onMakeAllRead={ this.handleClickMakeAllRead }
-            />
-          </div>
-          <div className="resizer vertical resize2" />
-          <div className="pane pane-content" ref={this.paneContentRef}>
-            { <Content data={Data} content={dataContent} height={ browserHeight } onClose={ this.handleCloseContent } /> }
-          </div>
+          <AddStreamDialog 
+            open={ this.state.openNewStream } 
+            onClose={ this.handleCloseNewStream } 
+            onSearch={ this.handleSearchStream } 
+          />
+          <SubscribeStreamDialog 
+            open={ this.state.openSubscribeStream } 
+            onClose={ this.handleCloseSubscribeStream } 
+            onSubscribe = { this.handleSubscribeStream }
+            onNewFolder = { this.handleNewFolder }
+            categories = {Categories.items} 
+            rss={this.state.subscribeRss}
+          />
+          <EditStreamDialog 
+            open={ this.state.openEditStream } 
+            onClose={ this.handleCloseEditStream } 
+            onUpdate = { this.handleUpdateStream }
+            onNewFolder = { this.handleNewFolder }
+            categories = {Categories.items} 
+            stream = { this.state.editStream.item }
+            checked = { this.state.editStream.checked }
+          />
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal:  'center' }}
+            open={ this.state.tipsOpen }
+            onClose={this.handleTipsClose }
+            style={{marginTop: '10px'}}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            autoHideDuration={1000}
+            message={ <span id="message-id">{this.state.tipsMsg}</span> }
+          />
         </div>
-        <AddStreamDialog 
-          open={ this.state.openNewStream } 
-          onClose={ this.handleCloseNewStream } 
-          onSearch={ this.handleSearchStream } 
-        />
-        <SubscribeStreamDialog 
-          open={ this.state.openSubscribeStream } 
-          onClose={ this.handleCloseSubscribeStream } 
-          onSubscribe = { this.handleSubscribeStream }
-          onNewFolder = { this.handleNewFolder }
-          categories = {Categories.items} 
-          rss={this.state.subscribeRss}
-        />
-        <EditStreamDialog 
-          open={ this.state.openEditStream } 
-          onClose={ this.handleCloseEditStream } 
-          onUpdate = { this.handleUpdateStream }
-          onNewFolder = { this.handleNewFolder }
-          categories = {Categories.items} 
-          stream = { this.state.editStream.item }
-          checked = { this.state.editStream.checked }
-        />
-        <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal:  'center' }}
-          open={ this.state.tipsOpen }
-          onClose={this.handleTipsClose }
-          style={{marginTop: '10px'}}
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          autoHideDuration={1000}
-          message={ <span id="message-id">{this.state.tipsMsg}</span> }
-        />
-      </div>
+      </BasicLayout>
     )
   }
 }

@@ -17,5 +17,25 @@ export default {
   folderTitle: 'Folder Title',
   title: 'Title',
   siteRecommends: 'Site Recommends',
-  skip: 'Skip'
+  skip: 'Skip',
+  preferences: "Preferences",
+  general: "General",
+  selectedLanguage: "Selected Language",
+  refreshSubscriptions: "Refresh Subscriptions",
+  neverNone: "Never None",
+  start: "Start",
+  everyMinutes: "Every Minutes",
+  fiveMinutes: "5 Minutes",
+  fifteenMinutes: "15 Minutes",
+  thirtyMinutes: "30 Minutes",
+  everyHours: "Every Hours",
+  file: "File",
+  importOPML: "Import OPML",
+  exportOPML: "Export OPML",
+  edit: "Edit",
+  undo: 'Undo',
+  view: "View",
+  subscriptions: "Subscriptions",
+  windows: "Windows"
+
 }

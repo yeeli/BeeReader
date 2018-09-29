@@ -1,28 +1,34 @@
 import { remote } from 'electron'
 const Menu = remote.Menu
 
-const SetMenu = (store, history)  => {
+import  * as AppActions from '~/actions/app'
 
+const SetMenu = (store, history, locale)  => {
+  const intl = (id, defaultMessage) => {
+    return locale[id] ? locale[id] : defaultMessage
+  }
   const template = [
     {
       label: '',
       submenu: [
-        {label: 'Preferences', click() {
+        {label: intl('preferences', 'Preferences'), click() {
           return history.push({pathname: '/preferences/general'})
         }}
       ]
     },
     {
-      label: 'File',
+      label: intl('file', 'File'),
       submenu: [
-        {label: 'Import OPML'},
-        {label: 'Export OPML'}
+        {label: intl('importOPML', "Import OPML"), click() {
+          return history.push({pathname: '/preferences/opml'})
+        }},
+        {label: intl( 'exportOPML', 'Export OPML')}
       ]
     },
     {
-      label: 'Edit',
+      label: intl('edit', 'Edit'),
       submenu: [
-        {role: 'undo'},
+        {role: 'undo', label: intl('undo')},
         {role: 'redo'},
         {type: 'separator'},
         {role: 'cut'},
@@ -33,7 +39,7 @@ const SetMenu = (store, history)  => {
       ]
     },
     {
-      label: 'View',
+      label: intl('view', 'View'),
       submenu: [
         {role: 'reload'},
         {role: 'forcereload'},
@@ -47,7 +53,7 @@ const SetMenu = (store, history)  => {
       ]
     },
     {
-      label: 'Subscriptions',
+      label: intl('subscriptions', 'Subscriptions'),
       submenu: [
         {label: 'Provious'},
         {label: 'Next'}, 
@@ -60,7 +66,7 @@ const SetMenu = (store, history)  => {
       ]
     },
     {
-      label: 'Windows',
+      label: intl('windows', 'Windows'),
       submenu: [
         {role: 'minimize'},
         {role: 'zoom'},

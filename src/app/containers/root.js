@@ -9,7 +9,7 @@ import Routers from '~/routers'
 import '~/shared/layout.sass'
 
 import locale from '~/utils/locale'
-
+import SetMenu from '~/utils/menu'
 
 
 const theme = createMuiTheme({
@@ -20,6 +20,7 @@ const theme = createMuiTheme({
 
 const Root = ({ store, history }) =>{
   let currentLocale = locale.getLocale(store.getState().App.locale)
+  SetMenu(store, history, currentLocale)
   return (
   <MuiThemeProvider theme={theme}>
       <IntlProvider locale='zh-CN' messages={currentLocale}>
