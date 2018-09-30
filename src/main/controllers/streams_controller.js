@@ -66,7 +66,10 @@ class StreamsController {
 
   async import() {
     let { account, data } = this.request.params
-
+    console.log(JSON.parse(data)["data"])
+    this.response.body = {
+      meta: { status: 'success' }
+    }
   }
    
 

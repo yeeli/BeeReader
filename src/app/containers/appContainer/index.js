@@ -92,7 +92,7 @@ class AppContainer extends Component {
                   Object.entries(rssJson["cn"]).map((rss, index) => {
                     return (
                       <Grid item xs={3} key={index}>
-                        <Paper className="site-item" onClick={this.handleClickSite(rss[1])}>
+                        <Paper className="site-item" onClick={this.handleClickSite(rss[1])} color="#fff">
                           <div className="site-action">
                             {this.state.selectedSites.indexOf(rss[1]) === -1 ?
                                 <FontAwesomeIcon icon={faCheckCircle} color="#999"/>
