@@ -85,20 +85,19 @@ const createWindow = async () =>{
   filter()
 
 
-/*  tray = new Tray(path.join(paths.publicSrc, 'assets/baseline-notifications.png'))
+  tray = new Tray(path.join(paths.publicSrc, 'assets/menu.png'))
   const contextMenu = Menu.buildFromTemplate([
-    {label: 'Item1'},
-    {label: 'Item2'}
+    {label: 'News 1'},
   ])
+  //tray.setTitle('This is my application.')
   tray.setContextMenu(contextMenu)
-*/
-
 };
 
 
-app.setName('BeeReader')
-
 app.on('ready', createWindow);
+
+app.setName('BeeReader')
+app.dock.setIcon(path.join(paths.publicSrc, 'assets/icon.png'))
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
