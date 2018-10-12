@@ -15,7 +15,6 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
 // Fontawesome Icons
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons'
 
@@ -23,7 +22,6 @@ import { faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons'
 import BasicLayout from '~/layouts/basicLayout'
 
 // Actions
-
 import * as AccountsActions from '~/actions/accounts'
 import * as AppActions from '~/actions/app'
 import * as StreamsActions from '~/actions/streams'

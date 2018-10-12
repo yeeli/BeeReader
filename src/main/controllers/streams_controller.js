@@ -66,7 +66,12 @@ class StreamsController {
 
   async import() {
     let { account, data } = this.request.params
-    console.log(JSON.parse(data)["data"])
+    let json = JSON.parse(data)["data"]
+    if(_.isArray(json)){
+      console.log("1")
+    } else {
+      console.log("2")
+    }
     this.response.body = {
       meta: { status: 'success' }
     }

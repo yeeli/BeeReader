@@ -3,7 +3,7 @@ const Model = require('./model')
 const _ = require('lodash')
 const url = require('url')
 
-const createMulti = async (account, uris) => {
+const createMultiStream = async (account, uris) => {
   for(let [index, item] of uris) {
 
   }
