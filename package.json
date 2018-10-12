@@ -1,5 +1,6 @@
 {
   "name": "BeeReader",
+  "productName": "BeeReader",
   "version": "1.0.0",
   "main": "src/main/index.js",
   "author": "yeeli",

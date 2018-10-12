@@ -74,6 +74,7 @@ class AppContainer extends Component {
     if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }
+    let sites = rssJson["en"]
     return (
       <BasicLayout>
         <div id="app">
@@ -87,7 +88,7 @@ class AppContainer extends Component {
               </div>
               <Grid container  spacing={16} className="listing-sites">
                 {
-                  Object.entries(rssJson["cn"]).map((rss, index) => {
+                  Object.entries(sites).map((rss, index) => {
                     return (
                       <Grid item xs={3} key={index}>
                         <Paper className="site-item" onClick={this.handleClickSite(rss[1])} color="#fff">
