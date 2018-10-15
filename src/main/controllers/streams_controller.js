@@ -68,9 +68,7 @@ class StreamsController {
     let { account, data } = this.request.params
     let json = JSON.parse(data)["data"]
     if(_.isArray(json)){
-      console.log("1")
     } else {
-      console.log("2")
     }
     this.response.body = {
       meta: { status: 'success' }
