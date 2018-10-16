@@ -26,7 +26,7 @@ class OpmlContainer extends Component {
     super(props)
   }
 
- 
+
   handleUploadOpml = event => {
     let reader = new FileReader()
     let file = event.target.files[0]
@@ -45,8 +45,17 @@ class OpmlContainer extends Component {
     reader.readAsText(file)
   }
 
+  renderSubscription = (data) => {
+    return  !_.isEmpty(data) && data.outline.map((item, index) => {
+      let subscription = item.$
+      return (
+        <div key={index}>{subscription.title}</div>
+      )
+    })  
+  }
+
   render() {
-    console.log(this.state.data)
+    const {data} = this.state
     return (
       <BasicLayout>
         <div id="preferences">
@@ -73,6 +82,9 @@ class OpmlContainer extends Component {
                   <Typography variant="body1" style={{marginTop: '10px', color: '#A9A9A9'}}>Drap File Here</Typography>
                 </label>
               </div>           
+            </div>
+            <div className="opml-text-container">
+              { this.renderSubscription(data) }
             </div>
           </div>
         </div>

@@ -84,6 +84,24 @@ export const addStream = (url, categories) => (dispatch, getState) => {
   })
 }
 
+export const importStream = (url, data) => (dispatch, getState) => {
+  let { currentAccount } = getState().App
+  return dispatch({
+    type: ACTION_REQUEST,
+    sync: {
+      url: 'importStreamsPath',
+      params: {
+        account: currentAccount.id,
+        data: data
+      }
+    }
+  }).then(res => {
+    if( res.meta.status == "success" ) {
+    }
+    Promise.resolve(res)
+  })
+}
+
 export const destroyStream = (id) => (dispatch, getState) => {
   let { currentAccount } = getState().App
   return dispatch({

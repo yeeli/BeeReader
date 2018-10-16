@@ -68,6 +68,7 @@ class StreamsController {
     let { account, data } = this.request.params
     let json = JSON.parse(data)["data"]
     if(_.isArray(json)){
+      await Sync.createMultiStream(account, json) 
     } else {
     }
     this.response.body = {
