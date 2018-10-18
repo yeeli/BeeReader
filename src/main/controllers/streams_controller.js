@@ -67,10 +67,7 @@ class StreamsController {
   async import() {
     let { account, data } = this.request.params
     let json = JSON.parse(data)["data"]
-    if(_.isArray(json)){
-      await Sync.createMultiStream(account, json) 
-    } else {
-    }
+    await Sync.importOpml(account, json) 
     this.response.body = {
       meta: { status: 'success' }
     }

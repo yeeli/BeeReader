@@ -3,23 +3,17 @@ const Model = require('./model')
 const _ = require('lodash')
 const url = require('url')
 
-const importOpml = async (account, opml) => {
-
-}
-
-const createMultiStream = async (account, uris) => {
-  for(let uri of uris) {
-    let streams = await Model.Stream.where({account_id: account, oid: uri})
-    let rss = new Rss(uri)
-    let feed = await rss.getFeed()
+const importOpml = async (account, subscriptions) => {
+  for(let subscription of subscriptions) {
+    let streams = await Model.Stream.where({account_id: account, oid: subscription.link})
     if(streams.length > 0 ) {
       next
     }
     await Model.Stream.create({
       oid: uri,
       account_id: account,
-      title: feed.title,
-      website: feed.link,
+      title: subscription.title,
+      website: subscription.link,
       state: 'active'
     })
   }
@@ -155,6 +149,5 @@ module.exports = {
   syncStream, 
   createStream,
   createCategory,
-  createMultiStream,
   importOpml
 }

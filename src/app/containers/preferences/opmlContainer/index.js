@@ -12,6 +12,13 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import BackIcon from '@material-ui/icons/arrowBack'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+
+
+// Fontawesome Icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 // Layout
 
@@ -19,18 +26,30 @@ import BasicLayout from '~/layouts/basicLayout'
 
 class OpmlContainer extends Component {
   state = {
-    data: []
+    data: [],
+    selectedSites: [],
   }
+
 
   constructor(props) {
     super(props)
   }
 
+  handleClickSite = (url) => (event) => {
+    let sites = this.state.selectedSites
+    let index = sites.indexOf(url)
+    if(index != -1 ){
+      _.pull(sites, url)
+    } else {
+      sites.push(url)
+    }
+    this.setState({selectedSites: sites})
+  }
 
   handleUploadOpml = event => {
     let reader = new FileReader()
     let file = event.target.files[0]
-    if(file.name)
+    if(file && file.name){
       reader.onloadend = () => {
         let result = reader.result
         if(result.match(/\<opml[^\>]*\>/)){
@@ -42,15 +61,52 @@ class OpmlContainer extends Component {
         }
 
       }
-    reader.readAsText(file)
+      reader.readAsText(file)
+    }
+  }
+
+  renderItem = (subscription) => {
+    return (
+      <Grid item xs={6}>
+        <Paper className="site-item" onClick={this.handleClickSite(subscription.xmlUrl)} color="#fff">
+          <div className="site-action">
+            {this.state.selectedSites.indexOf(subscription.xmlUrl) === -1 ?
+                <FontAwesomeIcon icon={faCheckCircle} color="#999"/>
+                :
+                <FontAwesomeIcon icon={faCheckCircle} color="#2196f3"/>
+            }
+
+          </div>
+          <div className="site-name">{subscription.title}</div>
+          <div className="site-rss">{subscription.xmlUrl}</div>
+        </Paper>
+      </Grid>
+    )
   }
 
   renderSubscription = (data) => {
     return  !_.isEmpty(data) && data.outline.map((item, index) => {
       let subscription = item.$
-      return (
-        <div key={index}>{subscription.title}</div>
-      )
+      if(item.outline){
+        return (
+          <div key={index}>
+            <div>{subscription.title}</div>
+            <Grid container  spacing={16} className="listing-sites">
+              { item.outline.map((sitem, index) => {
+                let sub = sitem.$
+                return this.renderItem(sub)
+              }) 
+              }
+            </Grid>
+          </div>
+        )
+      } else {
+        return (
+          <Grid container  spacing={16} className="listing-sites" key={index}>
+            {this.renderItem(subscription)}
+          </Grid>
+        )
+      }
     })  
   }
 
@@ -72,7 +128,7 @@ class OpmlContainer extends Component {
             </div>
           </div>
           <div className="preferences-bd">
-            <div className="general-container">
+            <div className="opml-upload-container">
               <div className="block-opml-upload" >
                 <input id="contained-button-file" type="file" style={{ display: 'none'}}  onChange={ this.handleUploadOpml } />
                 <label htmlFor="contained-button-file">
@@ -83,9 +139,15 @@ class OpmlContainer extends Component {
                 </label>
               </div>           
             </div>
-            <div className="opml-text-container">
-              { this.renderSubscription(data) }
-            </div>
+            { !_.isEmpty(data) && (
+              <div className="opml-text-container">
+                <div>
+                  <span>listing rss</span>
+                </div>
+                { this.renderSubscription(data) }
+              </div>
+            )
+            }
           </div>
         </div>
       </BasicLayout>
