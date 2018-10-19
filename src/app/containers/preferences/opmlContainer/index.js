@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {injectIntl, FormattedMessage} from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -24,6 +25,10 @@ import { faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons'
 
 import BasicLayout from '~/layouts/basicLayout'
 
+
+// Actions
+import * as AppActions from '~/actions/app'
+
 class OpmlContainer extends Component {
   state = {
     data: [],
@@ -35,18 +40,31 @@ class OpmlContainer extends Component {
     super(props)
   }
 
-  handleClickSite = (url) => (event) => {
-    let sites = this.state.selectedSites
-    let index = sites.indexOf(url)
-    if(index != -1 ){
-      _.pull(sites, url)
+  handleClickSite = (rss, parent) => (event) => {
+    let sites = Array.from(this.state.selectedSites)
+    if(parent){
+      var index = _.findIndex(sites, (s) =>{ return s.title == parent.title && s.children })
+      var children = Array.from(sites[index]["children"])
+      var cindex = _.findIndex(children, {'rssUrl': rss.rssUrl})
+      if(cindex != -1 ){
+        _.pull(children, rss)
+      } else {
+        children.push(rss)
+      }
+      sites[index] = {title: parent.title, children: children} 
     } else {
-      sites.push(url)
+      var index = _.findIndex(sites, {'rssUrl': rss.rssUrl})
+      if(index != -1 ){
+        _.pull(sites, rss)
+      } else {
+        sites.push(rss)
+      }
     }
     this.setState({selectedSites: sites})
   }
 
   handleUploadOpml = event => {
+    let that = this
     let reader = new FileReader()
     let file = event.target.files[0]
     if(file && file.name){
@@ -54,10 +72,23 @@ class OpmlContainer extends Component {
         let result = reader.result
         if(result.match(/\<opml[^\>]*\>/)){
           parseString(result, (err, result) => {
-            this.setState({data: result.opml.body[0]})
+            let  data = result.opml.body[0]
+            let opmlData = data.outline.map((item) => {
+              let sub = item.$
+              if(!_.isEmpty(item.outline)) {
+                let children = item.outline.map((sitem) => {
+                  let ssub = sitem.$
+                  return {title: ssub.title, rssUrl: ssub.xmlUrl }
+                })
+                return {title: sub.title, children: children}
+              } else {
+                return {title: sub.title, rssUrl: sub.xmlUrl }
+              }
+            })
+            this.setState({ data: opmlData, selectedSites: opmlData })
           })
         } else {
-          console.log("reader error")
+          that.props.dispatch(AppActions.openTips("please select opml file"))
         }
 
       }
@@ -65,36 +96,35 @@ class OpmlContainer extends Component {
     }
   }
 
-  renderItem = (subscription) => {
+  renderItem = (index, subscription, parent) => {
+    let selectedSites = parent ? _.find(this.state.selectedSites, (s) =>{return s.title == parent.title && s.children})["children"] : this.state.selectedSites 
     return (
-      <Grid item xs={6}>
-        <Paper className="site-item" onClick={this.handleClickSite(subscription.xmlUrl)} color="#fff">
+      <Grid item xs={6} key={`${index}_${subscription.rssUrl}`}>
+        <Paper className="site-item" onClick={this.handleClickSite(subscription, parent)} color="#fff">
           <div className="site-action">
-            {this.state.selectedSites.indexOf(subscription.xmlUrl) === -1 ?
+            { _.findIndex(selectedSites, { "rssUrl": subscription.rssUrl }) === -1 ?
                 <FontAwesomeIcon icon={faCheckCircle} color="#999"/>
                 :
                 <FontAwesomeIcon icon={faCheckCircle} color="#2196f3"/>
             }
 
           </div>
-          <div className="site-name">{subscription.title}</div>
-          <div className="site-rss">{subscription.xmlUrl}</div>
+          <div className="site-name" title={ subscription.title }>{subscription.title}</div>
+          <div className="site-rss" title={subscription.rssUrl }>{subscription.rssUrl}</div>
         </Paper>
       </Grid>
     )
   }
 
   renderSubscription = (data) => {
-    return  !_.isEmpty(data) && data.outline.map((item, index) => {
-      let subscription = item.$
-      if(item.outline){
+    return  data.map((subscription, index) => {
+      if(subscription.children){
         return (
-          <div key={index}>
-            <div>{subscription.title}</div>
+          <div key={index} className="group-subscription">
+            <div className="folder-title">{subscription.title}</div>
             <Grid container  spacing={16} className="listing-sites">
-              { item.outline.map((sitem, index) => {
-                let sub = sitem.$
-                return this.renderItem(sub)
+              { subscription.children.map((sub, i) => {
+                return this.renderItem(i, sub, subscription)
               }) 
               }
             </Grid>
@@ -102,9 +132,11 @@ class OpmlContainer extends Component {
         )
       } else {
         return (
-          <Grid container  spacing={16} className="listing-sites" key={index}>
-            {this.renderItem(subscription)}
-          </Grid>
+          <div key={index} className="group-subscription">
+            <Grid container  spacing={16} className="listing-sites">
+              {this.renderItem(index, subscription)}
+            </Grid>
+          </div>
         )
       }
     })  
@@ -138,16 +170,28 @@ class OpmlContainer extends Component {
                   <Typography variant="body1" style={{marginTop: '10px', color: '#A9A9A9'}}>Drap File Here</Typography>
                 </label>
               </div>           
-            </div>
-            { !_.isEmpty(data) && (
-              <div className="opml-text-container">
-                <div>
-                  <span>listing rss</span>
+              { !_.isEmpty(data) && (
+                <div className="block-listing-opml">
+                  <div className="block-hd">
+                    <FormattedMessage id="opmlRss" defaultMessage="OPML RSS" />
+                  </div>
+                  <div className="block-bd">
+                    { this.renderSubscription(data) }
+                    <div className="opml-actions">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={ this.handleClickImport }
+                      >
+                        <FormattedMessage id="Import" defaultMessage="Import"/>
+                      </Button>
+                    </div>
+                  </div>
+
                 </div>
-                { this.renderSubscription(data) }
-              </div>
-            )
-            }
+              )
+              }
+            </div>
           </div>
         </div>
       </BasicLayout>
@@ -155,6 +199,10 @@ class OpmlContainer extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  const { App } = state
+  return { App }
+}
 
 import './index.sass'
-export default injectIntl(OpmlContainer)
+export default connect(mapStateToProps)(injectIntl(OpmlContainer))

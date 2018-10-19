@@ -17,6 +17,9 @@ export const SET_LOCALE = "APP_SET_LOCALE"
 
 export const OPEN_IMPORT = "APP_OPEN_IMPORT"
 
+export const OPEN_TIPS = "APP_OPEN_TIPS"
+export const CLOSE_TIPS = "APP_CLOSE_TIPS"
+
 export const fetchRss = (url) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_RSS,
@@ -68,4 +71,13 @@ export const setLocale = (lang) => ({
 
 export const openImport = () => ({
   type: OPEN_IMPORT
+})
+
+export const openTips = (msg) => ({
+  type: OPEN_TIPS,
+  message: msg
+})
+
+export const closeTips = () => ({
+  type: CLOSE_TIPS
 })

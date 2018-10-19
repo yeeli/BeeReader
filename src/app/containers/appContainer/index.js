@@ -30,20 +30,25 @@ import * as FoldersActions from '~/actions/folders'
 
 import rssJson from '~/config/rss.json'
 
-
 class AppContainer extends Component {
   state = {
-    selectedSites: [],
-    creating: false
+    selectedSites: rssJson["en"],
+    creating: false,
+    sites: rssJson["en"]
   }
 
-  handleClickSite = (url) => (event) => {
-    let sites = this.state.selectedSites
-    let index = sites.indexOf(url)
+  constructor(props) {
+    super(props)
+    this.setState
+  }
+
+  handleClickSite = (rss) => (event) => {
+    let sites = Array.from(this.state.selectedSites)
+    let index = _.findIndex(sites, {"rssUrl": rss.rssUrl})
     if(index != -1 ){
-      _.pull(sites, url)
+      _.pull(sites, rss)
     } else {
-      sites.push(url)
+      sites.push(rss)
     }
     this.setState({selectedSites: sites})
   }
@@ -70,11 +75,11 @@ class AppContainer extends Component {
   }
 
   render () {
+    console.log(this.state)
     const {Accounts, App} = this.props
     if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }
-    let sites = rssJson["en"]
     return (
       <BasicLayout>
         <div id="app">
@@ -88,20 +93,20 @@ class AppContainer extends Component {
               </div>
               <Grid container  spacing={16} className="listing-sites">
                 {
-                  Object.entries(sites).map((rss, index) => {
+                  this.state.sites.map((rss, index) => {
                     return (
                       <Grid item xs={3} key={index}>
-                        <Paper className="site-item" onClick={this.handleClickSite(rss[1])} color="#fff">
+                        <Paper className="site-item" onClick={this.handleClickSite(rss)} color="#fff">
                           <div className="site-action">
-                            {this.state.selectedSites.indexOf(rss[1]) === -1 ?
+                            {_.findIndex(this.state.selectedSites, {'rssUrl': rss.rssUrl}) === -1 ?
                                 <FontAwesomeIcon icon={faCheckCircle} color="#999"/>
                                 :
                                 <FontAwesomeIcon icon={faCheckCircle} color="#2196f3"/>
                             }
 
                           </div>
-                          <div className="site-name">{rss[0]}</div>
-                          <div className="site-rss">{rss[1]}</div>
+                          <div className="site-name">{rss.title}</div>
+                          <div className="site-rss">{rss.rssUrl}</div>
                         </Paper>
                       </Grid>
                     )

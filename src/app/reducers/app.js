@@ -13,7 +13,9 @@ const defaultState = {
   currentAccount: {},
   openFolders: [],
   locale: app.getLocale(),
-  refresh: "none"
+  refresh: "none",
+  openTips: false,
+  tipsMsg: ''
 }
 
 const App = (state = defaultState, action) => {
@@ -71,6 +73,17 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         openImportOPML: true
+      }
+    case AppActions.OPEN_TIPS:
+      return {
+        ...state,
+        openTips: true,
+        tipsMsg: action.message
+      }
+    case AppActions.CLOSE_TIPS:
+      return {
+        ...state,
+        openTips: false
       }
     default:
       return state

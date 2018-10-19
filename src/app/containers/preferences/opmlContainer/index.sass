@@ -12,22 +12,44 @@
   margin: 0 auto
 
 
-.opml-text-container
-  width: 700px
-  margin: 20px auto 0
-  .site-item
-    padding: 15px
-    overflow: hidden
-    color: #555
-    position: relative
-    cursor: pointer 
-    .site-action
-      position: absolute
-      right: 15px
-      top: 15px
-    .site-rss
-      font-size: 14px
+.block-listing-opml
+  margin-top: 20px
+  .block-bd
+    margin-top: 20px
+    .group-subscription
+      margin-bottom: 10px
+    .folder-title
       color: #999
-      margin-top:  10px
+      font-size: 16px
+      margin-bottom: 10px
+    .site-item
+      padding: 15px
       overflow: hidden
-      text-overflow: ellipsis
+      color: #555
+      position: relative
+      cursor: pointer 
+      .site-action
+        position: absolute
+        right: 15px
+        top: 15px
+      .site-name
+        height: 18px
+        overflow: hidden
+        margin-right: 20px
+        white-space: nowrap
+        text-overflow: ellipsis
+      .site-rss
+        font-size: 14px
+        color: #999
+        margin-top:  10px
+        overflow: hidden
+        text-overflow: ellipsis
+        height: 18px
+        white-space: nowrap
+    .opml-actions
+      width: 100% 
+      display: block
+      padding: 20px 0
+      button
+        margin-right: 40px
+        width: 200px

@@ -1,23 +1,23 @@
 {
-  "en": {
-    "TechCrunch": "https://techcrunch.com/feed/",
-    "InfoWorld": "https://www.infoworld.com/index.rss",
-    "Engadget": "https://www.engadget.com/rss.xml",
-    "Hacker News": "https://news.ycombinator.com/rss",
-    "Product Hunt": "https://www.producthunt.com/feed",
-    "ReadWriteWeb": "https://readwrite.com/feed",
-    "Mashable!": "https://mashable.com/rss"
-  },
-  "cn": {
-    "36氪": "https://www.36kr.com/feed",
-    "爱范儿": "https://www.ifanr.com/feed",
-    "品玩": "https://www.pingwest.com/feed",
-    "腾讯科技": "http://n.rss.qq.com/rss/tech_rss.php",
-    "虎嗅网": "https://www.huxiu.com/rss/0.xml",
-    "好奇心日报": "https://www.qdaily.com/feed",
-    "极客公园": "https://www.geekpark.net/rss",
-    "动点科技": "https://cn.technode.com/rss",
-    "钛媒体": "http://www.tmtpost.com/feed",
-    "锋科技": "https://tech.feng.com/rss.xml"
-  }
+  "en": [
+    { "title": "TechCrunch", "rssUrl": "https://techcrunch.com/feed/" },
+    { "title": "InfoWorld",  "rssUrl": "https://www.infoworld.com/index.rss" },
+    { "title": "Engadget", "rssUrl": "https://www.engadget.com/rss.xml" },
+    { "title": "Hacker News", "rssUrl": "https://news.ycombinator.com/rss" },
+    { "title": "Product Hunt", "rssUrl": "https://www.producthunt.com/feed" },
+    { "title": "ReadWriteWeb", "rssUrl": "https://readwrite.com/feed" },
+    { "title": "Mashable!", "rssUrl": "https://mashable.com/rss" }
+  ],
+  "cn": [
+    { "title": "36氪", "rssUrl": "https://www.36kr.com/feed" },
+    { "title": "爱范儿", "rssUrl": "https://www.ifanr.com/feed" },
+    { "title": "品玩", "rssUrl": "https://www.pingwest.com/feed" },
+    { "title": "腾讯科技", "rssUrl": "http://n.rss.qq.com/rss/tech_rss.php" },
+    { "title": "虎嗅网", "rssUrl": "https://www.huxiu.com/rss/0.xml" },
+    { "title": "好奇心日报", "rssUrl": "https://www.qdaily.com/feed" },
+    { "title": "极客公园", "rssUrl": "https://www.geekpark.net/rss" },
+    { "title": "动点科技", "rssUrl": "https://cn.technode.com/rss" },
+    { "title": "钛媒体", "rssUrl": "http://www.tmtpost.com/feed" },
+    { "title": "锋科技", "rssUrl": "https://tech.feng.com/rss.xml" }
+  ]
 }

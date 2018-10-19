@@ -80,11 +80,11 @@ export const addStream = (url, categories) => (dispatch, getState) => {
       dispatch(CategoriesActions.fetchCategories(currentAccount))
       dispatch(FoldersActions.change(res.data.folders))
     }
-    Promise.resolve(res)
+    return Promise.resolve(res)
   })
 }
 
-export const importStream = (url, data) => (dispatch, getState) => {
+export const importStream = (data) => (dispatch, getState) => {
   let { currentAccount } = getState().App
   return dispatch({
     type: ACTION_REQUEST,

@@ -45,8 +45,6 @@ class ReaderContainer extends Component {
     openNewStream: false,
     openSubscribeStream: false,
     openEditStream: false,
-    tipsOpen: false,
-    tipsMsg: '',
     subscribeRss: {},
     editStream: {item: {}, checked: []}
   }
@@ -160,9 +158,11 @@ class ReaderContainer extends Component {
   handleSubscribeStream = (categories = []) => event => {
     const { feed_url } = this.state.subscribeRss
     this.props.dispatch(StreamsActions.addStream(feed_url, categories)).then(res => {
-      if(res.meta.status =="success") {
+      if(res.meta.status == "success") {
+        let stream = res.data.stream
         this.props.dispatch(EntriesActions.syncEntries(stream.id))
-        this.setState({ openSubscribeStream: false, tipsOpen: true , tipsMsg: 'Subscribe Success' })
+        this.setState({ openSubscribeStream: false })
+        this.props.dispatch(AppActions.openTips('Subscribe Success'))
       }
     })
   }
@@ -188,7 +188,8 @@ class ReaderContainer extends Component {
 
   handleUpdateStream = (id, title, categories = []) => event => {
     this.props.dispatch(StreamsActions.updateStream(id, title, categories))
-    this.setState({ openEditStream: false, tipsOpen: true , tipsMsg: 'Update Success' })
+    this.setState({ openEditStream: false })
+    this.props.dispatch(AppActions.openTips('Update Success'))
   }
 
 
@@ -217,10 +218,6 @@ class ReaderContainer extends Component {
 
   handleCloseContent = (event) => {
     this.props.dispatch(DataActions.clearData())
-  }
-
-  handleTipsClose = (event) => {
-    this.setState({tipsOpen: false})
   }
 
   render () {
@@ -291,17 +288,6 @@ class ReaderContainer extends Component {
             categories = {Categories.items} 
             stream = { this.state.editStream.item }
             checked = { this.state.editStream.checked }
-          />
-          <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal:  'center' }}
-            open={ this.state.tipsOpen }
-            onClose={this.handleTipsClose }
-            style={{marginTop: '10px'}}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
-            autoHideDuration={1000}
-            message={ <span id="message-id">{this.state.tipsMsg}</span> }
           />
         </div>
       </BasicLayout>
