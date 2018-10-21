@@ -28,6 +28,7 @@ import BasicLayout from '~/layouts/basicLayout'
 
 // Actions
 import * as AppActions from '~/actions/app'
+import * as StreamsActions from '~/actions/streams'
 
 class OpmlContainer extends Component {
   state = {
@@ -35,9 +36,12 @@ class OpmlContainer extends Component {
     selectedSites: [],
   }
 
-
   constructor(props) {
     super(props)
+  }
+
+  handleClickImport = (event) => {
+    this.props.dispatch(StreamsActions.importStream(this.state.selectedSites))
   }
 
   handleClickSite = (rss, parent) => (event) => {
@@ -51,7 +55,7 @@ class OpmlContainer extends Component {
       } else {
         children.push(rss)
       }
-      sites[index] = {title: parent.title, children: children} 
+      sites[index] = {title: parent.title, children: children}
     } else {
       var index = _.findIndex(sites, {'rssUrl': rss.rssUrl})
       if(index != -1 ){
@@ -75,11 +79,14 @@ class OpmlContainer extends Component {
             let  data = result.opml.body[0]
             let opmlData = data.outline.map((item) => {
               let sub = item.$
-              if(!_.isEmpty(item.outline)) {
-                let children = item.outline.map((sitem) => {
-                  let ssub = sitem.$
-                  return {title: ssub.title, rssUrl: ssub.xmlUrl }
-                })
+              if(sub.type != 'rss') {
+                let children = []
+                if(!_.isEmpty(item.outline)) {
+                  children = item.outline.map((sitem) => {
+                    let ssub = sitem.$
+                    return {title: ssub.title, rssUrl: ssub.xmlUrl }
+                  })
+                }
                 return {title: sub.title, children: children}
               } else {
                 return {title: sub.title, rssUrl: sub.xmlUrl }
@@ -97,7 +104,7 @@ class OpmlContainer extends Component {
   }
 
   renderItem = (index, subscription, parent) => {
-    let selectedSites = parent ? _.find(this.state.selectedSites, (s) =>{return s.title == parent.title && s.children})["children"] : this.state.selectedSites 
+    let selectedSites = parent ? _.find(this.state.selectedSites, (s) =>{return s.title == parent.title && s.children})["children"] : this.state.selectedSites
     return (
       <Grid item xs={6} key={`${index}_${subscription.rssUrl}`}>
         <Paper className="site-item" onClick={this.handleClickSite(subscription, parent)} color="#fff">
@@ -125,7 +132,7 @@ class OpmlContainer extends Component {
             <Grid container  spacing={16} className="listing-sites">
               { subscription.children.map((sub, i) => {
                 return this.renderItem(i, sub, subscription)
-              }) 
+              })
               }
             </Grid>
           </div>
@@ -139,7 +146,7 @@ class OpmlContainer extends Component {
           </div>
         )
       }
-    })  
+    })
   }
 
   render() {

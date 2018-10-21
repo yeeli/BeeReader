@@ -36,5 +36,7 @@ export default {
   undo: '撤销',
   view: "查看",
   subscriptions: "订阅源",
-  windows: "窗口"
+  windows: "窗口",
+  opmlRss: "OPML已订阅内容",
+  Import: "导入"
 }

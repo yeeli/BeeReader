@@ -14,7 +14,7 @@ class StreamsController {
   async index() {
     let streams = await Stream.where({})
     this.response.body = {
-      meta: { status: 'success' }, 
+      meta: { status: 'success' },
       data: { streams: streams }
     }
   }
@@ -42,7 +42,7 @@ class StreamsController {
     return Sync.createStream(account, url, categories).then(res => {
       this.response.body = {
         meta: { status: 'success' },
-        data: { 
+        data: {
           stream: res.stream,
           folders: res.folders
         }
@@ -67,16 +67,16 @@ class StreamsController {
   async import() {
     let { account, data } = this.request.params
     let json = JSON.parse(data)["data"]
-    await Sync.importOpml(account, json) 
+    await Sync.importOpml(account, json)
     this.response.body = {
       meta: { status: 'success' }
     }
   }
-   
 
-  /* 
+
+  /*
    * /streams/destroy
-   * 
+   *
    * @desc destroy streams
    *
    * @params id [Integer] Stream id

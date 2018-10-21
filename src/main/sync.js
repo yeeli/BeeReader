@@ -5,17 +5,63 @@ const url = require('url')
 
 const importOpml = async (account, subscriptions) => {
   for(let subscription of subscriptions) {
-    let streams = await Model.Stream.where({account_id: account, oid: subscription.link})
-    if(streams.length > 0 ) {
-      next
+    if(subscription.children){
+      let categories = await Model.Category.where({ account_id: account, oid: subscription.title })
+      let category
+      if( categories.length < 1 ){
+        category = await Model.Category.create({
+          oid: subscription.title,
+          account_id: account,
+          title: subscription.title,
+          state: 'active'
+        })
+        let folders = await Model.Folder.where({account_id: account, source_type: 'Category', source_id: category.id, state: 'active'})
+        if(folders.length <= 0 ) {
+          let folder = await Model.Folder.create({
+            account_id: account,
+            source_type: 'Category',
+            source_id: category.id,
+            state: 'active'
+          })
+        }
+      } else {
+        category = categories[0]
+      }
+      for(let sub of subscription.children) {
+        let streams = await Model.Stream.where({account_id: account, oid: sub.rssUrl})
+        if(streams.length > 0 ) {
+          continue
+        }
+        let stream = await Model.Stream.create({
+          oid: sub.rssUrl,
+          account_id: account,
+          title: sub.title,
+          website: sub.rssUrl,
+          state: 'active'
+        })
+        await Model.Stream.createCategoryStreams(category.id, stream.id)
+      }
+
+    } else {
+      let streams = await Model.Stream.where({account_id: account, oid: subscription.rssUrl})
+      if(streams.length > 0 ) {
+        continue
+      }
+      let stream = await Model.Stream.create({
+        oid: subscription.rssUrl,
+        account_id: account,
+        title: subscription.title,
+        website: subscription.rssUrl,
+        state: 'active'
+      })
+      await Model.Folder.create({
+        account_id: account,
+        source_type: 'Stream',
+        source_id: stream.id,
+        state: 'active'
+      })
+
     }
-    await Model.Stream.create({
-      oid: uri,
-      account_id: account,
-      title: subscription.title,
-      website: subscription.link,
-      state: 'active'
-    })
   }
 }
 

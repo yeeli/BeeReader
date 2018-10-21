@@ -92,7 +92,7 @@ export const importStream = (data) => (dispatch, getState) => {
       url: 'importStreamsPath',
       params: {
         account: currentAccount.id,
-        data: data
+        data:  JSON.stringify({'data': data})
       }
     }
   }).then(res => {
@@ -180,7 +180,7 @@ export const makeAllRead = () => (dispatch, getState) => {
       dispatch(EntriesActions.readAll(streamsKeys))
       dispatch(readStreams(streams))
       dispatch(AccountsActions.updateCount('update', {
-        unreadCount: unreadCount, 
+        unreadCount: unreadCount,
         todayCount: todayCount
       }))
     } else {
