@@ -97,8 +97,11 @@ export const importStream = (data) => (dispatch, getState) => {
     }
   }).then(res => {
     if( res.meta.status == "success" ) {
+      dispatch(FoldersActions.fetchFolders(currentAccount))
+      dispatch(CategoriesActions.fetchCategories(currentAccount))
+      dispatch(fetchStreams(currentAccount))
     }
-    Promise.resolve(res)
+    return Promise.resolve(res)
   })
 }
 

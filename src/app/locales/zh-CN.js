@@ -38,5 +38,7 @@ export default {
   subscriptions: "订阅源",
   windows: "窗口",
   opmlRss: "OPML已订阅内容",
-  Import: "导入"
+  import: "导入",
+  choiceFile: "请选择OPML文件",
+  fileTips: '将文件拖到这里'
 }

@@ -39,7 +39,6 @@ class AppContainer extends Component {
 
   constructor(props) {
     super(props)
-    this.setState
   }
 
   handleClickSite = (rss) => (event) => {
@@ -58,10 +57,11 @@ class AppContainer extends Component {
     this.setState({ creating: true })
     if(Accounts.isLoaded && Accounts.items.length == 0 ) {
       this.props.dispatch(AccountsActions.createAccount('Rss')).then(res => {
-        for(let [index,item] of this.state.selectedSites.entries()) {
-          this.props.dispatch(StreamsActions.addStream(item))
-        }
-        this.props.history.push("/reader")
+        this.props.dispatch(StreamsActions.importStream(this.state.selectedSites)).then(res => {
+          if(res.meta.status == "success") {
+            this.props.history.push("/reader")
+          }
+        })
       })
     }
   }
@@ -75,8 +75,8 @@ class AppContainer extends Component {
   }
 
   render () {
-    console.log(this.state)
     const {Accounts, App} = this.props
+    console.log(App)
     if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }

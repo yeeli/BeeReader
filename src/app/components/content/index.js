@@ -5,11 +5,15 @@ import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import ClearIcon from '@material-ui/icons/Clear'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
 import _ from 'lodash'
 import QRCode from 'qrcode.react'
 import moment from 'moment'
+
+// Icons
+import ClearIcon from '@material-ui/icons/Clear'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQrcode} from '@fortawesome/free-solid-svg-icons'
 
 class Content extends Component {
   entryRef = React.createRef()
@@ -164,7 +168,9 @@ class Content extends Component {
                   <IconButton disableRipple className={'content-button'} onClick={this.handleClose}><ClearIcon /></IconButton>
                 </div>
                 <div className="right-actions">
-                  <IconButton disableRipple className={'content-button'} onClick={this.handleQrOpen}><MoreVertIcon /></IconButton>
+                  <IconButton disableRipple className={'content-button'} onClick={this.handleQrOpen}> 
+                    <FontAwesomeIcon icon={faQrcode} size="xs"/>
+                  </IconButton>
                 </div>
               </div>
             )}

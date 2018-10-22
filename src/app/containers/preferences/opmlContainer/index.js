@@ -41,7 +41,11 @@ class OpmlContainer extends Component {
   }
 
   handleClickImport = (event) => {
-    this.props.dispatch(StreamsActions.importStream(this.state.selectedSites))
+    this.props.dispatch(StreamsActions.importStream(this.state.selectedSites)).then(res => {
+      if(res.meta.status == "success") {
+        this.props.history.push("/reader")
+      }
+    })
   }
 
   handleClickSite = (rss, parent) => (event) => {
@@ -161,7 +165,7 @@ class OpmlContainer extends Component {
                   <BackIcon />
                 </IconButton>
                 <Typography variant="title" color="inherit" style={{marginLeft: '20px'}}>
-                  Import OPML
+                  <FormattedMessage id="importOPML" defaultMessage="Import OPML"/>
                 </Typography>
               </Toolbar>
             </div>
@@ -172,9 +176,12 @@ class OpmlContainer extends Component {
                 <input id="contained-button-file" type="file" style={{ display: 'none'}}  onChange={ this.handleUploadOpml } />
                 <label htmlFor="contained-button-file">
                   <Button variant="contained" component="span" color="primary">
-                    Choice opml File
+                    
+                    <FormattedMessage id="choiceFile" defaultMessage="Choice opml File"/>
                   </Button>
-                  <Typography variant="body1" style={{marginTop: '10px', color: '#A9A9A9'}}>Drap File Here</Typography>
+                  <Typography variant="body1" style={{marginTop: '10px', color: '#A9A9A9'}}>
+                    <FormattedMessage id="fileTips" defaultMessage="Drap File Here"/>
+                  </Typography>
                 </label>
               </div>           
               { !_.isEmpty(data) && (
