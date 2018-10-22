@@ -197,7 +197,7 @@ class OpmlContainer extends Component {
                         color="primary"
                         onClick={ this.handleClickImport }
                       >
-                        <FormattedMessage id="Import" defaultMessage="Import"/>
+                        <FormattedMessage id="import" defaultMessage="Import"/>
                       </Button>
                     </div>
                   </div>
