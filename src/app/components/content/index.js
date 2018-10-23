@@ -5,9 +5,11 @@ import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import LinearProgress from '@material-ui/core/LinearProgress'
+
 import _ from 'lodash'
 import QRCode from 'qrcode.react'
 import moment from 'moment'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Icons
 import ClearIcon from '@material-ui/icons/Clear'
@@ -140,6 +142,7 @@ class Content extends Component {
     const nheight = height - 50
     return (
       <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
+          <PerfectScrollbar>
         { this.state.showData && this.state.showLoading && <LinearProgress variant="determinate" value={this.state.webLoading} /> }
         { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
         { content && ( !this.state.showData && this.renderEntry(content))}
@@ -151,6 +154,7 @@ class Content extends Component {
             { content && <QRCode value={ content.url } size={250} /> }
           </div>
         </div>
+          </PerfectScrollbar>
       </div>
 
     )

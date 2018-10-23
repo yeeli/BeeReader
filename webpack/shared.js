@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const paths = require('../src/main/config/paths');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
   target: 'electron-renderer',
@@ -33,6 +34,21 @@ module.exports = {
         }, {
           loader: "sass-loader" // compiles Sass to CSS
         }]
+      },
+
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it use publicPath in webpackOptions.output
+              publicPath: '../'
+            }
+          },
+          "css-loader"
+        ]
       }
     ]
   }

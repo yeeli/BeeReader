@@ -19,6 +19,7 @@ import InboxIcon from '@material-ui/icons/Inbox'
 import AssessmentIcon from '@material-ui/icons/Assessment'
 import TodayIcon from '@material-ui/icons/Today'
 
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import {injectIntl, FormattedMessage} from 'react-intl'
 
 import { remote } from 'electron'
@@ -139,6 +140,7 @@ class Subscriptions extends Component {
         <div className="block-hd" style={winStyle}>
         </div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
+          <PerfectScrollbar>
           <MenuList className="listing-filters">
             <MenuItem selected={ selectedItem.type == "all"} onClick={ this.props.onFilter({  type: 'all' }) } className="filter-item">
               <ListItemIcon>
@@ -188,6 +190,7 @@ class Subscriptions extends Component {
               folders.isLoaded && categories.isLoaded && streams.isLoaded && this.listFolders(selectedItem) 
             }
           </MenuList>
+        </PerfectScrollbar>
         </div>
         <div className="block-ft">
           <div className="subscription-actions">
