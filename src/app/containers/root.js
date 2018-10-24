@@ -21,14 +21,15 @@ const theme = createMuiTheme({
 const Root = ({ store, history }) =>{
   let currentLocale = locale.getLocale(store.getState().App.locale)
   SetMenu(store, history, currentLocale)
+  addLocaleData(currentLocale)
   return (
-  <MuiThemeProvider theme={theme}>
-      <IntlProvider locale='zh-CN' messages={currentLocale}>
-      <Provider store={store}>
-        <Routers history={history}/>
-      </Provider>
-    </IntlProvider>
-  </MuiThemeProvider>
-)
+    <MuiThemeProvider theme={theme}>
+      <IntlProvider locale={currentLocale.locale} messages={currentLocale}>
+        <Provider store={store}>
+          <Routers history={history}/>
+        </Provider>
+      </IntlProvider>
+    </MuiThemeProvider>
+  )
 }
 export default Root
