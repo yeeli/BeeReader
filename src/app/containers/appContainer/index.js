@@ -74,6 +74,60 @@ class AppContainer extends Component {
     }
   }
 
+  renderInit() {
+    return (
+      <div className="block-sites">
+        <div className="block-hd">
+          <Typography variant="subheading" gutterBottom>
+            <FormattedMessage id="siteRecommends" defaultMessage="Site Recommends"/>
+          </Typography> 
+        </div>
+        <Grid container  spacing={16} className="listing-sites">
+          {
+            this.state.sites.map((rss, index) => {
+              return (
+                <Grid item xs={3} key={index}>
+                  <Paper className="site-item" onClick={this.handleClickSite(rss)} color="#fff">
+                    <div className="site-action">
+                      {_.findIndex(this.state.selectedSites, {'rssUrl': rss.rssUrl}) === -1 ?
+                          <FontAwesomeIcon icon={faCheckCircle} color="#999"/>
+                          :
+                          <FontAwesomeIcon icon={faCheckCircle} color="#2196f3"/>
+                      }
+
+                    </div>
+                    <div className="site-name">{rss.title}</div>
+                    <div className="site-rss">{rss.rssUrl}</div>
+                  </Paper>
+                </Grid>
+              )
+            })
+          }
+        </Grid>
+        <div className="step-actions">
+          <Button
+            variant="contained"
+            color="default"
+            disabled={ this.state.creating }
+            onClick={ this.handleClickSkip }
+          >
+
+          <FormattedMessage id="skip" defaultMessage="Skip"/>
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={ this.state.creating }
+          onClick={ this.handleClickSubscribe }
+        >
+          <FormattedMessage id="subscribe" defaultMessage="Subscribe"/>
+        </Button>
+      </div>
+    </div>
+
+    )
+  }
+
   render () {
     const {Accounts, App} = this.props
     console.log(App)
@@ -85,57 +139,10 @@ class AppContainer extends Component {
         <div id="app">
           <div className="app-hd" style={{"WebkitAppRegion": "drag"}}></div>
           <div className="app-bd">
-            <div className="block-sites">
-              <div className="block-hd">
-                <Typography variant="subheading" gutterBottom>
-                  <FormattedMessage id="siteRecommends" defaultMessage="Site Recommends"/>
-                </Typography> 
-              </div>
-              <Grid container  spacing={16} className="listing-sites">
-                {
-                  this.state.sites.map((rss, index) => {
-                    return (
-                      <Grid item xs={3} key={index}>
-                        <Paper className="site-item" onClick={this.handleClickSite(rss)} color="#fff">
-                          <div className="site-action">
-                            {_.findIndex(this.state.selectedSites, {'rssUrl': rss.rssUrl}) === -1 ?
-                                <FontAwesomeIcon icon={faCheckCircle} color="#999"/>
-                                :
-                                <FontAwesomeIcon icon={faCheckCircle} color="#2196f3"/>
-                            }
-
-                          </div>
-                          <div className="site-name">{rss.title}</div>
-                          <div className="site-rss">{rss.rssUrl}</div>
-                        </Paper>
-                      </Grid>
-                    )
-                  })
-                }
-              </Grid>
-            </div>
-            <div className="step-actions">
-              <Button
-                variant="contained"
-                color="default"
-                disabled={ this.state.creating }
-                onClick={ this.handleClickSkip }
-              >
-
-              <FormattedMessage id="skip" defaultMessage="Skip"/>
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={ this.state.creating }
-              onClick={ this.handleClickSubscribe }
-            >
-              <FormattedMessage id="subscribe" defaultMessage="Subscribe"/>
-            </Button>
+            { Accounts.isLoaded && _.isEmpty(App.currentAccount) && this.renderInit()}
           </div>
         </div>
-      </div>
-    </BasicLayout>
+      </BasicLayout>
     )
   }
 }

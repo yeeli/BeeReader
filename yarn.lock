@@ -2106,6 +2106,11 @@ buffer@^4.3.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
+bufferhelper@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/bufferhelper/-/bufferhelper-0.2.1.tgz#fa74a385724a58e242f04ad6646c2366f83b913e"
+  integrity sha1-+nSjhXJKWOJC8ErWZGwjZvg7kT4=
+
 builder-util-runtime@4.4.1, builder-util-runtime@^4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.4.1.tgz#2770d03241e51fde46acacc7ed3ed8a9f45f02cb"
@@ -8634,12 +8639,13 @@ rn-host-detect@^1.0.1:
   resolved "https://registry.yarnpkg.com/rn-host-detect/-/rn-host-detect-1.1.5.tgz#fbecb982b73932f34529e97932b9a63e58d8deb6"
   integrity sha512-ufk2dFT3QeP9HyZ/xTuMtW27KnFy815CYitJMqQm+pgG3ZAtHBsrU8nXizNKkqXGy3bQmhEoloVbrfbvMJMqkg==
 
-rss-parser@^3.5.2:
+rss-parser@yeeli/rss-parser:
   version "3.5.2"
-  resolved "https://registry.yarnpkg.com/rss-parser/-/rss-parser-3.5.2.tgz#fca07638d3fda43cefdb31f6f7aae5c5856a3175"
-  integrity sha512-tpD+psqq1v6yqH0aLZtmnK0yp5PmewYrHlAonrUIEepEJSqUq553raC3sY6Tw/3DxsnZg8fsa/nSU5VwBZYsyg==
+  resolved "https://codeload.github.com/yeeli/rss-parser/tar.gz/98cc60b18c84fb610aa4c14e48ec7a4bbaec23e5"
   dependencies:
+    bufferhelper "^0.2.1"
     entities "^1.1.1"
+    iconv-lite "^0.4.24"
     xml2js "^0.4.19"
 
 run-async@^2.2.0:

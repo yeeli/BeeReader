@@ -108,8 +108,11 @@ class Content extends Component {
   };
 
   handleClose = (event) => {
-    this.setState({ showData: null})
-    this.props.onClose(event)
+    if(this.state.showData){
+      this.setState({ showData: null})
+    } else {
+      this.props.onClose(event)
+    }
   }
 
   renderEntry(data) {
