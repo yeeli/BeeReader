@@ -29,6 +29,7 @@ import * as CategoriesActions from '~/actions/categories'
 import * as FoldersActions from '~/actions/folders'
 
 import rssJson from '~/config/rss.json'
+import SetMenu from '~/utils/menu'
 
 class AppContainer extends Component {
   state = {
