@@ -85,12 +85,12 @@ const createWindow = async () =>{
   filter()
 
 
-  tray = new Tray(path.join(paths.publicSrc, 'assets/menu.png'))
-  const contextMenu = Menu.buildFromTemplate([
-    {label: 'News 1'},
-  ])
+  // tray = new Tray(path.join(paths.publicSrc, 'assets/menu.png'))
+  //const contextMenu = Menu.buildFromTemplate([
+  //  {label: 'News 1'},
+  //])
   //tray.setTitle('This is my application.')
-  tray.setContextMenu(contextMenu)
+  //tray.setContextMenu(contextMenu)
 };
 
 

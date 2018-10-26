@@ -1,5 +1,6 @@
 import { remote } from 'electron'
 const Menu = remote.Menu
+const Tray = remote.Tray
 
 import  * as AppActions from '~/actions/app'
 
@@ -80,6 +81,13 @@ const SetMenu = (store, history, locale)  => {
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  tray = new Tray("")
+  const contextMenu = Menu.buildFromTemplate([
+    {label: 'News 1'},
+  ])
+  //tray.setTitle('This is my application.')
+  tray.setContextMenu(contextMenu)
 
 }
 
