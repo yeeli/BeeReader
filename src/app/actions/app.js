@@ -14,6 +14,7 @@ export const OPEN_FOLDER = "APP_OPEN_FOLDER"
 export const CLOSE_FOLDER = "APP_CLOSE_FOLDER"
 
 export const SET_LOCALE = "APP_SET_LOCALE"
+export const SET_REFRESH = "APP_SET_REFRESH"
 
 export const OPEN_IMPORT = "APP_OPEN_IMPORT"
 
@@ -67,6 +68,11 @@ export const clear = () => ({
 export const setLocale = (lang) => ({
   type: SET_LOCALE,
   locale: lang
+})
+
+export const setRefresh = (time) => ({
+  type: SET_REFRESH,
+  time: time
 })
 
 export const openImport = () => ({

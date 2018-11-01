@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import { IntlProvider, addLocaleData } from 'react-intl'
+import { addLocaleData } from 'react-intl'
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import blue from '@material-ui/core/colors/blue'
 import Routers from '~/routers'
 
+
+import ConfigProvider from '~/containers/configProvider'
+
+import zhLocaleData from 'react-intl/locale-data/zh'
+import enLocaleData from 'react-intl/locale-data/en'
+
+addLocaleData([...zhLocaleData, ...enLocaleData])
+
 import '~/shared/layout.sass'
-
-import locale from '~/utils/locale'
-import SetMenu from '~/utils/menu'
-
 
 const theme = createMuiTheme({
   palette: {
@@ -19,17 +23,17 @@ const theme = createMuiTheme({
 })
 
 const Root = ({ store, history }) =>{
-  let currentLocale = locale.getLocale(store.getState().App.locale)
-  SetMenu(store, history, currentLocale)
-  addLocaleData(currentLocale)
   return (
     <MuiThemeProvider theme={theme}>
-      <IntlProvider locale={currentLocale.locale} messages={currentLocale}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <ConfigProvider s={store} h={history} >
           <Routers history={history}/>
-        </Provider>
-      </IntlProvider>
+        </ConfigProvider>
+      </Provider>
     </MuiThemeProvider>
   )
 }
+
+
+import '~/shared/layout.sass'
 export default Root

@@ -18,11 +18,9 @@ import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider'
 
-
 // Actions
 
 import * as AppActions from '~/actions/app'
-
 
 // Layout
 
@@ -33,6 +31,11 @@ class GeneralContainer extends Component {
   handleChangeLanguage = event => {
     let value = event.target.value
     this.props.dispatch(AppActions.setLocale(value))
+  }
+
+  handleChangeRefresh = event => {
+    let value = event.target.value
+    this.props.dispatch(AppActions.setRefresh(value))
   }
 
   render() {
@@ -80,26 +83,26 @@ class GeneralContainer extends Component {
                   </Grid>
                   <Grid item xs={4}>
                     <FormControl fullWidth >
-                      <Select value={App.refresh}>
+                      <Select value={App.refresh} onChange={ this.handleChangeRefresh } >
                         <MenuItem value="none">
                          <FormattedMessage id="neverNone" defaultMessage="Never None" />
                         </MenuItem>
                         <MenuItem value="start">
                           <FormattedMessage id="start" defaultMessage="Start" />
                         </MenuItem>
-                        <MenuItem value={1}>
+                        <MenuItem value={"1"}>
                           <FormattedMessage id="everyMinutes" defaultMessage="Every Minutes" />
                         </MenuItem>
-                        <MenuItem value={5}>
+                        <MenuItem value={"5"}>
                           <FormattedMessage id="fiveMinutes" defaultMessage="5 Minutes" />
                         </MenuItem>
-                        <MenuItem value={15}>
+                        <MenuItem value={"15"}>
                           <FormattedMessage id="fifteenMinutes" defaultMessage="15 Minutes" />
                         </MenuItem>
-                        <MenuItem value={30}>
+                        <MenuItem value={"30"}>
                           <FormattedMessage id="thirtyMinutes" defaultMessage="30 Minutes" />
                         </MenuItem>
-                        <MenuItem value={60}>
+                        <MenuItem value={"60"}>
                           <FormattedMessage id="everyHours" defaultMessage="Every Hours" />
                         </MenuItem>
                       </Select>

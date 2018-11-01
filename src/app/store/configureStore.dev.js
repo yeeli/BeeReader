@@ -23,7 +23,7 @@ const composeEnhancers =
       // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
     }) : composeWithDevTools({ realtime: true, port: 5678 });
 
-export const configureStore = (history, preloadedState) => {
+export const configureStore = (preloadedState) => {
   const store = createStore(
     rootReducer,
     preloadedState,

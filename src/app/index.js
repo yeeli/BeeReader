@@ -15,6 +15,8 @@ import  * as StreamsActions from '~/actions/streams'
 import  * as EntriesActions from '~/actions/entries'
 import  * as DataActions from '~/actions/data'
 
+const storage = window.localStorage
+
 // Disable Electron App Drop File
 document.addEventListener('dragover', function (event) {
   event.preventDefault();
@@ -27,6 +29,8 @@ document.addEventListener('drop', function (event) {
 }, false);
 
 const store = configureStore()
+
+// Sync All infomation with starting
 store.dispatch(AccountsActions.fetchAccounts()).then(res => {
   if(res.meta.status == "success") {
     let account = _.find(res.data.accounts, {service: 'Rss'})

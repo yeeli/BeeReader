@@ -82,10 +82,18 @@ const createWindow = async () =>{
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // filter some website read image with referer
   filter()
 
+  // start app with empty menu
+  Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 
-  // tray = new Tray(path.join(paths.publicSrc, 'assets/menu.png'))
+
+  tray = new Tray(path.join(paths.publicSrc, 'assets/menu.png'))
+  tray.on('click', () => {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+  })
   //const contextMenu = Menu.buildFromTemplate([
   //  {label: 'News 1'},
   //])

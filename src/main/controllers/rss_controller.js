@@ -5,6 +5,7 @@ class RssController {
     let { url } = this.request.params
     let rss = new Rss(url)
     return rss.getFeed().then(res => {
+      console.log(res)
       this.response.body = {
         meta: { status: 'success'},
         data: { rss: res }

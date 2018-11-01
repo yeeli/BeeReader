@@ -145,21 +145,26 @@ class Content extends Component {
     const nheight = height - 50
     return (
       <div className="block-bd" ref={this.entryRef} style={{height: `${nheight}px`}}>
-          <PerfectScrollbar>
-        { this.state.showData && this.state.showLoading && <LinearProgress variant="determinate" value={this.state.webLoading} /> }
-        { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
-        { content && ( !this.state.showData && this.renderEntry(content))}
-        <div className="entry-qrcode-modal"
-          onClick={this.handleQrClose}
-          style={{display: `${ this.state.open ? 'block' : 'none' }`}}
-        >
-          <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
-            { content && <QRCode value={ content.url } size={250} /> }
+        <PerfectScrollbar>
+          { this.state.showData && this.state.showLoading && <LinearProgress variant="determinate" value={this.state.webLoading} /> }
+          { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
+          { content && ( !this.state.showData && this.renderEntry(content))}
+          <div className="entry-qrcode-modal"
+            onClick={this.handleQrClose}
+            style={{display: `${ this.state.open ? 'block' : 'none' }`}}
+          >
+            <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
+              { content && <QRCode value={ content.url } size={250} /> }
+            </div>
           </div>
-        </div>
-          </PerfectScrollbar>
+        </PerfectScrollbar>
       </div>
 
+    )
+  }
+  renderBlank() {
+    return (
+      <div className="content-blank"> Blank </div>
     )
   }
   render() {
@@ -183,7 +188,8 @@ class Content extends Component {
             )}
           </div>
         </div>
-        { data.isLoaded && this.renderContent() }
+        { data.isLoaded && this.renderContent() } 
+        { !data.isFetching && !data.isLoaded && this.renderBlank() }
       </div>
     )
   }

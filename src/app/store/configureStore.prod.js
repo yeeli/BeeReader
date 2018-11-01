@@ -12,7 +12,7 @@ const historyMiddleware = routerMiddleware(history)
 
 const middlewares = [thunk, syncMiddleware, historyMiddleware]
 
-export const configureStore = (history, preloadedState) => {
+export const configureStore = (preloadedState) => {
   const store = createStore(
     rootReducer,
     preloadedState,

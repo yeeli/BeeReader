@@ -1,19 +1,22 @@
 const Service = require('./service')
 const axios = require('axios')
-const Parser = require('rss-parser')
+const Parser = require('/Users/yeeli/Github/rss-parser')
 const parse5 = require('parse5')
 const { JSDOM } = require('jsdom')
 
 class Rss extends Service {
   constructor(uri){
     super()
-    this.parser = new Parser()
+    this.parser = new Parser({headers: {
+      'User-Agent': 'BeeReader',
+      'Accept': 'application/rss+xml',
+    }})
     this.uri = uri
   }
 
   async getFeed() {
     this.feed = await this.parser.parseURL(this.uri)
-    let icon = await this.getIcon()
+    let icon = null //await this.getIcon()
     let link = this.feed.link.trim()
     let entries = await this.getEntries()
     let item = {

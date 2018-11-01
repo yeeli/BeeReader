@@ -32,6 +32,13 @@ class Feeds extends Component {
     menu.popup(remote.getCurrentWindow())
   }
 
+  renderBlank(height) {
+    return (
+      <div className="listing-feeds-blank" style={{height: `${height - 40}px`}}>
+      </div>
+    )
+  }
+
   render() {
     const winStyle = { "WebkitAppRegion": "drag" }
     const { entries, selectedItem,  onClickFeed, height, onMakeAllRead } = this.props
@@ -71,7 +78,7 @@ class Feeds extends Component {
               })}
             </List>
           </PerfectScrollbar>
-          {_.isEmpty(entries) && <div className="listing-feeds-blank" style={{height: `${nheight - 40}px`}}></div>}
+          {_.isEmpty(entries) && this.renderBlank(nheight) }
         </div>
         {/*<div className="block-ft">footer</div>*/}
       </div>

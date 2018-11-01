@@ -131,7 +131,6 @@ class AppContainer extends Component {
 
   render () {
     const {Accounts, App} = this.props
-    console.log(App)
     if( Accounts.isLoaded && Accounts.items.length > 0 && !_.isEmpty(App.currentAccount)){
       return <Redirect to='/reader' />
     }

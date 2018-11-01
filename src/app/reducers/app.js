@@ -12,8 +12,8 @@ const defaultState = {
   syncing: false,
   currentAccount: {},
   openFolders: [],
-  locale: app.getLocale(),
-  refresh: "none",
+  locale: storage["locale"] || app.getLocale(),
+  refresh: storage["refresh"] || "none",
   openTips: false,
   tipsMsg: ''
 }
@@ -68,6 +68,12 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         locale: action.locale
+      }
+    case AppActions.SET_REFRESH:
+      storage["refresh"] = action.time
+      return {
+        ...state,
+        refresh: action.time
       }
     case AppActions.OPEN_IMPORT:
       return {

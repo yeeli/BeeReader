@@ -2,8 +2,6 @@ import glob from 'glob'
 import path from 'path'
 import _ from 'lodash'
 import {addLocaleData} from 'react-intl';
-import zhLocaleData from 'react-intl/locale-data/zh'
-import enLocaleData from 'react-intl/locale-data/en'
 
   /*
 const locales = []
@@ -19,11 +17,9 @@ const getLocale = (lang) => {
   let data
   switch(lang){
     case 'zh-CN':
-      addLocaleData(zhLocaleData)
       data = require('~/locales/zh-CN')
       break
     case 'en-US':
-      addLocaleData(enLocaleData)
       data = require('~/locales/en-US')
       break
     default:
