@@ -3,6 +3,7 @@
   "productName": "BeeReader",
   "version": "1.0.0",
   "main": "src/main/index.js",
+  "description": "Sample rss reader",
   "author": "yeeli",
   "license": "MIT",
   "scripts": {
@@ -17,7 +18,15 @@
     "db:dev:migrate": "cross-env NODE_ENV=development NODE_FROM=console node ./src/db/migrate.js",
     "db:dev:seeds": "cross-env NODE_ENV=development NODE_FROM=console node ./src/db/seeds.js",
     "package": "electron-packager . BeeReader --platform=darwin",
-    "package:mac": "cross-env NODE_ENV=production  electron-packager . BeeReader --platform=darwin --overwrite"
+    "package:mac": "cross-env NODE_ENV=production  electron-packager . BeeReader --platform=darwin --overwrite",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.yeeli.beereader",
+    "productName": "BeeReader"
+
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -56,10 +65,10 @@
     "css-loader": "^0.28.1",
     "devtron": "^1.4.0",
     "electron": "^3.0.5",
+    "electron-rebuild": "^1.8.2",
     "electron-builder": "^20.28.4",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",
-    "electron-rebuild": "^1.8.2",
     "electron-reloader": "^0.2.0",
     "eslint": "4.x",
     "eslint-loader": "^2.1.0",
