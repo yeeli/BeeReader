@@ -38,7 +38,7 @@ const config = merge(sharedConfig, {
     new HtmlWebpackPlugin({
       inject: true,
       filename: 'main.html',
-      template: "./src/public/main.html"
+      template: "./src/main.html"
     })
   ],
   stats: { errors: true, errorDetails: true },

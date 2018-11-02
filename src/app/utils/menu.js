@@ -58,24 +58,14 @@ const SetMenu = (store, history, locale)  => {
   }
   viewSubMenu.push(
     {label: intl('allArticle', 'All Article'), click() {
-      store.dispatch(DataActions.clearData())
-      store.dispatch(AppActions.setSelectedStream({type: 'all'}))
-      store.dispatch(EntriesActions.filterEntries())
-      return history.push({pathname: '/reader'})
+      store.dispatch(AppActions.filterEntries({ type: 'all'}))
     }},
     {label: intl('unreadArticle', 'Unread Article'), click() {
-      store.dispatch(DataActions.clearData())
-      store.dispatch(AppActions.setSelectedStream({type: 'unread'}))
-      store.dispatch(EntriesActions.filterEntries())
-      return history.push({pathname: '/reader'})  
+      store.dispatch(AppActions.filterEntries({ type: 'unread'}))
     }}, 
     {label: intl('todayArticle', 'Today Article'), click() {
-      store.dispatch(DataActions.clearData())
-      store.dispatch(AppActions.setSelectedStream({type: 'today'}))
-      store.dispatch(EntriesActions.filterEntries())
-      return history.push({pathname: '/reader'})  
+      store.dispatch(AppActions.filterEntries({ type: 'today' }))
     }}
-
   )
 
   template.push({
@@ -89,7 +79,9 @@ const SetMenu = (store, history, locale)  => {
       {label: intl('provious','Provious Subscription')},
       {label: intl('next', 'Next Subscription')}, 
       {type: 'separator'},
-      {label: intl('addSubscription', 'Add Subscription')},
+      {label: intl('addSubscription', 'Add Subscription'), click() {
+         store.dispatch(AppActions.openNewSubscription())
+      }},
       {type: 'separator'},
       {label: intl('makeAllAsRead', 'Make All As Read')}
     ]
@@ -102,7 +94,6 @@ const SetMenu = (store, history, locale)  => {
       {label: intl('next', 'Next Article')}, 
       {type: 'separator'},
       {label: intl('toggleRead', 'Toggle Read')},
-      {label: intl('toggleStarred', 'Toggle Starred')},
       {type: 'separator'},
       {label: intl('viewArticle', 'View Article')},
     ]

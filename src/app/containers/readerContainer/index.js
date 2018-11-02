@@ -43,7 +43,6 @@ class ReaderContainer extends Component {
     subscriptionsWidth: 250,
     feedsWidth: 320,
     contentWidth: 500,
-    openNewStream: false,
     openSubscribeStream: false,
     openEditStream: false,
     subscribeRss: {},
@@ -64,9 +63,6 @@ class ReaderContainer extends Component {
     //interact('.resize2').draggable({ onmove: window.dragMoveListener})
     //  .on('dragmove', self.handleResizeFeeds);
 
-
-    //Auto Sync Entries Now
-    this.timer = setInterval(this.syncEntries, 60000 * 30)
   }
 
   syncEntries = () => {
@@ -128,18 +124,17 @@ class ReaderContainer extends Component {
     }
   }
 
-
   // Subscription Events
   handleClickSync = (event) =>  {
     this.syncEntries()
   }
 
   handleClickNewStream = (event) => {
-    this.setState({ openNewStream: true })
+    this.props.dispatch(AppActions.openNewSubscription())
   }
 
   handleCloseNewStream = () => {
-    this.setState({ openNewStream: false })
+    this.props.dispatch(AppActions.closeNewSubscription())
   }
 
   handleSearchStream = (event, value) => {
@@ -199,10 +194,7 @@ class ReaderContainer extends Component {
   }
 
   handleFilter = selected => event => {
-    let ids = []
-    this.props.dispatch(DataActions.clearData())
-    this.props.dispatch(AppActions.setSelectedStream(selected))
-    this.props.dispatch(EntriesActions.filterEntries())
+    this.props.dispatch(AppActions.filterEntries(selected))
   }
 
   // Feed Events
@@ -221,6 +213,15 @@ class ReaderContainer extends Component {
     this.props.dispatch(DataActions.clearData())
   }
 
+  handleToggleQR = ( event ) => {
+    this.props.dispatch(AppActions.toggleQR())
+  }
+  handleCloseQR = ( event ) => {
+    this.props.dispatch(AppActions.closeQR())
+  }
+
+
+
   render () {
     const { synced, streamsList, entriesList, showEntry, browserHeight, subscriptionsWidth, feedsWidth, contentWidth } = this.state
     const { App, Folders, Entries, Data, Categories, Streams, Accounts } = this.props
@@ -232,6 +233,13 @@ class ReaderContainer extends Component {
       dataContent.stream_title = entry.stream_title
       dataContent.published_at = entry.published_at
     }
+
+    //Auto Sync Entries Now
+    //if(App.refresh == "start") {
+    //  this.syncEntries()
+    //} else {
+    //  this.timer = setInterval(this.syncEntries, 60000 * 30)
+    //}
 
     return (
       <BasicLayout>
@@ -265,11 +273,19 @@ class ReaderContainer extends Component {
             </div>
             <div className="resizer vertical resize2" />
             <div className="pane pane-content" ref={this.paneContentRef}>
-              { <Content data={Data} content={dataContent} height={ browserHeight } onClose={ this.handleCloseContent } /> }
+              { <Content 
+                data={Data} 
+                content={dataContent} 
+                height={ browserHeight } 
+                onClose={ this.handleCloseContent } 
+                showQR={App.openQR}
+                onToggleQR= { this.handleToggleQR }
+                onCloseQR = {this.handleCloseQR}
+              /> }
             </div>
           </div>
           <AddStreamDialog 
-            open={ this.state.openNewStream } 
+            open={ App.openNewSubscription } 
             onClose={ this.handleCloseNewStream } 
             onSearch={ this.handleSearchStream } 
           />

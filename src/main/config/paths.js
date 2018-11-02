@@ -26,12 +26,14 @@ function getServedPath(appPackageJson) {
 
 // config after eject: we're in ./config/
 module.exports = {
+  dirSrc: resolveApp('.'),
   nodePaths: nodePaths,
   nodeModules: resolveApp('node_modules'),
   appSrc: resolveApp('src/app'),
   mainSrc: resolveApp('src/main'),
-  publicSrc: resolveApp('src/public'),
+  assetsSrc: resolveApp('src/assets'),
   appIndexJs: resolveApp('src/app/index.js'),
+  mainIndexJs: resolveApp('src/main/index.js'),
   extensions: resolveApp('extensions'),
   appBuild: resolveApp('build'),
   appPackageJson: resolveApp('package.json'),

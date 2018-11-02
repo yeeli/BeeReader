@@ -7,15 +7,18 @@ const { app } = remote
 
 
 const defaultState = {
+  currentAccount: {},
   selectedStream: { type: 'all' },
   selectedEntry: null,
   syncing: false,
-  currentAccount: {},
   openFolders: [],
   locale: storage["locale"] || app.getLocale(),
   refresh: storage["refresh"] || "none",
   openTips: false,
-  tipsMsg: ''
+  tipsMsg: '',
+  openQR: false,
+  openNewSubscription: false,
+  showData: null
 }
 
 const App = (state = defaultState, action) => {
@@ -49,7 +52,8 @@ const App = (state = defaultState, action) => {
     case AppActions.SET_ENTRY:
       return {
         ...state,
-        selectedEntry: action.selected
+        selectedEntry: action.selected,
+        openQR: false
       }
     case AppActions.OPEN_FOLDER:
       let openFolders = state.openFolders
@@ -90,6 +94,26 @@ const App = (state = defaultState, action) => {
       return {
         ...state,
         openTips: false
+      }
+    case AppActions.TOGGLE_QR:
+      return {
+        ...state,
+        openQR: !state.openQR,
+      }
+    case AppActions.CLOSE_QR:
+      return {
+        ...state,
+        openQR: false
+      }
+    case AppActions.OPEN_NEW_SUBSCRIPTION:
+      return {
+        ...state,
+        openNewSubscription: true
+      }
+    case AppActions.CLOSE_NEW_SUBSCRIPTION:
+      return {
+        ...state,
+        openNewSubscription: false
       }
     default:
       return state

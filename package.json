@@ -8,25 +8,33 @@
   "license": "MIT",
   "scripts": {
     "hs": "cross-env NODE_ENV=development webpack-dev-server --config webpack/development.js",
-    "dev": "cross-env HOT=1 NODE_ENV=development electron . --dev",
-    "dev:server": "cross-env HOT=1 NODE_ENV=development nodemon ./src/main/server.js",
-    "build:pro": "cross-env NODE_ENV=production node_modules/.bin/babel-node --trace-warnings ./node_modules/.bin/webpack --config webpack/production.js",
-    "pro": "cross-env NODE_ENV=production electron  .",
     "rebuild": "electron-rebuild -f -w sqlite3",
     "migration": "knex --knexfile src/config/database.js --cwd src/db/ migrate:make",
     "rollback": "knex --knexfile src/config/database.js --cwd src/db/ migrate:rollback",
     "db:dev:migrate": "cross-env NODE_ENV=development NODE_FROM=console node ./src/db/migrate.js",
     "db:dev:seeds": "cross-env NODE_ENV=development NODE_FROM=console node ./src/db/seeds.js",
+    "dev": "cross-env HOT=1 NODE_ENV=development electron . --dev",
+    "dev:server": "cross-env HOT=1 NODE_ENV=development nodemon ./src/main/server.js",
+    "build:pro": "cross-env NODE_ENV=production node_modules/.bin/babel-node --trace-warnings ./node_modules/.bin/webpack --config webpack/production.js",
+    "pro": "cross-env NODE_ENV=production electron  ./build",
     "package": "electron-packager . BeeReader --platform=darwin",
-    "package:mac": "cross-env NODE_ENV=production  electron-packager . BeeReader --platform=darwin --overwrite",
+    "package:mac": "cross-env NODE_ENV=production  electron-packager ./build BeeReader --platform=darwin --overwrite",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "dist": "electron-builder"
   },
   "build": {
     "appId": "com.yeeli.beereader",
-    "productName": "BeeReader"
-
+    "productName": "BeeReader",
+    "files": [
+      "src/main/**/*",
+      "src/public/**/*",
+      "build/**/*",
+      "node_moduls/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.news"
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -65,14 +73,17 @@
     "css-loader": "^0.28.1",
     "devtron": "^1.4.0",
     "electron": "^3.0.5",
-    "electron-rebuild": "^1.8.2",
     "electron-builder": "^20.28.4",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",
+    "electron-packager": "^12.2.0",
+    "electron-rebuild": "^1.8.2",
     "electron-reloader": "^0.2.0",
     "eslint": "4.x",
     "eslint-loader": "^2.1.0",
     "eslint-plugin-react": "^7.11.1",
+    "externals-dependencies": "^1.0.4",
+    "gulp": "^3.9.1",
     "html-webpack-plugin": "^3.2.0",
     "imports-loader": "^0.7.1",
     "koa": "^2.5.2",
@@ -95,7 +106,8 @@
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.7",
     "webpack-merge": "^4.1.4",
-    "webpack-sources": "^1.2.0"
+    "webpack-sources": "^1.2.0",
+    "webpack-stream": "^5.1.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.4",

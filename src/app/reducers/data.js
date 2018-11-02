@@ -3,7 +3,7 @@ import * as DataActions from '~/actions/data'
 const defaultState = {
   isFetching: false,
   isLoaded: false,
-  item: {}
+  item: {},
 }
 
 const Data = (state = defaultState, action) => {

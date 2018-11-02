@@ -18,8 +18,6 @@ require('./db/migrate')
 require('./router')
 const filter = require('./filter')
 
-
-
 let mainWindow
 
 //let externalDisplay = displays.find((display) => {
@@ -90,7 +88,7 @@ const createWindow = async () =>{
   Menu.setApplicationMenu(Menu.buildFromTemplate([]))
 
 
-  tray = new Tray(path.join(paths.publicSrc, 'assets/menu.png'))
+  tray = new Tray(path.join(paths.assetsSrc, 'menu.png'))
   tray.on('click', () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   })
@@ -105,7 +103,7 @@ const createWindow = async () =>{
 app.on('ready', createWindow);
 
 app.setName('BeeReader')
-app.dock.setIcon(path.join(paths.publicSrc, 'assets/icon.png'))
+app.dock.setIcon(path.join(paths.assetsSrc, 'icon.png'))
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

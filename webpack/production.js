@@ -14,11 +14,10 @@ const merge = require('webpack-merge')
 const config = merge(sharedConfig, {
   mode: 'production',
   output: { 
-    filename: 'bundle.js',
+    filename: 'app.js',
     path: paths.appBuild,
     //publicPath: paths.publicPath
   },
-  devtool: 'source-map',
   stats: 'normal',
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
@@ -28,7 +27,7 @@ const config = merge(sharedConfig, {
     new HtmlWebpackPlugin({
       inject: true,
       filename: 'main.html',
-      template: "./src/public/main.html"
+      template: "./src/main.html"
     })
   ],
 });

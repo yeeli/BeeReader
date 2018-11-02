@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl'
 import Locale from '~/utils/locale'
 import SetMenu from '~/utils/menu'
 
-class Provider extends Component {
+class ConfigProvider extends Component {
   render() {
     const { App, s, h } = this.props
     let  currentLocale = Locale.getLocale(App.locale)
@@ -22,4 +22,4 @@ const mapStateToProps = state => {
   return { App: state.App }
 }
 
-export default connect(mapStateToProps)(Provider)
+export default connect(mapStateToProps)(ConfigProvider)

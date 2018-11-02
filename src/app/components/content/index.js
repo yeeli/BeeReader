@@ -99,14 +99,6 @@ class Content extends Component {
     this.setState({showData: url, webLoading: 0, showLoading: true})
   }
 
-  handleQrOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleQrClose = () => {
-    this.setState({ open: false });
-  };
-
   handleClose = (event) => {
     if(this.state.showData){
       this.setState({ showData: null})
@@ -150,8 +142,8 @@ class Content extends Component {
           { this.state.showData && <webview src={this.state.showData} style={{ height: "100%" }} ref={this.webviewRef}></webview> }
           { content && ( !this.state.showData && this.renderEntry(content))}
           <div className="entry-qrcode-modal"
-            onClick={this.handleQrClose}
-            style={{display: `${ this.state.open ? 'block' : 'none' }`}}
+            onClick={this.props.onCloseQR}
+            style={{display: `${ this.props.showQR ? 'block' : 'none' }`}}
           >
             <div className="entry-qrcode-body" style={{ marginTop: `${nheight / 2}px`} }>
               { content && <QRCode value={ content.url } size={250} /> }
@@ -180,7 +172,7 @@ class Content extends Component {
                   <IconButton disableRipple className={'content-button'} onClick={this.handleClose}><ClearIcon /></IconButton>
                 </div>
                 <div className="right-actions">
-                  <IconButton disableRipple className={'content-button'} onClick={this.handleQrOpen}> 
+                  <IconButton disableRipple className={'content-button'} onClick={this.props.onToggleQR}> 
                     <FontAwesomeIcon icon={faQrcode} size="xs"/>
                   </IconButton>
                 </div>
