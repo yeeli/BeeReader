@@ -1,0 +1,79 @@
+.content-button
+  color: #fff
+  &:hover
+    background-color: transparent !important
+
+.content-blank
+  margin: 30% auto 0
+  width: 300px
+  text-align: center
+  color: #ccc
+
+.block-entry
+  width: 100%
+  height: 100%
+  clear: both
+  position: relative
+  background: #fff
+  .block-hd
+    height: 50px
+    border-bottom: 1px solid rgba(199, 199, 199, 0.52)
+    .content-actions
+      position: relative
+      clear: both
+      overflow: hidden
+      .left-actions
+        float: left
+      .right-actions
+        float: right
+  .block-bd
+    overflow-y: auto
+    .entry-qrcode-modal
+      position: absolute
+      background: rgba(0, 0,0, 0.3)
+      left: 0
+      top: 0
+      bottom: 0
+      right: 0
+      z-index: 999
+      text-align: center
+      line-height: 100%
+      .entry-qrcode-body
+        background: #fff
+        display: inline-block
+        padding: 10px
+    .entry
+      min-width: 450px
+      max-width: 700px
+      height: 100%
+      margin: 20px auto 0
+      padding: 0 20px
+      .entry-hd
+        border-bottom: 1px solid #e1e1e1
+        margin-bottom: 15px
+        .entry-title
+          margin-bottom: 10px
+          a
+            font-size: 1.5rem
+            color: #333
+            margin-bottom: 0
+            text-decoration: none
+            font-weight: bold
+            &:hover
+              text-decoration: underline
+        .entry-info
+          margin-bottom: 10px
+          font-size: 14px
+          color: #666
+      .entry-bd
+        margin-bottom: 100px
+        a
+          color: #000
+        p
+          font-size: 16px
+          font-family: "Roboto", "Helvetica", "Arial", sans-serif
+        img
+          max-width: 100%
+        iframe
+          width: 100%
+          height: 400px

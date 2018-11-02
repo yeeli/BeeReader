@@ -1,0 +1,23 @@
+{
+  "en": [
+    { "title": "TechCrunch", "rssUrl": "https://techcrunch.com/feed/" },
+    { "title": "InfoWorld",  "rssUrl": "https://www.infoworld.com/index.rss" },
+    { "title": "Engadget", "rssUrl": "https://www.engadget.com/rss.xml" },
+    { "title": "Hacker News", "rssUrl": "https://news.ycombinator.com/rss" },
+    { "title": "Product Hunt", "rssUrl": "https://www.producthunt.com/feed" },
+    { "title": "ReadWriteWeb", "rssUrl": "https://readwrite.com/feed" },
+    { "title": "Mashable!", "rssUrl": "https://mashable.com/rss" }
+  ],
+  "cn": [
+    { "title": "36氪", "rssUrl": "https://www.36kr.com/feed" },
+    { "title": "爱范儿", "rssUrl": "https://www.ifanr.com/feed" },
+    { "title": "品玩", "rssUrl": "https://www.pingwest.com/feed" },
+    { "title": "腾讯科技", "rssUrl": "http://n.rss.qq.com/rss/tech_rss.php" },
+    { "title": "虎嗅网", "rssUrl": "https://www.huxiu.com/rss/0.xml" },
+    { "title": "好奇心日报", "rssUrl": "https://www.qdaily.com/feed" },
+    { "title": "极客公园", "rssUrl": "https://www.geekpark.net/rss" },
+    { "title": "动点科技", "rssUrl": "https://cn.technode.com/rss" },
+    { "title": "钛媒体", "rssUrl": "http://www.tmtpost.com/feed" },
+    { "title": "锋科技", "rssUrl": "https://tech.feng.com/rss.xml" }
+  ]
+}

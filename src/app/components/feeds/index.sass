@@ -1,0 +1,88 @@
+.listing-feeds-blank
+  border: 2px dashed #999
+  border-radius: 5px
+  position: absolute
+  left: 0
+  right: 0
+  top: 0
+  margin: 66px 15px 15px
+
+.block-feeds
+  width: 100%
+  height: 100%
+  background: #F9F8F4
+  position: relative
+  clear: both
+  .block-hd
+    height: 50px
+    border-bottom: 1px solid rgba(199, 199, 199, 0.52)
+    position: relative
+    .entries-title
+      text-align: center
+      padding-top: 15px
+    .left-actions
+      position: absolute
+      top: 12px
+      left: 10px
+      .content-button
+        height: 20px
+        width: 20px
+  .block-bd
+    //overflow-y: auto
+    //&::-webkit-scrollbar
+      background: transparent
+      width: 6px
+      height: 6px
+      z-index: 9999
+    //&::-webkit-scrollbar-thumb
+      background-color: #333 
+    .listing-feeds
+      padding: 0
+    .feed-item
+      padding: 10px
+      display: block
+      &.item-selected
+        background: rgba(0, 0, 0, 0.14)
+      &.read
+        .feed-title
+          color: #777
+    .feed-info
+      margin-bottom: 5px
+      clear: both
+      position: relative
+      overflow: hidden
+      span
+        font-size: 12px
+        color: rgba(0, 0, 0, 0.54)
+      .feed-stream
+        float: left
+      .feed-date
+        float: right
+    .feed-detail
+      padding: 0
+      .feed-title
+        color: rgba(0, 0, 0, 0.87)
+        font-size: 0.85rem
+        font-weight: bold
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif
+        margin: 0
+        padding: 0
+      .feed-summary
+        font-size: 0.8rem
+        font-weight: 200
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif
+        margin: 0
+        padding: 0
+        color: rgba(0, 0, 0, 0.54)
+        line-height: 1.46429em
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+  .block-ft
+    position: absolute
+    bottom: 0
+    left: 0
+    height: 50px
+    width: 100%
+    background: #F9F8F4
+    border-top: 1px solid rgba(199, 199, 199, 0.52)

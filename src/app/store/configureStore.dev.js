@@ -1,18 +1,29 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import { routerMiddleware, routerActions } from 'react-router-redux'
+import { routerMiddleware } from 'react-router-redux'
 import { createLogger } from 'redux-logger'
-import rootReducer from '@/reducers'
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createHashHistory } from 'history'
+import createHistory from 'history/createHashHistory'
+
+import rootReducer from '~/reducers'
+import syncMiddleware from '~/middleware/sync'
 
 const logger = createLogger()
-export const history = createHashHistory()
+export const history = createHistory()
 
-const router = routerMiddleware(history);
-const middlewares = [thunk, logger, router]
+const historyMiddleware = routerMiddleware(history)
 
-export const configureStore = preloadedState => {
+const middlewares = [thunk, logger, syncMiddleware, historyMiddleware]
+
+
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+    }) : composeWithDevTools({ realtime: true, port: 5678 });
+
+export const configureStore = (preloadedState) => {
   const store = createStore(
     rootReducer,
     preloadedState,
@@ -21,12 +32,12 @@ export const configureStore = preloadedState => {
     )
   )
 
-  if (module.hot) {
+    /*if (module.hot) {
     module.hot.accept('../reducers', () => {
       const nextRootReducer = require('../reducers').default
       store.replaceReducer(nextRootReducer)
     })
-  }
+  }*/
 
   return store
 }

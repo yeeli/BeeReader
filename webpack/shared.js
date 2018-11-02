@@ -1,30 +1,29 @@
-const webpack = require('webpack'); 
-const paths = require('./paths');
+const webpack = require('webpack');
+const paths = require('../src/main/config/paths');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
   target: 'electron-renderer',
+  entry: {
+    'app': [
+      '@babel/polyfill',
+      paths.appIndexJs
+    ],
+  },
   resolve: {
-    modules: ['node_modules', paths.appNodeModules, paths.appSrc].concat(paths.nodePaths),
+    modules: ['node_modules', paths.nodeModules, paths.appSrc].concat(paths.nodePaths),
     extensions: ['.js', '.json', '.jsx'],
     alias: {
-      containers: 'containers',
-      components: 'components',
-      actions: 'actions',
-      reducers: 'reducers',
       'react-native': 'react-native-web',
-      '@': paths.appSrc
+      '~': paths.appSrc
     }
   },
   module: {
     rules: [
       {
-        test: require.resolve('react'),
-        use: 'imports-loader',
-      },
-      {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: ['babel-loader'],
       },
       {
         test: /\.sass$/,
@@ -35,6 +34,21 @@ module.exports = {
         }, {
           loader: "sass-loader" // compiles Sass to CSS
         }]
+      },
+
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // you can specify a publicPath here
+              // by default it use publicPath in webpackOptions.output
+              publicPath: '../'
+            }
+          },
+          "css-loader"
+        ]
       }
     ]
   }
