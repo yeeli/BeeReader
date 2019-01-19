@@ -17,7 +17,7 @@ let dbConfig = {
   production: {
     client: 'sqlite3',
     connection: {
-      filename: path.join(userData,'Data/br.db')
+      filename: path.join(userData,'Data/bee.db')
     },
     useNullAsDefault: true
   }

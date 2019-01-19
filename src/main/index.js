@@ -11,7 +11,7 @@ const fs = require('fs')
 
 let dataPath = path.join(app.getPath('userData'), 'Data')
 if(!fs.existsSync(dataPath)) {
-  fs.mkdirSync(dataPath)
+  fs.mkdir(dataPath)
 }
 
 require('./db/migrate')

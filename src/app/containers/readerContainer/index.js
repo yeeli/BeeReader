@@ -200,9 +200,9 @@ class ReaderContainer extends Component {
   // Feed Events
 
   handleClickFeed = (event, id) => {
+    this.props.dispatch(AppActions.setSelectedEntry(id))
     this.props.dispatch(EntriesActions.readEntry(id))
     this.props.dispatch(DataActions.fetchData(id))
-    this.props.dispatch(AppActions.setSelectedEntry(id))
   }
 
   handleClickMakeAllRead = (event) => {
