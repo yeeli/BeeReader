@@ -120,6 +120,7 @@
     "electron-is": "^2.4.1",
     "history": "^4.7.2",
     "html-to-text": "^4.0.0",
+    "immutable": "^4.0.0-rc.12",
     "interactjs": "^1.2.8",
     "jsdom": "^11.11.0",
     "knex": "^0.15.2",
