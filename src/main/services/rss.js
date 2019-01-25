@@ -1,6 +1,6 @@
 const Service = require('./service')
 const axios = require('axios')
-const Parser = require('/Users/yeeli/Github/rss-parser')
+const Parser = require('rss-parser')
 const parse5 = require('parse5')
 const { JSDOM } = require('jsdom')
 
