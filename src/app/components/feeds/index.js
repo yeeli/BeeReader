@@ -10,6 +10,7 @@ import DoneAllIcon from '@material-ui/icons/DoneAll'
 import _ from 'lodash'
 import moment from 'moment'
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import VirtualList from 'react-virtualized/List'
 
 import {injectIntl, FormattedMessage} from 'react-intl'
 
@@ -59,25 +60,21 @@ class Feeds extends Component {
           }
         </div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
-          <PerfectScrollbar>
-            <List className="listing-feeds">
               { entries.map( (entry) => {
                 let date = new Date(entry.published_at)
                 return (
-                  <ListItem  key={entry.id} button className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { onClickFeed(e, entry.id) }} onContextMenu={ this.rightMenu(entry) }>
+                  <div>
                     <div className="feed-info">
                       <span className="feed-stream">{ entry.stream_title }</span>
                       <span className="feed-date">{ moment(date).format('YYYY-MM-D HH:mm') }</span>
                     </div>
                     <div className="feed-detail">
-                      <h3 className="feed-title">{entry.title}</h3> 
+                      <h3 className="feed-title">{entry.title}</h3>
                       <p className="feed-summary">{entry.summary && entry.summary.substr(0, 80)}</p>
                     </div>
-                  </ListItem> 
+                  </div>
                 )
               })}
-            </List>
-          </PerfectScrollbar>
           {_.isEmpty(entries) && this.renderBlank(nheight) }
         </div>
         {/*<div className="block-ft">footer</div>*/}

@@ -15,7 +15,8 @@ module.exports = {
     extensions: ['.js', '.json', '.jsx'],
     alias: {
       'react-native': 'react-native-web',
-      '~': paths.appSrc
+      '~': paths.appSrc,
+      'react-virtualized/List': 'react-virtualized/dist/es/List'
     }
   },
   module: {
