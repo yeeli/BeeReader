@@ -54,7 +54,7 @@ class ReaderContainer extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, Accounts, App} = this.props 
+    const { dispatch, Accounts, App} = this.props
     window.addEventListener("resize", this.handleWindowResize)
 
     //interact('.resize1').draggable({ onmove: window.dragMoveListener })
@@ -91,10 +91,10 @@ class ReaderContainer extends Component {
       contentWidth = browserWidth - subscriptionsWidth - feedsWidth
     }
     this.setState({
-      browserHeight: browserHeight, 
-      browserWidth: browserWidth,  
-      contentWidth: contentWidth, 
-      feedsWidth: feedsWidth, 
+      browserHeight: browserHeight,
+      browserWidth: browserWidth,
+      contentWidth: contentWidth,
+      feedsWidth: feedsWidth,
       subscriptionsWidth: subscriptionsWidth,
     })
   }
@@ -114,11 +114,11 @@ class ReaderContainer extends Component {
 
   handleResizeFeeds = (event) => {
     var target = this.paneFeedsRef
-    var split = event.target 
+    var split = event.target
     var x = (parseFloat(split.getAttribute('data-x')) || 0)
-    // update the element's style 
-    var width = parseFloat(target.offsetWidth) 
-    width += event.dx 
+    // update the element's style
+    var width = parseFloat(target.offsetWidth)
+    width += event.dx
     if( this.state.browserWidth - width - this.state.subscriptionsWidth > 500) {
       this.setState({ feedsWidth: width })
     }
@@ -165,7 +165,7 @@ class ReaderContainer extends Component {
 
 
   handleUnsubscribeStream = (id) => {
-    this.props.dispatch(StreamsActions.destroyStream(id)) 
+    this.props.dispatch(StreamsActions.destroyStream(id))
   }
 
   handleEditStream = (stream) => {
@@ -206,7 +206,7 @@ class ReaderContainer extends Component {
   }
 
   handleClickMakeAllRead = (event) => {
-    this.props.dispatch(StreamsActions.makeAllRead()) 
+    this.props.dispatch(StreamsActions.makeAllRead())
   }
 
   handleCloseContent = (event) => {
@@ -246,16 +246,16 @@ class ReaderContainer extends Component {
         <div id="reader">
           <div className="reader-container split-pane">
             <div className="pane pane-subscriptions" ref={ this.paneSubscriptionsRef } style={{flex: `0 0 ${subscriptionsWidth}px`}}>
-              <Subscriptions  
-                height={browserHeight} 
+              <Subscriptions
+                height={browserHeight}
                 folders={Folders}
                 categories={Categories}
                 streams= {Streams}
                 app={App}
                 selectedItem={ App.selectedStream }
-                onFilter={ this.handleFilter } 
-                onClickSync={ this.handleClickSync }  
-                onClickNewStream={ this.handleClickNewStream } 
+                onFilter={ this.handleFilter }
+                onClickSync={ this.handleClickSync }
+                onClickNewStream={ this.handleClickNewStream }
                 onUnsubscribeStream={ this.handleUnsubscribeStream }
                 onEditStream={ this.handleEditStream }
                 syncing={ App.syncing }
@@ -263,9 +263,9 @@ class ReaderContainer extends Component {
             </div>
             <div className="resizer vertical resize1"/>
             <div className="pane pane-feeds" ref={this.paneFeedsRef} style={{flex: `0 0 ${feedsWidth}px`}}>
-              <Feeds 
-                height={ browserHeight } 
-                entries={ Entries.filterItems } 
+              <Feeds
+                height={ browserHeight }
+                entries={ Entries.filterItems }
                 selectedItem={ App.selectedEntry }
                 onClickFeed={ this.handleClickFeed }
                 onMakeAllRead={ this.handleClickMakeAllRead }
@@ -273,36 +273,36 @@ class ReaderContainer extends Component {
             </div>
             <div className="resizer vertical resize2" />
             <div className="pane pane-content" ref={this.paneContentRef}>
-              { <Content 
-                data={Data} 
-                content={dataContent} 
-                height={ browserHeight } 
-                onClose={ this.handleCloseContent } 
+              { <Content
+                data={Data}
+                content={dataContent}
+                height={ browserHeight }
+                onClose={ this.handleCloseContent }
                 showQR={App.openQR}
                 onToggleQR= { this.handleToggleQR }
                 onCloseQR = {this.handleCloseQR}
               /> }
             </div>
           </div>
-          <AddStreamDialog 
-            open={ App.openNewSubscription } 
-            onClose={ this.handleCloseNewStream } 
-            onSearch={ this.handleSearchStream } 
+          <AddStreamDialog
+            open={ App.openNewSubscription }
+            onClose={ this.handleCloseNewStream }
+            onSearch={ this.handleSearchStream }
           />
-          <SubscribeStreamDialog 
-            open={ this.state.openSubscribeStream } 
-            onClose={ this.handleCloseSubscribeStream } 
+          <SubscribeStreamDialog
+            open={ this.state.openSubscribeStream }
+            onClose={ this.handleCloseSubscribeStream }
             onSubscribe = { this.handleSubscribeStream }
             onNewFolder = { this.handleNewFolder }
-            categories = {Categories.items} 
+            categories = {Categories.items}
             rss={this.state.subscribeRss}
           />
-          <EditStreamDialog 
-            open={ this.state.openEditStream } 
-            onClose={ this.handleCloseEditStream } 
+          <EditStreamDialog
+            open={ this.state.openEditStream }
+            onClose={ this.handleCloseEditStream }
             onUpdate = { this.handleUpdateStream }
             onNewFolder = { this.handleNewFolder }
-            categories = {Categories.items} 
+            categories = {Categories.items}
             stream = { this.state.editStream.item }
             checked = { this.state.editStream.checked }
           />
