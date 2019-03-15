@@ -142,6 +142,7 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "react-split-pane": "^0.1.63",
+    "react-tiny-virtual-list": "^2.2.0",
     "react-virtualized": "^9.21.0",
     "redux": "^4.0.0",
     "redux-saga": "^0.16.2",

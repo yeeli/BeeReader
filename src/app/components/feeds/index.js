@@ -10,7 +10,6 @@ import DoneAllIcon from '@material-ui/icons/DoneAll'
 import _ from 'lodash'
 import moment from 'moment'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import VirtualList from 'react-virtualized/List'
 
 import {injectIntl, FormattedMessage} from 'react-intl'
 
