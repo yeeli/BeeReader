@@ -62,7 +62,7 @@ class Feeds extends Component {
               { entries.map( (entry) => {
                 let date = new Date(entry.published_at)
                 return (
-                  <div key={entry.id}>
+                  <div key={entry.id} className={`feed-item ${selectedItem == entry.id && 'item-selected'} ${ !_.isNull(entry.read_at) && 'read'}`} onClick={(e) => { onClickFeed(e, entry.id) }} onContextMenu={ this.rightMenu(entry) }>
                     <div className="feed-info">
                       <span className="feed-stream">{ entry.stream_title }</span>
                       <span className="feed-date">{ moment(date).format('YYYY-MM-D HH:mm') }</span>
