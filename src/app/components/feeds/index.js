@@ -62,7 +62,7 @@ class Feeds extends Component {
               { entries.map( (entry) => {
                 let date = new Date(entry.published_at)
                 return (
-                  <div>
+                  <div key={entry.id}>
                     <div className="feed-info">
                       <span className="feed-stream">{ entry.stream_title }</span>
                       <span className="feed-date">{ moment(date).format('YYYY-MM-D HH:mm') }</span>
