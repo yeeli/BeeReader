@@ -59,6 +59,7 @@ class Feeds extends Component {
           }
         </div>
         <div className="block-bd" style={{height: `${nheight}px`}}>
+          <PerfectScrollbar>
               { entries.map( (entry) => {
                 let date = new Date(entry.published_at)
                 return (
@@ -74,6 +75,7 @@ class Feeds extends Component {
                   </div>
                 )
               })}
+          </PerfectScrollbar>
           {_.isEmpty(entries) && this.renderBlank(nheight) }
         </div>
         {/*<div className="block-ft">footer</div>*/}
