@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
@@ -30,7 +30,7 @@ import  * as DataActions from '~/actions/data'
 
 import { Link } from 'react-router-dom'
 
-class ReaderContainer extends Component {
+class ReaderContainer extends PureComponent {
   timer = null
   paneSubscriptionsRef = React.createRef()
   paneFeedsRef = React.createRef()
@@ -200,9 +200,9 @@ class ReaderContainer extends Component {
   // Feed Events
 
   handleClickFeed = (event, id) => {
-    this.props.dispatch(AppActions.setSelectedEntry(id))
     this.props.dispatch(EntriesActions.readEntry(id))
     this.props.dispatch(DataActions.fetchData(id))
+    this.props.dispatch(AppActions.setSelectedEntry(id))
   }
 
   handleClickMakeAllRead = (event) => {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -17,7 +17,7 @@ import { remote } from 'electron'
 const RemoteMenu = remote.Menu
 const RemoteMenuItem = remote.MenuItem
 
-class Feeds extends Component {
+class Feeds extends PureComponent {
 
   rightMenu = (entry) => event => {
     event.preventDefault()

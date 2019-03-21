@@ -55,7 +55,7 @@ class Subscriptions extends Component {
           { stream.sync ? <ToysIcon style={{ color: '#fff', fontSize: '15px', marginRight: 0}}  className="icon-spin"/> : <RssIcon  style={{ color: '#fff', fontSize: '15px', marginRight: 0}}/> }
         </ListItemIcon>
         <ListItemText primary={stream.title} className="subscription-title" />
-        { stream.unread_count > 0 && 
+        { stream.unread_count > 0 &&
             (
               <ListItemSecondaryAction>
                 <span className="subscription-count">{ stream.unread_count }</span>
@@ -69,7 +69,7 @@ class Subscriptions extends Component {
   setCategory = (category, selectedItem, opened) => {
     let selected = category.id == selectedItem.id && selectedItem.type == "category"
     let streamIds = category.stream_ids
-    let streams = _.filter(this.props.streams.items, (stream) => { 
+    let streams = _.filter(this.props.streams.items, (stream) => {
       return _.includes(streamIds, stream.id.toString())
     })
     let cateOpened =  opened == 1 ? true : false
@@ -79,7 +79,7 @@ class Subscriptions extends Component {
         <MenuItem selected={selected} onClick={ this.props.onFilter({  type: 'category', id: category.id }) } className="category-item" key={category.id}>
           {cateOpened ? <ExpandMore  style={{ color: '#fff', fontSize: '15px', marginRight: 0}} /> : <ChevronRight style={{color: "#fff", fontSize: '15px', marginRight: 0}}/>  }
           <ListItemText inset primary={category.title} className="category-title"/>
-          { streamsUnreadCount > 0 && 
+          { streamsUnreadCount > 0 &&
               (
                 <ListItemSecondaryAction>
                   <span className="subscription-count">{ streamsUnreadCount }</span>
@@ -110,7 +110,7 @@ class Subscriptions extends Component {
       }
       if(folder.source_type === "Stream") {
         let stream = _.find(streams, {id: folder.source_id})
-        return ( 
+        return (
           <div key={folder.id}>
           { this.setStream(stream, selectedItem) }
         </div>
@@ -147,7 +147,7 @@ class Subscriptions extends Component {
                 <AssessmentIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage({id: 'all', defaultMessage: 'All'})} className="filter-name"/>
-              { app.currentAccount.entries_count > 0 && 
+              { app.currentAccount.entries_count > 0 &&
                 <ListItemSecondaryAction>
                   <span className="filter-count" >{ app.currentAccount.entries_count }</span>
                 </ListItemSecondaryAction>
@@ -158,7 +158,7 @@ class Subscriptions extends Component {
                 <InboxIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage({id: 'unread', defaultMessage: 'Unread'})} className="filter-name" />
-              { app.currentAccount.unread_count > 0 && 
+              { app.currentAccount.unread_count > 0 &&
                 <ListItemSecondaryAction>
                   <span className="filter-count">{ app.currentAccount.unread_count }</span>
                 </ListItemSecondaryAction>
@@ -169,7 +169,7 @@ class Subscriptions extends Component {
                 <TodayIcon style={{color: '#fff', fontSize: '0.9rem', marginRight: 0 }} />
               </ListItemIcon>
               <ListItemText primary={intl.formatMessage({id: 'today', defaultMessage: 'Today'})} className="filter-name" />
-              { app.currentAccount.today_count > 0 && 
+              { app.currentAccount.today_count > 0 &&
                 <ListItemSecondaryAction>
                   <span className="filter-count">{ app.currentAccount.today_count }</span>
                 </ListItemSecondaryAction>
@@ -184,10 +184,10 @@ class Subscriptions extends Component {
               </ListItemText>
               <ListItemSecondaryAction />
             </MenuItem>
-          </MenuList> 
+          </MenuList>
           <MenuList className="listing-subscriptions">
             {
-              folders.isLoaded && categories.isLoaded && streams.isLoaded && this.listFolders(selectedItem) 
+              folders.isLoaded && categories.isLoaded && streams.isLoaded && this.listFolders(selectedItem)
             }
           </MenuList>
         </PerfectScrollbar>
