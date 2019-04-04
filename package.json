@@ -20,7 +20,8 @@
     "package": "electron-packager . BeeReader --platform=darwin",
     "package:mac": "cross-env NODE_ENV=production  electron-packager ./build BeeReader --platform=darwin --overwrite",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "lint": "eslint --format 'node_modules/eslint-formatter-friendly' src"
   },
   "build": {
     "appId": "com.yeeli.beereader",
@@ -79,9 +80,13 @@
     "electron-packager": "^12.2.0",
     "electron-rebuild": "^1.8.2",
     "electron-reloader": "^0.2.0",
-    "eslint": "4.x",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-formatter-friendly": "^6.0.0",
     "eslint-loader": "^2.1.0",
-    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
     "externals-dependencies": "^1.0.4",
     "gulp": "^3.9.1",
     "html-webpack-plugin": "^3.2.0",
